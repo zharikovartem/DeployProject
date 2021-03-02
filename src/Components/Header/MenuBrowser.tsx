@@ -1,33 +1,21 @@
-import React, {useState} from 'react'
-import { Button, Menu } from 'antd';
+import React from 'react'
+import { Menu } from 'antd'
 import {Link, useHistory} from 'react-router-dom'
-// import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
-import {LogoutOutlined} from '@ant-design/icons'
-import {MenuBrowserPropsType} from './MenuBrowserConainer'
-import { TaskListType } from '../../Types/types';
-import { MenuDataType } from './Header';
+import { MenuPropsType } from './MenuContainer'
+import { MenuDataItemType } from './Header';
 
 const { SubMenu } = Menu;
 
-export type OwnMenuBrowserPropsType = {
-    menuData: any,
-    // logout: any,
-    // appLocation: string | null
-}
-
-const MenuBrowser: React.FC<MenuBrowserPropsType> = (props) => {
+const MenuBrowser: React.FC<MenuPropsType> = (props) => {
     let history = useHistory();
-    const [state, setState] = useState<Array<string>>([])
-    const handleClick = (e: any | undefined) => {
-        //console.log('click ', e);
-        // setState({ current: e.key });
-    }
 
-    const getMenuItem = (childs: any):any => {
-        // return <Menu.Item key="setting:1">Option 1</Menu.Item>
-        const menuItems = childs.map( (item: any) => {
+    const handleClick = () => {}
+
+    const getMenuItem = (childs: Array<MenuDataItemType>):Array<JSX.Element | undefined> => {
+        const menuItems = childs.map( (item: MenuDataItemType) => {
+            const disabled = item.disabled ? {disabled: true} : null
             return (
-                <Menu.Item key={item.value}>
+                <Menu.Item key={item.value} {...disabled}>
                     <Link to={item.value}>{item.label}</Link>
                 </Menu.Item>
             )
@@ -35,44 +23,32 @@ const MenuBrowser: React.FC<MenuBrowserPropsType> = (props) => {
         return menuItems
     }
 
-    const getSubMenu = () => {
-        //console.log(props.menuData)
-        const subMenu = props.menuData.map( (item: any) => {
-            //console.log(item)
+    const getSubMenu = ():Array<JSX.Element | undefined> => {
+        const subMenu = props.menuData.map( (item: MenuDataItemType) => {
             return (
                 <SubMenu 
                     key={item.value} 
-                    // icon={<MailOutlined />}
                     title={item.label}
                 >
-                    {getMenuItem(item.children)}
+                    {item.children ? getMenuItem(item.children) : null}
                 </SubMenu >
             )
         })
-        // subMenu.push(
-        //     <Menu.Item key="login">
-        //         <Link to={props.appLocation +"login"} >Login</Link>
-        //     </Menu.Item>
-        // )
         return subMenu
     }
 
     const onLogout = () => {
-        // onChange(['', ''])
         history.replace(props.appLocation+'login')
         props.logout()
     }
 
-    //console.log(props)
-
     return (
         <Menu 
             onClick={handleClick} 
-            // selectedKeys={[current]} 
             mode="horizontal"
             theme="dark"
         >
-            {getSubMenu()}
+            { getSubMenu() }
 
             {!props.isAuth ? 
                 <Menu.Item key="login">
@@ -84,12 +60,15 @@ const MenuBrowser: React.FC<MenuBrowserPropsType> = (props) => {
                     title={props.user?.name}
                 >
                     <Menu.Item key="login" onClick={onLogout}>
-                        {/* <Link to={props.appLocation +"login"} > */}
                             Logout
-                        {/* </Link> */}
+                    </Menu.Item>
+                    <Menu.Item key="info" onClick={()=>{}}>
+                            Info
+                    </Menu.Item>
+                    <Menu.Item key="help" onClick={()=>{}}>
+                            Help
                     </Menu.Item>
                 </SubMenu >
-                
             }
         </Menu>
     )

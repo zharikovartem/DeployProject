@@ -1,13 +1,12 @@
-import {instance, APIResponseType} from "./api";
+import { credsType } from "../redux/authReducer";
+import { instance } from "./api";
 
-type MeResponseDataType = {
-    id: number
-    email: string
-    login: string
-    // remember_token?: string,
-    // user?: any
-    // error?: boolean,
-    // message?: string
+export type RegisterFormType = {
+    name: string,
+    email: string,
+    password: string,
+    remember?: boolean,
+    status?: 'guest' | 'admin'
 }
 
 export const authAPI = {
@@ -19,17 +18,14 @@ export const authAPI = {
         if (sessionStorage.getItem('remember_token')) {
             remember_token = sessionStorage.getItem('remember_token')
         }
-        console.log(remember_token)
         return instance.get(`authMe/`+remember_token).then( (response) => {
-            console.log('ME: ', response)
             return response
         })
     },
-    login(data: any) {
-        console.log(data)
+
+    login(data: credsType) {
         return instance.post('login', data)
         .then(response => {
-            console.log('login: ', response)
             if (data.remember) {
                 if (response.data.remember_token !== null) {
                     localStorage.setItem('remember_token', response.data.remember_token);
@@ -49,20 +45,17 @@ export const authAPI = {
         })
         .catch(err => {
             if (err.response) {
-                //console.log(err.response)
                 return err.response
             } else if (err.request) {
-                //console.log('request', err.request)
             } else {
-                //console.log('anything else: ', err)
             }
             return null
         })
     },
-    register(creds: any) {
+
+    register(creds: RegisterFormType) {
         return instance.post('register', creds)
         .then(response => {
-            console.log('register: ', response)
             if (response.data.remember_token !== null) {
                 localStorage.setItem('remember_token', response.data.token);
             } else {
@@ -72,12 +65,9 @@ export const authAPI = {
         })
         .catch(err => {
             if (err.response) {
-                console.log(err.response)
                 return err.response
             } else if (err.request) {
-                //console.log('request', err.request)
             } else {
-                //console.log('anything else: ', err)
             }
             return null
         })

@@ -1,44 +1,32 @@
 import React from 'react'
-import {
-    BrowserView,
-    MobileView,
-    isBrowser,
-    isMobile
-} from "react-device-detect"
 import { HeaderPropsType } from './HeaderContainer'
-import MenuBrowser from './MenuBrowserConainer'
-import MenuMobile from './MenuMobileContainer'
-// import {useHistory, useLocation} from 'react-router-dom'
-
-// type MenuDataType = Array<any>
+import MenuContainer from './MenuContainer'
 
 export type OwnHeaderPropsType = {}
 
 const Header: React.FC<HeaderPropsType> = (props) => {
-    // const location = useLocation()
-    //console.log('Header')
-
-    if (isMobile) {
-        return <MenuMobile menuData={menuData(props.appLocation)} logout={props.logout}/>
-    } else {
-        return <MenuBrowser menuData={menuData(props.appLocation)}/>
-    }
+    const userStatus = props.user ? props.user.status : null
+    return <MenuContainer menuData={menuData(props.appLocation, userStatus)}/>
 }
 
 export default Header
 
+export type MenuDataType = Array<MenuDataItemType>
+export type MenuDataItemType = {
+    value: string,
+    label: string,
+    disabled?: boolean
+    children?: Array<MenuDataItemType>,
+}
 
-export type MenuDataType = ReturnType<typeof menuData>
-
-const menuData = (appLocation: string) => {
-    const data = [
+const menuData = (appLocation: string, userStatus: string | null): MenuDataType => {
+    const data: MenuDataType = [
     {
         value: 'planning',
         label: 'Planning',
         children: [
             {
                 label: 'ToDo list',
-                // label: <Link to='/toDoList'>ToDo list</Link>,
                 value: appLocation + 'toDoList',
                 disabled: false,
             },
@@ -50,7 +38,12 @@ const menuData = (appLocation: string) => {
                 label: 'Analysis',
                 value: appLocation + 'analysis',
                 disabled: true,
-            }
+            },
+            {
+                label: 'Daily schedule',
+                value: appLocation + 'schedule',
+                disabled: false,
+            },
         ],
     }, {
         value: 'catalog',
@@ -69,7 +62,6 @@ const menuData = (appLocation: string) => {
     {
         value: 'orders',
         label: 'Orders',
-        // isLeaf: true,
         children: [
             {
                 label: 'Orders',
@@ -82,5 +74,33 @@ const menuData = (appLocation: string) => {
         ],
     },
     ]
+
+    if (userStatus === 'admin' || userStatus ==='superAdmin') {
+        data.push(
+            {
+                value: 'admin',
+                label: 'Admin',
+                children: [
+                    {
+                        label: 'Users',
+                        value: appLocation + 'users',
+                    }
+                ],
+            }
+        )
+        //
+        data.push(
+            {
+                value: 'development',
+                label: 'Development',
+                children: [
+                    {
+                        label: 'Projects',
+                        value: appLocation + 'projects',
+                    }
+                ],
+            }
+        )
+    }
     return data
 }

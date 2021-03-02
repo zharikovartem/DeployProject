@@ -31,6 +31,7 @@ const ToDoHeader: React.FC<ToDoHeaderPropsType> = (props) => {
             })
         }
         setIsInterval(e.target.checked)
+        props.setIsInterval(e.target.checked, props.dateInterval)
     }
 
     const onDateRangeChange = (values: RangeValue<moment.Moment>, formatString: [string, string]): void => {
@@ -78,9 +79,11 @@ const ToDoHeader: React.FC<ToDoHeaderPropsType> = (props) => {
                     }
                 </div>
             </div>
+            
             <div className="col-12 col-md-3 col-lg-3 col-xl-2 m-2 m-md-0" >
                 <Checkbox className="ml-3" onChange={onDateTypeChange}>Date interval</Checkbox>
             </div>
+            { !props.isReadOnly ?
             <div className="col-12 col-md-12 col-lg-4 col-xl-3 mt-lg-2">
                 <Button
                     type="primary"
@@ -106,6 +109,8 @@ const ToDoHeader: React.FC<ToDoHeaderPropsType> = (props) => {
                         </div>} 
                     />
             </div>
+            : null
+            }
         </div>
     )
 }

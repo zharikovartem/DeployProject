@@ -1,44 +1,25 @@
 import { TaskListType } from '../Types/types'
-import {instance} from './api'
-
-
-if (localStorage.getItem('remember_token')) {
-    instance.defaults.headers.common['X-Auth-Token'] = localStorage.getItem('remember_token')
-}
-if (sessionStorage.getItem('remember_token')) {
-    instance.defaults.headers.common['X-Auth-Token'] = sessionStorage.getItem('remember_token')
-}
-
-const getToken = () => {
-    if (localStorage.getItem('remember_token')) {
-        instance.defaults.headers.common['X-Auth-Token'] = localStorage.getItem('remember_token')
-    }
-    if (sessionStorage.getItem('remember_token')) {
-        instance.defaults.headers.common['X-Auth-Token'] = sessionStorage.getItem('remember_token')
-    }
-}
+import {getToken, instance} from './api'
+import {NewTaskListType} from './../Types/types'
 
 export const taskListAPI = {
     getTaskList() {
         getToken()
         return instance.get<TaskListType>(`taskList`)
         .then(response => {
-            //console.log(response)
             return response.status === 200 ? response : null
         })
         .catch(err => {
             if (err.response) {
-                //console.log(err.response)
                 return err.response
             } else if (err.request) {
-                //console.log('request', err.request)
             } else {
-                //console.log('anything else: ', err)
             }
             return null
         })
     },
-    createNewTaskList(values: any) {
+    createNewTaskList(values: NewTaskListType) {
+        console.log(values)
         return instance.post<TaskListType>(`taskList`, values)
         .then(response => {
             console.log(response)
@@ -49,9 +30,7 @@ export const taskListAPI = {
                 console.log(err.response)
                 return err.response
             } else if (err.request) {
-                //console.log('request', err.request)
             } else {
-                //console.log('anything else: ', err)
             }
             return null
         })
@@ -64,14 +43,13 @@ export const taskListAPI = {
             if (err.response) {
                 return err.response
             } else if (err.request) {
-                //console.log('request', err.request)
             } else {
-                //console.log('anything else: ', err)
             }
             return null
         })
     },
-    updateTask(values: any, taskId: number) {
+    updateTask(values: NewTaskListType, taskId: number) {
+        console.log(values)
         return instance.put<TaskListType>(`taskList/${taskId}`, values)
         .then(response => {
             console.log(response)
@@ -79,16 +57,11 @@ export const taskListAPI = {
         })
         .catch(err => {
             if (err.response) {
-                console.log(err.response)
                 return err.response
             } else if (err.request) {
-                //console.log('request', err.request)
             } else {
-                //console.log('anything else: ', err)
             }
             return null
         })
     }
 }
-//descriptions
-//descriptions

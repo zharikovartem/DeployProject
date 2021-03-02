@@ -1,5 +1,10 @@
 import { AppStateType } from './../redux/store'
 
+export type AntdOptionsType = {
+    name: string,
+    value: string
+}
+
 export type GetStateType = ()=>AppStateType
 
 export type TaskListType = {
@@ -15,6 +20,18 @@ export type TaskListType = {
     updated_at: string,
     user_id: number | null,
     data: string | null, 
+}
+
+export type NewTaskListType = {
+    descriptions?: string | null,
+    id?: number,
+    isCompleted?: boolean,
+    name?: string,
+    parent_id?: null | number,
+    task_type?: string,
+    time_to_complete?: string,
+    user_id?: number | null,
+    data?: string | null,
 } 
 
 export type TaskType = {
@@ -30,7 +47,8 @@ export type TaskType = {
     type?: string | null,
     updated_at?: string | null,
     user_id: number | null,
-    isCompleted?: boolean
+    isCompleted?: boolean,
+    action?: number
 }
 
 export type NewTaskDataType = {
@@ -40,7 +58,9 @@ export type NewTaskDataType = {
     date: string
     description?: string,
     id?: number,
-    isCompleted?: boolean
+    isCompleted?: boolean,
+    action?: number
+    action_data?: any
 }
 
 export declare type RangeValue<DateType> = [EventValue<DateType>, EventValue<DateType>] | null

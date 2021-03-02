@@ -1,21 +1,20 @@
 import {connect} from 'react-redux'
-// import TasksTree, { OwnTasksTreePropsType } from './TasksTree'
 import { AppStateType } from '../../redux/store'
 import {getTaskList, createNewTaskList, deleteTaskList, updateTaskList, actions} from './../../redux/TaskListReducer'
 import {createNewTask as createNewToDo} from './../../redux/taskReducer'
 import { isMobile } from 'react-device-detect'
 import TasksTreeBrowser from './TasksTreeBrowser'
 import TasksTreeMobile from './TasksTreeMobile'
-import { NewTaskDataType } from '../../Types/types'
+import { NewTaskDataType, NewTaskListType } from '../../Types/types'
 
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 
 type MapDispatchPropsType = {
     getTaskList: ()=>void,
-    createNewTaskList: (values: any)=>void,
+    createNewTaskList: (values: NewTaskListType)=>void,
     deleteTaskList: (taskId: number)=>void,
-    updateTaskList: (values: any, taskId: number)=> void,
+    updateTaskList: (values: NewTaskListType, taskId: number)=> void,
     backSelectedTasks: ()=>void,
     createNewToDo: (values: NewTaskDataType, reload?:boolean)=> void,
 }
@@ -52,6 +51,7 @@ type TaskTreeTypesItemType = {
 
 }
 type TaskTreeTypesType = Array<TaskTreeTypesItemType>
+
 export const taskTreeTypes: TaskTreeTypesType = [
     {
         name: 'Простая задача',
@@ -87,7 +87,7 @@ export const taskTreeTypes: TaskTreeTypesType = [
         ]
     },
     {
-        name: 'Проект',
+        name: 'Разработка',
         value: 3,
         isSubform: true,
         childTypes: []

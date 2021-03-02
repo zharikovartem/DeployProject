@@ -1,49 +1,49 @@
 import React, { useEffect, useState } from 'react'
-import { TaskType } from '../../Types/types'
+// import { TaskType } from '../../Types/types'
+import { TaskType } from './../../../Types/types'
 import moment from 'moment'
 import { TimeScalePropsType } from './TimeScaleContainer'
 import { Divider, Spin, Tooltip, message } from 'antd'
 import TaskItem from './TaskItem/TaskItemContainer'
-import { sortTaskArrayByParams } from '../../utils/array-helpers'
+import { sortTaskArrayByParams } from '../../../utils/array-helpers'
+import { ListGroup } from 'react-bootstrap'
 
 export type OwnTaskTimeScaleType = {
-    onEdit: (value:any)=>void
+    onEdit: (value:any)=>void,
+    isReadOnly?: boolean
 }
 const TimeScale: React.FC<TimeScalePropsType> = (props) => {
     type SelestedDatesType = typeof props.dateInterval
     const [selestedDates, setSelectedDates] = useState<SelestedDatesType>({ startDate: moment(null), endDate: moment() })
-    // const [isInterval, setIsInterval] = useState(
-    //     props.dateInterval.startDate.format('YYYY-MM-DD') === props.dateInterval.endDate.format('YYYY-MM-DD') ? false : true
-    //     )
+
     useEffect(() => {
+        const getTaskList = () => props.getTaskList
         if (
             props.dateInterval.startDate.isSame(selestedDates.startDate.format('YYYY-MM-DD'), "day" ) &&
             props.dateInterval.endDate.isSame(selestedDates.endDate.format('YYYY-MM-DD'), "day" )
         ) { }
         else {
             if (props.dateInterval.startDate !== null) {
-                props.getTaskList(
+                getTaskList()(
                     props.dateInterval.startDate.format('YYYY-MM-DD'),
                     props.dateInterval.endDate.format('YYYY-MM-DD')
                 )
                 setSelectedDates(props.dateInterval)
             }
         }
-    }, [props.dateInterval])
+    }, [props.dateInterval, props.getTaskList, selestedDates])
 
     useEffect(() => {
         if (props.errorMessage !== null) {
             message.success(props.errorMessage)
         }
     }, [props.errorMessage])
-    
-    //console.log(props.dateInterval)
 
     if (props.taskList !== undefined) {
         if (props.taskList !== null) {
             return (
                 <>
-                    {getTimeScaleArrey(props.taskList, props.isInterval, props.onEdit)}
+                    {getTimeScaleArrey(props.taskList, props.isInterval, props.onEdit, props.isReadOnly ? props.isReadOnly : false)}
                 </>
             )
         } else {
@@ -60,15 +60,18 @@ const TimeScale: React.FC<TimeScalePropsType> = (props) => {
 export default TimeScale
 
 
-const getTimeScaleArrey = (taskList: Array<TaskType>, isInterval:boolean, onEdit:(value:any)=>void): Array<React.ReactElement<string>> => {
+const getTimeScaleArrey = (
+    taskList: Array<TaskType>, 
+    isInterval:boolean, 
+    onEdit:(value:any)=>void,
+    isReadOnly: boolean
+    ):Array<React.ReactElement<string>> => {
     let timeScaleArrey: Array<React.ReactElement<string>> = []
     let tomorowTasks: Array<TaskType> = []
 
-    //console.log('isInterval: ', isInterval)
-
     taskList.sort(sortTaskArrayByParams('time')).sort(sortTaskArrayByParams('date'))
 
-    const getHeadlineLabel = (task: TaskType) => {
+    const getHeadlineLabel = (task: TaskType):string => {
         return moment(task.date).format('D MMMM')
     }
 
@@ -78,7 +81,7 @@ const getTimeScaleArrey = (taskList: Array<TaskType>, isInterval:boolean, onEdit
         headlineDate = getHeadlineLabel(taskList[0])
         timeScaleArrey.push(
             <h5 
-                key={headlineDate + 'title'}
+                key={headlineDate}
                 className={isInterval ? "text-left" : ""}
             >
                 {headlineDate}:
@@ -96,7 +99,7 @@ const getTimeScaleArrey = (taskList: Array<TaskType>, isInterval:boolean, onEdit
                 )
             }
         } else {
-            timeScaleArrey.push(<h3 key="noTasks">no tasks</h3>)
+            timeScaleArrey.push(<h3 key={'noTasks'+index}>no tasks</h3>)
             break
         }
 
@@ -109,7 +112,9 @@ const getTimeScaleArrey = (taskList: Array<TaskType>, isInterval:boolean, onEdit
                     if (getHeadlineLabel(element) === headlineDate) {
                         timeScaleArrey.push(
                             <Tooltip key={index + '-' + element.id} placement="topLeft" title={element.descriptions}>
-                                <TaskItem element={element} onEdit={onEdit}/>
+                                <ListGroup as="ul" key={index}>
+                                    <TaskItem key={index} element={element} onEdit={onEdit} isReadOnly={isReadOnly}/>
+                                </ListGroup>
                             </Tooltip>
                         )
                     }
@@ -122,7 +127,7 @@ const getTimeScaleArrey = (taskList: Array<TaskType>, isInterval:boolean, onEdit
     }
 
     if (tomorowTasks.length > 0) {
-        timeScaleArrey = timeScaleArrey.concat(getTimeScaleArrey(tomorowTasks, isInterval, onEdit))
+        timeScaleArrey = timeScaleArrey.concat(getTimeScaleArrey(tomorowTasks, isInterval, onEdit , isReadOnly))
     }
 
     return timeScaleArrey

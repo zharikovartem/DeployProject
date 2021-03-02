@@ -1,109 +1,123 @@
 import React, { useState, useEffect } from 'react'
 import { TasksTreePropsType, taskTreeTypes } from './TasksTreeContainer'
-import { Drawer, List, SwipeAction, Icon, Button, Card, WingBlank, WhiteSpace } from 'antd-mobile'
-import NewTaskTreeForm from './NewTaskTreeForm'
+import { Drawer, List, Button, Card, WingBlank, WhiteSpace } from 'antd-mobile'
+import NewTaskTreeForm from './TaskTreeForm/NewTaskTreeForm'
 import './TasksTreeMobile.css'
 import { Formik } from 'formik'
-import { Spin, Empty } from 'antd'
-import { propTypes } from 'react-bootstrap/esm/Image'
-import moment from "moment"
-import { TaskListType } from '../../Types/types'
-import { useDispatch } from 'react-redux'
-import { TaskTreeItemMobile } from './TaskTreeItem'
+import { TaskTreeItemMobile } from './TaskTreeMobileItem'
+import { NewTimeByString } from '../../utils/Date/NewDeteByString'
+import { NewTaskListType, TaskListType } from '../../Types/types'
+import { checkActionsType } from './TaskListActions/TaskListActions'
 
-const Item = List.Item
-
-type InitialDrewerDataType = {
+export type InitialDrewerDataType = {
     header: string,
     taskId: false | number
 }
 
 const initialDrewerData: InitialDrewerDataType = {
-    header: 'Create New Task',
+    header: 'Tasks Tree',
     taskId: false
+}
+
+type SelectOptionType = {
+    name: string,
+    value: number
+}
+
+export type InitialValuesType = {
+    selectOptions: Array<SelectOptionType> | null,
+    taskTypes: typeof taskTreeTypes,
+    task_type: Array<number>,
+    name?: string,
+    descriptions?: string
+    parent_id?: number
+    time_to_complete?: Date
+}
+
+const getInitialValues = ( taskList: Array<TaskListType> ):InitialValuesType => {
+    return (
+        {
+            selectOptions: getSelectOptions(taskList),
+            taskTypes: taskTreeTypes,
+            task_type: [1],
+            time_to_complete: initialTimeToComplete,
+        }
+    )
+}
+
+let initialTimeToComplete = NewTimeByString()
+
+const getSelectOptions = (taskList: Array<TaskListType>):Array<SelectOptionType>  => {
+    if (taskList !== undefined && taskList.length > 0) {
+        return taskList.map((item: TaskListType) => {
+            return ({
+                name: item.name,
+                value: item.id
+            })
+        })
+    } else {
+        return []
+    }
 }
 
 const TasksTreeMobile: React.FC<TasksTreePropsType> = (props) => {
     useEffect(() => {
+        const getTaskList = () => props.getTaskList
         if (props.taskList && props.taskList.length === 0 && !props.isTaskListLoaded) {
-            props.getTaskList()
+            getTaskList()()
         } else if (props.taskList === undefined) {
-            props.getTaskList()
+            getTaskList()()
         }
         setVisible(false)
-        //console.log('initialValues: ', initialValues)
-        setInitialFormValues(initialValues)
-    }, [props.taskList])
-
-    const getSelectOptions = () => {
-        if (props.taskList !== undefined && props.taskList.length > 0) {
-            return props.taskList.map((item) => {
-                return ({
-                    name: item.name,
-                    value: item.id
-                })
-            })
-        } else {
-            //console.log('вернули пыстой список', props.taskList)
-            return null
-        }
-    }
-
-    let initialTimeToComplete = new Date()
-    initialTimeToComplete.setHours(0)
-    initialTimeToComplete.setMinutes(0)
-    initialTimeToComplete.setSeconds(0)
-    initialTimeToComplete.setMilliseconds(0)
-
-    const initialValues: any = {
-        selectOptions: getSelectOptions(),
-        taskTypes: taskTreeTypes,
-        task_type: 1,
-        time_to_complete: initialTimeToComplete
-        // parent_id:[]
-    }
+        setInitialFormValues( getInitialValues(props.taskList) )
+    }, [ props.taskList, props.getTaskList, props.isTaskListLoaded ])
 
     const [visible, setVisible] = useState(false)
-    const [initialFormValues, setInitialFormValues] = useState(initialValues)
+    const [initialFormValues, setInitialFormValues] = useState(getInitialValues(props.taskList))
     const [drawerData, setDrawerData] = useState(initialDrewerData)
 
-    const handleSubmit = (formProps: any) => {
-        //console.log('handleSubmit TasksTreeMobile: ', formProps.time_to_complete)
-        let formPropsCopy: any = { ...formProps }
-        delete formPropsCopy.selectOptions
-        delete formPropsCopy.taskTypes
-        if (formPropsCopy.time_to_complete !== undefined) {
-            //console.log(formPropsCopy.time_to_complete)
-            const time_to_complete = moment(formPropsCopy.time_to_complete)
-            formPropsCopy.time_to_complete = time_to_complete.format('HH:mm:ss')
-        }
-        if (Array.isArray(formPropsCopy.parent_id)) {
-            formPropsCopy.parent_id = formPropsCopy.parent_id[0]
+    const handleSubmit = (formProps: InitialValuesType) => {
+        console.log(formProps)
+        const data = checkActionsType({...formProps, task_type: Number(formProps.task_type)})
+        console.log(data)
+        let newTaskList: NewTaskListType = {
+            name: formProps.name,
+            // task_type: formProps.taskTypes[0].value?.toString(),
+            task_type: formProps.task_type.toString(),
+            descriptions: formProps.descriptions, 
+            user_id: props.userId,
+            parent_id: formProps.parent_id ? formProps.parent_id : undefined,
+            time_to_complete: formProps.time_to_complete ? formProps.time_to_complete.toTimeString().split(' ')[0] : undefined,
         }
 
-        //console.log('NewTaskMobile submit: ', formPropsCopy)
+        if (data) {
+            newTaskList = {...newTaskList, data: data}
+        }
 
-        formPropsCopy.user_id = props.userId
-        // props.createNewTaskList(formPropsCopy)
-        // setInitialFormValues(initialValues)
-        //console.log('taskId: ', drawerData.taskId)
         if (!drawerData.taskId) {
-            //console.log('createNewTaskList: ', formPropsCopy)
-            props.createNewTaskList(formPropsCopy)
+            props.createNewTaskList(newTaskList)
         } else {
-            //console.log('updateTaskList: ', formPropsCopy)
-            props.updateTaskList(formPropsCopy, drawerData.taskId)
+            props.updateTaskList(newTaskList, drawerData.taskId)
         }
     }
 
-    const onAdd = (args: any) => {
+    const onAdd = () => {
         if (props.selectedTasks.length !== 0) {
-            setDrawerData({ ...drawerData, taskId: false })
-            //console.log('sub')
-            //console.log('initialValues', initialValues)
-            setInitialFormValues({ ...initialValues, parent_id: [Number(props.selectedTasks[props.selectedTasks.length - 1])] })
+            console.log(
+                props.taskList.filter( item=> item.id === Number(props.selectedTasks[props.selectedTasks.length - 1]))[0].name
+            )
+            setDrawerData({ 
+                header: props.taskList.filter( item=> item.id === Number(props.selectedTasks[props.selectedTasks.length - 1]))[0].name,
+                taskId: false 
+            })
+            setInitialFormValues({ ...getInitialValues(props.taskList), parent_id: Number(props.selectedTasks[props.selectedTasks.length - 1]) })
         } else {
-            setInitialFormValues(initialValues)
+            
+            setDrawerData({ 
+                header: 'Task Tree',
+                taskId: false 
+            })
+            setInitialFormValues({...getInitialValues(props.taskList), parent_id: initialFormValues.parent_id })
         }
 
         setVisible(!visible)
@@ -114,19 +128,37 @@ const TasksTreeMobile: React.FC<TasksTreePropsType> = (props) => {
     }
 
     const onBack = () => {
+        if (props.selectedTasks.length > 1) {
+            const taskId = props.selectedTasks[props.selectedTasks.length-2]
+            const taskName = props.taskList.filter( item => item.id === taskId)[0].name
+            setDrawerData({ header: taskName, taskId: taskId })
+        } else {
+            setDrawerData({ header: 'Task Tree', taskId: false })
+        }
         props.backSelectedTasks()
     }
 
-    //console.log('TasksTreeMobile props: ', props)
-    //console.log('TasksTreeMobile name: ', initialFormValues.name)
+    const onRunTask = (values: number) => {
+        console.log(values)
+        // setRunTaskVisible(true)
+        // setRunData(
+        //     props.taskList.filter( (item: TaskListType)=> {
+        //             return (item.id === values)
+        //     })[0]
+        // )
+    }
 
-    // if (props.taskList !== undefined) {
     return (
         <WingBlank size="lg">
             <WhiteSpace size="lg" />
             <Card>
                 <Card.Header
-                    title={<h4 className="w-100 text-center">Tasks Tree</h4>}
+                    title={
+                        drawerData.header === 'Tasks Tree' ?
+                        <h5 className="w-100 text-center">{drawerData.header}</h5>
+                        :
+                        <h5>{drawerData.header}</h5>
+                    }
                     extra={
                         <div className="d-flex flex-row">
                             {props.selectedTasks.length > 0 && !visible ?
@@ -134,7 +166,6 @@ const TasksTreeMobile: React.FC<TasksTreePropsType> = (props) => {
                                     inline
                                     size="small"
                                     className="mx-3 my-2"
-                                    // style={{ marginRight: '4px' }} 
                                     onClick={onBack}
                                     type="primary"
                                 >
@@ -147,7 +178,6 @@ const TasksTreeMobile: React.FC<TasksTreePropsType> = (props) => {
                                 inline
                                 size="small"
                                 className="mx-3 my-2"
-                                // style={{ marginRight: '4px' }} 
                                 onClick={onAdd}
                                 type="primary"
                             >
@@ -156,38 +186,36 @@ const TasksTreeMobile: React.FC<TasksTreePropsType> = (props) => {
                         </div>
                     }
                 >
-
                 </Card.Header>
-
                 <Drawer
                     className="my-drawer"
                     style={{ minHeight: document.documentElement.clientHeight }}
-                    // enableDragHandle
                     contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 0, width: "100%" }}
                     sidebar={
                         <div className="mt-4">
                             <Formik
                                 initialValues={initialFormValues}
                                 onSubmit={handleSubmit}
-                                render={NewTaskTreeForm}
                                 enableReinitialize={true}
-                            />
+                            >
+                                {NewTaskTreeForm}
+                            </Formik>
                         </div>
                     }
                     open={visible}
                     onOpenChange={onAdd}
                 >
                     <List>
-
-
                         {props.taskList !== undefined ?
-                            props.taskList.map((item) => {
+                            props.taskList
+                            .map((item: TaskListType) => {
                                 let parentId: number
                                 if (props.selectedTasks.length !== 0) {
                                     parentId = props.selectedTasks[props.selectedTasks.length - 1]
                                     if (item.parent_id === parentId) {
                                         return (
                                             <TaskTreeItemMobile
+                                                key={item.id.toString()}
                                                 taskItem={item}
                                                 deleteTaskList={props.deleteTaskList}
                                                 showDrawer={showDrawer}
@@ -195,13 +223,17 @@ const TasksTreeMobile: React.FC<TasksTreePropsType> = (props) => {
                                                 initialFormValues={initialFormValues}
                                                 setInitialFormValues={setInitialFormValues}
                                                 updateTaskList={props.updateTaskList}
+                                                onRunTask={onRunTask}
                                             />
                                         )
+                                    } else {
+                                        return null
                                     }
                                 } else {
                                     if (item.parent_id === null) {
                                         return (
                                             <TaskTreeItemMobile
+                                                key={item.id.toString()}
                                                 taskItem={item}
                                                 deleteTaskList={props.deleteTaskList}
                                                 showDrawer={showDrawer}
@@ -209,8 +241,11 @@ const TasksTreeMobile: React.FC<TasksTreePropsType> = (props) => {
                                                 initialFormValues={initialFormValues}
                                                 setInitialFormValues={setInitialFormValues}
                                                 updateTaskList={props.updateTaskList}
+                                                onRunTask={onRunTask}
                                             />
                                         )
+                                    } else {
+                                        return null
                                     }
                                 }
 
@@ -218,131 +253,11 @@ const TasksTreeMobile: React.FC<TasksTreePropsType> = (props) => {
                             :
                             null
                         }
-
                     </List>
                 </Drawer>
-
-
-
             </Card>
         </WingBlank>
     )
-    // } else {
-    //     return <Spin key="spin" size="large" />
-    // }
 }
 
 export default TasksTreeMobile
-
-// const getTaskTreeItems = (
-//     taskList: Array<any>,
-//     deleteTaskList: (taskId: number) => void,
-//     showDrawer: () => void,
-//     setDrawerData: (drawerData: any) => void,
-//     initialFormValues: any,
-//     setInitialFormValues: (initialFormValues: any) => void
-// ) => {
-//     const onEdit = (task: any) => {
-//         //console.log(task)
-
-//         setDrawerData({
-//             header: 'Edit: "' + task.name + '"',
-//             taskId: task.id
-//         })
-
-//         let day = new Date()
-//         if (task.time_to_complete !== null) {
-//             const splitTime = task.time_to_complete.split(/:/)
-//             day.setHours(parseInt(splitTime[0]))
-//             day.setMinutes(parseInt(splitTime[1]))
-//             day.setSeconds(0)
-//             day.setMilliseconds(0)
-//         } else {
-//             day.setHours(0)
-//             day.setMinutes(0)
-//             day.setSeconds(0)
-//             day.setMilliseconds(0)
-//         }
-
-//         setInitialFormValues(
-//             {
-//                 ...initialFormValues,
-//                 // new: false,
-//                 name: task.name,
-//                 time_to_complete: day,
-//                 descriptions: task.descriptions,
-//                 parent_id: [task.parent_id],
-//                 task_type: [Number(task.task_type)]
-//             }
-//         )
-
-//         showDrawer()
-//     }
-
-//     const onItemOpen = (itemId: number) => {
-//         //console.log(itemId, 'is open')
-//         // const dispatch = useDispatch()
-//         // dispatch( { type: 'SN/TASK_LIST/SET_SELECTED_TASK', itemId } )
-//     }
-
-//     //console.log(taskList)
-
-//     if (taskList && taskList.length > 0) {
-//         return taskList.map((item) => {
-//             //console.log('!!!!!!!')
-//             return (
-//                 <SwipeAction
-//                     style={{ backgroundColor: 'gray' }}
-//                     autoClose
-//                     right={[
-//                         {
-//                             text: 'Cancel',
-//                             onPress: () => {
-//                                 //console.log('cancel') 
-//                             },
-//                             style: { backgroundColor: '#ddd', color: 'white' },
-//                         },
-//                         {
-//                             text: 'Delete',
-//                             onPress: () => deleteTaskList(item.id),
-//                             style: { backgroundColor: '#F4333C', color: 'white' },
-//                         },
-//                     ]}
-//                     left={[
-//                         {
-//                             text: 'Edit',
-//                             onPress: () => { onEdit(item) },
-//                             style: { backgroundColor: '#108ee9', color: 'white' },
-//                         },
-//                         {
-//                             text: 'Execute',
-//                             onPress: () => {
-//                                 //console.log('cancel')
-//                             },
-//                             style: { backgroundColor: 'green', color: 'white' },
-//                         },
-//                     ]}
-//                 // onOpen={() => //console.log('global open')}
-//                 // onClose={() => //console.log('global close')}
-//                 >
-//                     <Item
-//                         // className="my-3"
-//                         onClick={() => { onItemOpen(item.id) }}
-//                         arrow="horizontal"
-//                         key={item.id}
-//                     >
-//                         {item.name}
-//                     </Item>
-
-//                 </SwipeAction>
-//             )
-//         })
-//     } else {
-//         return (
-//             <Empty />
-//         )
-//     }
-
-
-// }
-

@@ -1,19 +1,16 @@
-import { Button, Card, Drawer, List, Checkbox, Collapse, Modal } from 'antd'
+import { Button, Card, Drawer, List, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { TasksTreePropsType, taskTreeTypes } from './TasksTreeContainer'
-import { FileAddOutlined, SettingOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import NewTaskTreeForm from './NewTaskTreeForm'
-import { Formik, useFormikContext  } from 'formik'
+import { FileAddOutlined, SettingOutlined } from '@ant-design/icons'
+import NewTaskTreeForm from './TaskTreeForm/NewTaskTreeForm'
+import { Formik  } from 'formik'
 import moment from "moment"
 import TaskTreeBrowserItem from './TaskTreeBrowserItemContainer'
 import RunTaskFormCall from './RunTask.tsx/RunTaskForm'
-import { TaskListType, TaskType } from '../../Types/types'
+import { NewTaskListType, TaskListType, NewTaskDataType } from '../../Types/types'
+import { checkActionsType } from './TaskListActions/TaskListActions'
 
-
-
-const { Panel } = Collapse;
-
-type InitialDrewerDataType = {
+export type InitialDrewerDataType = {
     header: string,
     taskId: false | number
 }
@@ -23,70 +20,90 @@ const initialDrewerData: InitialDrewerDataType = {
     taskId: false
 } 
 
+type SelectOptionType = {
+    name: string,
+    value: number
+}
+
+export type InitialValuesType = {
+    selectOptions: Array<SelectOptionType> | null,
+    taskTypes: typeof taskTreeTypes,
+    task_type: number,
+    name: string
+    time_to_complete?: moment.Moment,
+    descriptions?: string,
+    parent_id?: number,
+    data?: string
+}
+
+const getInitialValues = ( taskList: Array<TaskListType> ):InitialValuesType => {
+    return (
+        {
+            selectOptions: getSelectOptions(taskList),
+            taskTypes: taskTreeTypes,
+            task_type: 1,
+            name: '',
+        }
+    )
+}
+
+const getSelectOptions = (taskList: Array<TaskListType>):Array<SelectOptionType>  => {
+    if (taskList !== undefined && taskList.length > 0) {
+        return taskList.map((item: TaskListType) => {
+            return ({
+                name: item.name,
+                value: item.id
+            })
+        })
+    } else {
+        return []
+    }
+}
+
 const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
+
     useEffect(() => {
+        const getTaskList = () => props.getTaskList
         if (props.taskList !== undefined && props.taskList.length === 0 && !props.isTaskListLoaded) {
-            props.getTaskList()
+            getTaskList()()
         }
         else if (props.taskList === undefined) {
-            props.getTaskList()
+            getTaskList()()
         }
         setVisible(false)
-        setInitialFormValues(initialValues)
-    }, [props.taskList])
-
-    // const { submitForm } = useFormikContext();
+        setInitialFormValues(getInitialValues(props.taskList))
+    }, [props.taskList, props.getTaskList, props.isTaskListLoaded])
 
     const [visible, setVisible] = useState(false)
     const [drawerData, setDrawerData] = useState(initialDrewerData)
-
-    const getSelectOptions = () => {
-        if (props.taskList !== undefined && props.taskList.length > 0) {
-            return props.taskList.map((item) => {
-                return ({
-                    name: item.name,
-                    value: item.id
-                })
-            })
-        } else {
-            return null
-        }
-    }
-
-    const initialValues: any = {
-        selectOptions: getSelectOptions(),
-        taskTypes: taskTreeTypes,
-        task_type: 1,
-        name: '',
-
-    }
-
-    const [initialFormValues, setInitialFormValues] = useState(initialValues)
+    const [initialFormValues, setInitialFormValues] = useState(getInitialValues(props.taskList))
     const [runTaskVisible, setRunTaskVisible] = useState(false)
     const [runData, setRunData] = useState<TaskListType | null>(null)
 
-    const runTaslSubmit = (values: any) => {
-        console.log('runTaslSubmit', values.time.format('HH:mm:00'))
-        console.log(runData)
+    type RunTaskSubmitType = {
+        date: moment.Moment,
+        time: moment.Moment,
+    }
+    const runTaskSubmit = (values: RunTaskSubmitType) => {
         if (runData !== null && runData.data !== null && props.userId) {
             const data = JSON.parse(runData.data)
-            const newToDo = {
+            const newToDo: NewTaskDataType = {
                 name: 'Call to '+data.lead_name,
-                descriptions: data.phone_number,
+                description: data.phone_number,
                 date: values.date.format('YYYY-MM-DD'),
                 time: values.time.format('HH:mm:00'), 
-                user_id: props.userId
+                user_id: props.userId,
+                action: Number(runData.task_type),
+                action_data: {
+                    phone: data.phone_number,
+                    name: data.lead_name
+                }
             }
             console.log(newToDo)
             props.createNewToDo(newToDo, true)
         }
-        
-        
-        // props.createNewToDo()
     }
-    const runTaslOk = (values: any) => {
-
-        // submitForm()
+    const runTaskOk = () => {
         setRunTaskVisible(false)
     }
 
@@ -94,20 +111,17 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
         setRunTaskVisible(false)
     }
 
-    const onRunTask = (values: any) => {
+    const onRunTask = (values: number) => {
         setRunTaskVisible(true)
-        console.log('onRunTask', values)
         setRunData(
             props.taskList.filter( (item: TaskListType)=> {
-                if (item.id === values) {
-                    return item
-                }
+                    return (item.id === values)
             })[0]
         )
     }
     
     const onClose = () => {
-        setInitialFormValues({ ...initialValues })
+        setInitialFormValues(getInitialValues(props.taskList))
         setVisible(false)
     }
 
@@ -117,27 +131,31 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
 
     const onAdd = () => {
         setDrawerData(initialDrewerData)
-        setInitialFormValues(initialValues)
         showDrawer()
     }
 
-    const handleSubmit = (formProps: any) => {
+    const handleSubmit = (formProps: InitialValuesType) => {
+        const data = checkActionsType(formProps)
+        console.log(formProps)
+        let newTaskList: NewTaskListType = {
+            name: formProps.name,
+            task_type: formProps.task_type.toString(),
+            user_id: props.userId,
+            time_to_complete: formProps.time_to_complete ? formProps.time_to_complete.format('HH:mm:ss') : undefined,
 
-        let formPropsCopy: any = { ...formProps }
-        delete formPropsCopy.selectOptions
-        delete formPropsCopy.taskTypes
-        if (formPropsCopy.time_to_complete !== undefined) {
-            formPropsCopy.time_to_complete = formPropsCopy.time_to_complete.format('HH:mm:ss')
+            descriptions: formProps.descriptions, 
+            parent_id: formProps.parent_id ? formProps.parent_id : undefined,
         }
 
-        formPropsCopy.user_id = props.userId
-        console.log('handleSubmit', formPropsCopy)
+        if (data) {
+            newTaskList = {...newTaskList, data: data}
+        }
+
         if (!drawerData.taskId) {
-            props.createNewTaskList(formPropsCopy)
+            props.createNewTaskList(newTaskList)
         } else {
-            props.updateTaskList(formPropsCopy, drawerData.taskId)
+            props.updateTaskList(newTaskList, drawerData.taskId)
         }
-
     }
 
     return (
@@ -145,13 +163,8 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
             <div className="site-card-border-less-wrapper">
                 <Card
                     title={
-                        <div
-                            // className="col-12 col-md-12 col-lg-4"
-                            className="inline"
-                        >
+                        <div className="inline" >
                             <div ><h2>Tasks Tree</h2></div>
-
-
                         </div>
                     }
                     extra={
@@ -172,7 +185,6 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
                                 type="primary"
                                 shape="round"
                                 style={{ marginLeft: 10 }}
-                                // onClick={props.showModal}
                                 icon={
                                     <div className="d-flex flex-wrap align-content-start">
                                         <SettingOutlined style={{ fontSize: '18px' }} />
@@ -183,23 +195,9 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
                     }
                     bordered={false}
                 >
-
                     <List
                         size="small"
                         bordered
-
-                        // dataSource={getTaskTreeItems(
-                        //     props.taskList,
-                        //     props.deleteTaskList,
-                        //     props.updateTaskList,
-                        //     showDrawer,
-                        //     setDrawerData,
-                        //     initialFormValues,
-                        //     setInitialFormValues,
-                        //     props.selectedTasks
-                        // )}
-                        // renderItem={item => <List.Item className="py-0" draggable>{item}</List.Item>}
-
                         dataSource={props.taskList}
                         renderItem={item => {
                             return (<TaskTreeBrowserItem
@@ -208,7 +206,7 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
                                 setDrawerData={setDrawerData}
                                 initialFormValues={initialFormValues}
                                 setInitialFormValues={setInitialFormValues}
-                                initialValues={initialValues}
+                                initialValues={getInitialValues(props.taskList)}
                                 onRunTask={onRunTask}
                             />)
                         }}
@@ -226,27 +224,32 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
                         <Formik
                             initialValues={initialFormValues}
                             onSubmit={handleSubmit}
-                            render={NewTaskTreeForm}
                             enableReinitialize={true}
-                        />
+                        >
+                            {NewTaskTreeForm}
+                        </Formik>
 
                     </Drawer>
 
                     <Modal
                         title="Run Task"
                         visible={runTaskVisible}
-                        onOk={runTaslOk}
+                        onOk={runTaskOk}
                         onCancel={runTaskCancel}
                         okText="Ok"
                         cancelText="Cancel"
                     >
-                        {/* <RunTaskForm handleSubmit={runTaslSubmit} handleReset={(v: any)=>{}}/> */}
                         <Formik
-                            initialValues={{}}
-                            onSubmit={runTaslSubmit}
-                            render={RunTaskFormCall}
+                            initialValues={{
+                                date: moment(),
+                                time: moment(),
+                                action: 2
+                            }}
+                            onSubmit={runTaskSubmit}
                             enableReinitialize={true}
-                        />
+                        >
+                            {RunTaskFormCall}
+                        </Formik>
                     </Modal>
 
                 </Card>
@@ -257,121 +260,3 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
 }
 
 export default TasksTreeBrowser
-
-const getTaskTreeItems = (
-    taskList: Array<any>,
-    deleteTask: (taskId: number) => void,
-    updateTaskList: (values: any, taskId: number) => void,
-    showDrawer: () => void,
-    setDrawerData: (drawerData: any) => void,
-    initialFormValues: any,
-    setInitialFormValues: (initialFormValues: any) => void,
-    selectedTasks: Array<number>
-) => {
-    const onEdit = (task: any) => {
-        setDrawerData({
-            header: 'Edit: "' + task.name + '"',
-            taskId: task.id
-        })
-
-
-        let day = moment().zone('GMT')
-        if (task.time_to_complete !== null) {
-            const splitTime = task.time_to_complete.split(/:/)
-            day.hours(parseInt(splitTime[0])).minutes(parseInt(splitTime[1])).seconds(0).milliseconds(0);
-        } else {
-            day.hours(0).minutes(0).seconds(0).milliseconds(0);
-        }
-
-        setInitialFormValues(
-            {
-                ...initialFormValues,
-                name: task.name,
-                time_to_complete: day,
-                descriptions: task.descriptions,
-                parent_id: task.parent_id,
-                task_type: Number(task.task_type)
-            }
-        )
-        showDrawer()
-    }
-
-    const onStatusChange = (e: any) => {
-        const values = { isCompleted: e.target.checked }
-        updateTaskList(values, e.target.id)
-    }
-
-    // let display: string = 'none'
-
-    // const changeDisplat = (key: any) => {
-    //     console.log(key);
-    //     display = "block"
-    //   }
-
-    if (taskList !== undefined && taskList.length > 0) {
-
-
-        let taskTreeItems: Array<any> = []
-        for (let index = 0; index < taskList.length; index++) {
-            const item = taskList[index];
-            if (item.parent_id === null) {
-                taskTreeItems.push(
-                    <>
-                        <div className="py-2"><Checkbox checked={item.isCompleted} id={item.id} onClick={onStatusChange} /></div>
-                        <div className="w-100 float-left" key={item.id}>
-                            <div className="ml-3 float-left">
-
-                                {item.isCompleted ? <span className="text-black-50">{item.name}</span> : <a data-toggle="collapse" aria-controls={item.id + 'collapseExample'} >{item.name}</a>}
-
-                            </div>
-                            <div className="ml-3 float-right">
-                                {item.time_to_complete}
-                            </div>
-                        </div>
-                        <div className="d-flex flex-row">
-                            <Button className=""
-                                type="primary"
-                                shape="circle"
-                                size="small"
-                                style={{ marginLeft: 10 }}
-                                onClick={() => { onEdit(item) }}
-                                icon={
-                                    <div className="d-flex flex-wrap align-content-start">
-                                        <EditOutlined className="ml-1" style={{ fontSize: '14px' }} />
-                                    </div>
-                                }
-                            />
-                            <Button className=""
-                                type="primary"
-                                danger
-                                shape="circle"
-                                size="small"
-                                style={{ marginLeft: 10 }}
-                                onClick={() => { deleteTask(item.id) }}
-                                icon={
-                                    <div className="d-flex flex-wrap align-content-start">
-                                        <DeleteOutlined className="ml-1" style={{ fontSize: '14px' }} />
-                                    </div>
-                                }
-                            />
-                        </div>
-                    </>
-                )
-                taskTreeItems.push(
-                    <>
-                        <div className="collapse" id={item.id + 'collapseExample'}>
-                            <div className="card card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                            </div>
-                        </div>
-                    </>
-                )
-            }
-
-        }
-        return taskTreeItems
-
-    } else {
-        return []
-    }
-}

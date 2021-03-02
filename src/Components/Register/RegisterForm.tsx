@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react'
 import { Form, Field, FormikProps } from "formik"
-import { AntCheckbox, AntInput, AntInputPassword } from '../../utils/Formik/CreateAntField'
+import { AntCheckbox, AntInput, AntInputPassword, AntSelect } from '../../utils/Formik/CreateAntField'
 import { validateEmail, validateRequired } from '../../utils/Formik/ValidateFields'
 
 const RegisterForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
-    return(
+    return (
         <Form
-            className="form-container" 
+            className="form-container"
             onSubmit={props.handleSubmit}
         >
             <Field
@@ -53,13 +53,45 @@ const RegisterForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 label="Remember Me"
                 submitCount={props.submitCount}
             />
+
+            <Field
+                component={AntSelect}
+                selectOptions={statusOptions}
+                name="status"
+                type="select"
+                label="User Status"
+                submitCount={props.submitCount}
+            />
+
             <div className="submit-container">
                 <button className="ant-btn ant-btn-primary" type="submit">
                     Register
                 </button>
             </div>
+
         </Form>
     )
 }
 
 export default RegisterForm
+
+type StatusOptionItemType = {
+    name: string,
+    value: string,
+    isSubform: boolean,
+}
+
+type StatusOptionsType = Array<StatusOptionItemType>
+
+const statusOptions: StatusOptionsType = [
+    {
+        name: 'Guest',
+        value: 'guest',
+        isSubform: false,
+    },
+    {
+        name: 'Admin',
+        value: 'admin',
+        isSubform: false,
+    },
+]

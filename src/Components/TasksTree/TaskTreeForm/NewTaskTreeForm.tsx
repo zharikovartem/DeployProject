@@ -1,27 +1,36 @@
 import { Form, Field, FormikProps } from 'formik'
 import React, { ReactNode, useState, useEffect } from 'react'
-import { AntInput, AntSelect, AntTextArea, AntTimePicker } from '../../utils/Formik/CreateAntField'
-import { validateRequired } from '../../utils/Formik/ValidateFields'
+import { AntInput, AntSelect, AntTextArea, AntTimePicker } from '../../../utils/Formik/CreateAntField'
+import { validateRequired } from '../../../utils/Formik/ValidateFields'
+import ProjectForm from './Project/ProjectForm'
 
 
 const NewTaskTreeForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     const values: any = props.values
     const selectOptions = values.selectOptions
-    const taskTypes = values.taskTypes // ++++++
+    const taskTypes = values.taskTypes 
 
     const [taskType, setTaskType] = useState(values.taskType)
 
     useEffect(() => {
         const values: any = props.values
         const taskTypes = values.task_type
-        setTaskType(taskTypes)
+        if (Array.isArray(taskTypes)) {
+            setTaskType(taskTypes[0])
+        } else {
+            setTaskType(taskTypes)
+        }
+        
     }, [props.values])
 
+    const onSelectTaskType = (val: string) => {}
+    
     return (
         <Form
             className="form-container"
             onSubmit={props.handleSubmit}
         >
+            {taskType !== 3 ?
             <Field
                 component={AntInput}
                 name="name"
@@ -31,39 +40,38 @@ const NewTaskTreeForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 submitCount={props.submitCount}
                 hasFeedback
             />
+            :
+            null}
 
             <Field
                 component={AntSelect}
-
                 selectOptions={selectOptions}
-
                 name="parent_id"
                 type="select"
                 label="Parent"
-                // validate={validateRequired}
                 submitCount={props.submitCount}
-            // hasFeedback
             />
 
             <Field
                 component={AntTextArea}
                 name="descriptions"
-                type="text"
+                type="textarea"
                 label="Descriptions"
-                // validate={validateRequired}
                 submitCount={props.submitCount}
-                // hasFeedback
             />
 
-            <Field
-                component={AntTimePicker}
-                name="time_to_complete"
-                type="time"
-                label="Time to complete"
-                // validate={validateRequired}
-                submitCount={props.submitCount}
-            // hasFeedback
-            />
+            {taskType !== 3 ?
+                <Field
+                    component={AntTimePicker}
+                    name="time_to_complete"
+                    type="time"
+                    label="Time to complete"
+                    submitCount={props.submitCount}
+                />
+                :
+                null
+            }
+
 
             <Field
                 component={AntSelect}
@@ -71,6 +79,7 @@ const NewTaskTreeForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 name="task_type"
                 type="select"
                 label="task Types"
+                onSelect = {onSelectTaskType}
                 submitCount={props.submitCount}
             />
 
@@ -98,6 +107,12 @@ const NewTaskTreeForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 </>
                 :
                 null
+            }
+            {
+                taskType === 3 ?
+                    <ProjectForm />
+                    :
+                    null
             }
 
             <div className="submit-container">

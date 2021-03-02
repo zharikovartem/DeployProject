@@ -1,8 +1,6 @@
-import { Button } from 'antd'
 import { Form, Field, FormikProps } from 'formik'
-import React, { ReactNode, useState, useEffect } from 'react'
-import ButtonVsIcon from '../../../utils/components/ButtonVsIcon'
-import { AntDatePicker, AntInput, AntSelect, AntTextArea, AntTimePicker } from '../../../utils/Formik/CreateAntField'
+import React, { ReactNode } from 'react'
+import { AntDatePicker, AntTimePicker } from '../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../utils/Formik/ValidateFields'
 
 const RunTaskFormCall: ((props: FormikProps<{}>) => ReactNode) = (props) => {
@@ -18,7 +16,6 @@ const RunTaskFormCall: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 label="Select Date"
                 validate={validateRequired}
                 submitCount={props.submitCount}
-            // hasFeedback
             />
 
             <Field
@@ -28,10 +25,9 @@ const RunTaskFormCall: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 label="Select time"
                 validate={validateRequired}
                 submitCount={props.submitCount}
-            // hasFeedback
             />
-            <button className="ant-btn ant-btn-primary ml-2">Add now</button>
-            <button className="ant-btn ant-btn-primary ml-2">Auto add by context</button>
+            <button type="button" className="ant-btn ant-btn-primary ml-2">Add now</button>
+            <button type="button" className="ant-btn ant-btn-primary ml-2">Auto add by context</button>
 
             <div className="submit-container">
                 <button className="ant-btn ant-btn-primary" type="submit">

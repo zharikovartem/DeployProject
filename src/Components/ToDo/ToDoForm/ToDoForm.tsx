@@ -1,10 +1,12 @@
 import { Form, Field, FormikProps } from 'formik'
-import React, { ReactNode, useState, useEffect } from 'react'
-import { AntInput, AntSelect, AntTextArea, AntTimePicker, AntDatePicker } from '../../../utils/Formik/CreateAntField'
+import React, { ReactNode } from 'react'
+import { AntInput, AntTextArea, AntTimePicker, AntDatePicker } from '../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../utils/Formik/ValidateFields'
 
 
 const ToDoForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
+    const disabled = props.initialStatus === 'readOnly' ? true : false
+    
     return (
         <Form
             className="form-container"
@@ -18,6 +20,7 @@ const ToDoForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 validate={validateRequired}
                 submitCount={props.submitCount}
                 hasFeedback
+                disabled= {disabled}
             />
 
             <Field
@@ -27,6 +30,7 @@ const ToDoForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 label="Task date"
                 validate={validateRequired}
                 submitCount={props.submitCount}
+                disabled= {disabled}
             />
 
             <Field
@@ -36,21 +40,28 @@ const ToDoForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 label="Task time"
                 validate={validateRequired}
                 submitCount={props.submitCount}
+                disabled= {disabled}
             />
 
             <Field
                 component={AntTextArea}
                 name="descriptions"
-                type="text"
+                type="textarea"
                 label="Descriptions"
                 submitCount={props.submitCount}
+                disabled= {disabled}
             />
 
-            <div className="submit-container">
-                <button className="ant-btn ant-btn-primary" type="submit">
-                    Save
-                </button>
-            </div>
+            { !disabled ?
+                <div className="submit-container">
+                    <button className="ant-btn ant-btn-primary" type="submit">
+                        Save
+                    </button>
+                </div>
+                : 
+                null
+            }
+
 
         </Form>
     )

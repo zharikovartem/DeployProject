@@ -2,15 +2,19 @@ import { Formik } from 'formik'
 import React, { useEffect } from 'react'
 import RegisterForm from './RegisterForm'
 import { RegisterPropsType } from './RegisterContainer'
-import { propTypes } from 'react-bootstrap/esm/Image'
-import { Redirect, Route, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { message } from 'antd'
+import { RegisterFormType } from '../../api/authAPI'
 
-const initialValues = {
-    // parent_id :['1', '2', '3']
-}
 
 export type OwnRegisterPropsType = {}
+
+const initialValues: RegisterFormType = {
+    email: '',
+    password: '',
+    name: '',
+    remember: false
+}
 
 const Register: React.FC<RegisterPropsType> = (props) => {
     let history = useHistory();
@@ -18,7 +22,7 @@ const Register: React.FC<RegisterPropsType> = (props) => {
         if(props.isAuth) {
             history.replace(props.appLocation+'toDoList')
         }
-    }, [props.isAuth])
+    }, [props.isAuth, history, props.appLocation])
 
     useEffect(() => {
         if (props.authError) {
@@ -26,21 +30,19 @@ const Register: React.FC<RegisterPropsType> = (props) => {
         }
     }, [props.authError])
     
-    const handleSubmit = (formProps: any) => {
-        //console.log(formProps)
-        formProps.status = 'guest'
+    const handleSubmit = (formProps: RegisterFormType) => {
         props.register(formProps)
     }
 
-    //console.log('Register', props)
     return (
         <>
             <h1 className="mb-5 mx-auto">Register Form</h1>
             <Formik
                 initialValues={initialValues}
                 onSubmit={handleSubmit}
-                render={RegisterForm}
-            />
+            >
+                {RegisterForm}
+            </Formik>
         </>
     )
 }

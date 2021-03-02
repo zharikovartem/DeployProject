@@ -1,24 +1,11 @@
 import React, {useEffect} from 'react'
 import { LoginPropsType } from './LoginContainer'
-import { List, InputItem, Checkbox } from 'antd-mobile'
 import { Formik } from "formik"
-import moment from "moment"
 import LoginForm from './LoginForm'
-import { propTypes } from 'react-bootstrap/esm/Image'
 import { Button, message } from 'antd'
 import { Link } from 'react-router-dom'
+import { credsType } from '../../redux/authReducer'
 
-const CheckboxItem = Checkbox.CheckboxItem;
-
-const initialValues = {
-    // bookingClient: "",
-    // bookingDate: moment(Date.now()),
-    // bookingTime: moment(Date.now()),
-    // selectOptions: ["Mark", "Bob", "Anthony"]
-}
-
-// export const dateFormat = "YYYY--MM-DD";
-// export const timeFormat = "h:mm A";
 
 export type OwnLoginPropsType = {}
 
@@ -29,15 +16,21 @@ const Login: React.FC<LoginPropsType> = (props) => {
         }
     }, [props.authError])
 
-    const handleSubmit = (formProps: any) => {
-        //console.log('formProps: ', formProps)
-        if (!formProps.remember) {
-            formProps.remember = false
-        }
-        props.login(formProps)
+    type FormPropsType = {
+        email: string,
+        password: string,
+        remember: boolean
     }
 
-    //console.log(props)
+    const initialValues: FormPropsType = {
+        email: '',
+        password: '',
+        remember: false
+    }
+
+    const handleSubmit = (formProps: FormPropsType) => {
+        props.login(formProps as credsType)
+    }
 
     return (
         <>
@@ -45,8 +38,9 @@ const Login: React.FC<LoginPropsType> = (props) => {
             <Formik
                 initialValues={initialValues}
                 onSubmit={handleSubmit}
-                render={LoginForm}
-            />
+            >
+                {LoginForm}
+            </Formik>
             <div className="mt-3">
                 <Link to={props.location +"register"}><Button type="link" block>Register</Button></Link>
             </div>

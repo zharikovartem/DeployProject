@@ -8,6 +8,7 @@ import ToDoForm from './ToDoForm/ToDoForm'
 import moment from 'moment'
 import { TaskType, TimeScaleSettingsType, NewTaskDataType } from '../../Types/types'
 import { Divider, Empty } from 'antd'
+import { NewTimeByString } from '../../utils/Date/NewDeteByString'
 
 type InitialDrewerDataType = {
     header: string,
@@ -18,20 +19,16 @@ const initialDrewerData: InitialDrewerDataType = {
     header: 'Create New Task',
     taskId: false
 }
-const zeroTime = new Date()
-zeroTime.setHours(0)
-zeroTime.setMinutes(0)
-zeroTime.setSeconds(0)
-zeroTime.setMilliseconds(0)
+const zeroTime = NewTimeByString()
 
-type InitialValuesType = {
+export type InitialValuesType = {
     name: string,
     time: Date,
     date: Date,
     descriptions: string | null
 }
 
-const initialValues: InitialValuesType = {
+export const initialValues: InitialValuesType = {
     name: '',
     time: zeroTime,
     date: new Date(),
@@ -43,11 +40,12 @@ const ToDoMobile: React.FC<ToDoListPropsType> = (props) => {
         if (props.taskList === null) {
             props.getTaskList(props.dateInterval.startDate.format('YYYY-MM-DD'), props.dateInterval.endDate.format('YYYY-MM-DD'))
         }
-    }, [props.taskList])
+    }, [props])
 
     useEffect(() => {
-        props.getTaskList(props.dateInterval.startDate.format('YYYY-MM-DD'), props.dateInterval.endDate.format('YYYY-MM-DD'))
-    }, [props.dateInterval])
+        const getTaskList = () => props.getTaskList
+        getTaskList()(props.dateInterval.startDate.format('YYYY-MM-DD'), props.dateInterval.endDate.format('YYYY-MM-DD'))
+    }, [props.dateInterval, props.getTaskList])
 
     useEffect(() => {
         if (props.isInterval) {
@@ -66,6 +64,7 @@ const ToDoMobile: React.FC<ToDoListPropsType> = (props) => {
     const showDrawer = (): void => {
         if (visible) {
             setInitialFormValues(initialValues)
+            setDrawerData(initialDrewerData)
         }
         setVisible(!visible)
     }
@@ -82,13 +81,9 @@ const ToDoMobile: React.FC<ToDoListPropsType> = (props) => {
         setIsModalVisible(false)
     }
 
-    type FormPropsType = {
-        
-    }
-
-    const handleSubmit = (values: InitialValuesType) => {
-        let formPropsCopy: NewTaskDataType = { 
-            ...values, 
+    const handleSubmit = (values: InitialValuesType, actions: any) => {
+        let formPropsCopy: NewTaskDataType = {
+            ...values,
             time: moment(values.time).format('HH:mm:ss'),
             date: moment(values.date).format('YYYY-MM-DD'),
             user_id: props.userId,
@@ -99,18 +94,18 @@ const ToDoMobile: React.FC<ToDoListPropsType> = (props) => {
         } else {
             props.updateTask(formPropsCopy, drawerData.taskId)
         }
+        actions.resetForm()
         showDrawer()
     }
 
     const onComplete = (task: TaskType) => {
-        if (task.isCompleted) {
-            const updatedTask: NewTaskDataType = {
-                ...task as NewTaskDataType,
-                isCompleted: !task.isCompleted
-            }
-            props.updateTask(updatedTask, task.id)
+        const updatedTask: NewTaskDataType = {
+            ...task as NewTaskDataType,
+            isCompleted: !task.isCompleted
         }
+        props.updateTask(updatedTask, task.id)
     }
+
 
     if (props.taskList !== null) {
         return (
@@ -125,13 +120,11 @@ const ToDoMobile: React.FC<ToDoListPropsType> = (props) => {
                         />}
                     >
                     </Card.Header>
-
                     <SettingsModal
                         isModalVisible={isModalVisible}
                         handleOk={handleOk}
                         handleCancel={handleCancel}
                     />
-
                     <Drawer
                         className="my-drawer"
                         style={{ minHeight: document.documentElement.clientHeight }}
@@ -141,9 +134,10 @@ const ToDoMobile: React.FC<ToDoListPropsType> = (props) => {
                                 <Formik
                                     initialValues={initialFormValues}
                                     onSubmit={handleSubmit}
-                                    render={ToDoForm as any}
                                     enableReinitialize={true}
-                                />
+                                >
+                                    {ToDoForm}
+                                </Formik>
                             </div>
                         }
                         open={visible}
@@ -172,7 +166,6 @@ const ToDoMobile: React.FC<ToDoListPropsType> = (props) => {
                                     />
                             }
                         </List>
-
                     </Drawer>
                 </Card>
             </WingBlank>
@@ -190,11 +183,12 @@ type TaskItemMobileType = {
         startDate: moment.Moment;
         endDate: moment.Moment;
     },
-    deleteTask: (taskid: number, startDate: string, endDate:string)=>void,
+    deleteTask: (taskid: number, startDate: string, endDate: string) => void,
     setDrawerData: React.Dispatch<React.SetStateAction<InitialDrewerDataType>>,
     setInitialFormValues: React.Dispatch<React.SetStateAction<InitialValuesType>>,
-    showDrawer: ()=>void,
-    onComplete: (values: TaskType)=>void,
+    showDrawer: () => void,
+    onComplete: (values: TaskType) => void,
+    isReadOnly: boolean
 }
 
 const TaskItemMobile: React.FC<TaskItemMobileType> = (props) => {
@@ -205,17 +199,12 @@ const TaskItemMobile: React.FC<TaskItemMobileType> = (props) => {
             taskId: value.id
         })
 
-        const splitTime = value.time.split(/:/)
-        let time = new Date()
-        time.setHours(parseInt(splitTime[0]))
-        time.setMinutes(parseInt(splitTime[1]))
-        time.setSeconds(parseInt(splitTime[2]))
-        time.setMilliseconds(0)
+        let time = NewTimeByString(value.time)
 
         const splitDate = value.date.split(/-/)
         let date = new Date()
         date.setFullYear(parseInt(splitDate[0]))
-        date.setMinutes(parseInt(splitDate[1]))
+        date.setMonth(parseInt(splitDate[1]) - 1)
         date.setDate(parseInt(splitDate[2]))
 
         props.setInitialFormValues({
@@ -228,35 +217,65 @@ const TaskItemMobile: React.FC<TaskItemMobileType> = (props) => {
         props.showDrawer()
     }
 
-    return (
-        <SwipeAction
-            style={{ backgroundColor: 'gray' }}
-            autoClose
-            right={[
-                {
-                    text: 'Delete',
-                    onPress: () => props.deleteTask(
-                        props.element.id,
-                        props.dateInterval.startDate.format('YYYY-MM-DD'),
-                        props.dateInterval.endDate.format('YYYY-MM-DD')
-                    ),
-                    style: { backgroundColor: '#F4333C', color: 'white' },
-                },
-            ]}
-            left={[
-                {
-                    text: 'Edit',
-                    onPress: () => { onEdit(props.element) },
-                    style: { backgroundColor: '#108ee9', color: 'white' },
-                },
-                {
-                    text: props.element.isCompleted ? 'Not Done' : 'Done',
-                    onPress: () => props.onComplete(props.element),
-                    style: { backgroundColor: 'green', color: 'white' },
-                },
-            ]}
-        >
+    if (!props.isReadOnly) {
+        return (
+            <SwipeAction
+                key={props.element.id}
+                style={{ backgroundColor: 'gray' }}
+                autoClose
+                right={[
+                    {
+                        text: 'Delete',
+                        onPress: () => props.deleteTask(
+                            props.element.id,
+                            props.dateInterval.startDate.format('YYYY-MM-DD'),
+                            props.dateInterval.endDate.format('YYYY-MM-DD')
+                        ),
+                        style: { backgroundColor: '#F4333C', color: 'white' },
+                    },
+                ]}
+                left={[
+                    {
+                        text: 'Edit',
+                        onPress: () => { onEdit(props.element) },
+                        style: { backgroundColor: '#108ee9', color: 'white' },
+                    },
+                    {
+                        text: props.element.isCompleted ? 'Not Done' : 'Done',
+                        onPress: () => props.onComplete(props.element),
+                        style: { backgroundColor: 'green', color: 'white' },
+                    },
+                ]}
+                onOpen={() => { }}
+                onClose={() => { }}
+            >
 
+                <List.Item
+                    key={props.element.id.toString()}
+                    wrap
+                >
+                    <div className="w-100 row " key={props.element.id.toString()}>
+                        <div className="col-2 ">
+                            <span className="ml-3">{props.element.time.split(/:/)[0] + ':' + props.element.time.split(/:/)[1]}</span>
+                        </div>
+                        <div className="col-10">
+                            {props.element.isCompleted ?
+                                <span
+                                    className="text-break ml-3"
+                                    style={{ textDecoration: props.element.isCompleted ? 'line-through' : '' }}
+                                >
+                                    {props.element.name}
+                                </span>
+                                :
+                                <span className="text-break ml-3">{props.element.name}</span>
+                            }
+                        </div>
+                    </div>
+                </List.Item>
+            </SwipeAction>
+        )
+    } else {
+        return (
             <List.Item
                 key={props.element.id.toString()}
                 wrap
@@ -267,15 +286,21 @@ const TaskItemMobile: React.FC<TaskItemMobileType> = (props) => {
                     </div>
                     <div className="col-10">
                         {props.element.isCompleted ?
-                            <span className="text-black-50 text-break ml-3">{props.element.name}</span>
+                            <span
+                                className="text-break ml-3"
+                                style={{ textDecoration: props.element.isCompleted ? 'line-through' : '' }}
+                            >
+                                {props.element.name}
+                            </span>
                             :
                             <span className="text-break ml-3">{props.element.name}</span>
                         }
                     </div>
                 </div>
             </List.Item>
-        </SwipeAction>
-    )
+        )
+    }
+
 }
 
 type TimeScaleType = {
@@ -284,11 +309,12 @@ type TimeScaleType = {
         startDate: moment.Moment,
         endDate: moment.Moment,
     },
-    deleteTask: (taskid: number, startDate: string, endDate: string)=>void,
-    setDrawerData: React.Dispatch<React.SetStateAction<InitialDrewerDataType>>,
-    setInitialFormValues: React.Dispatch<React.SetStateAction<InitialValuesType>>,
-    showDrawer: ()=>void,
-    onComplete: (values: TaskType)=>void,
+    deleteTask?: (taskid: number, startDate: string, endDate: string) => void,
+    setDrawerData?: React.Dispatch<React.SetStateAction<InitialDrewerDataType>>,
+    setInitialFormValues?: React.Dispatch<React.SetStateAction<InitialValuesType>>,
+    showDrawer?: () => void,
+    onComplete?: (values: TaskType) => void,
+    isReadOnly?: boolean
 }
 const TimeScale: React.FC<TimeScaleType> = (props) => {
     let startDate = moment(props.dateInterval.startDate)
@@ -303,23 +329,25 @@ const TimeScale: React.FC<TimeScaleType> = (props) => {
     const getTasksForHour = (date: string, hour: number) => {
         let tasksForHour: Array<JSX.Element | undefined> = []
         if (props.taskList !== null) {
-            tasksForHour = props.taskList.map(item => {
-                if (item.date === date) {
-                    let itemTime = item.time.split(':')[0]
-                    if (moment().hours(hour).format('HH') === itemTime) {
-                        return <TaskItemMobile
+            tasksForHour = props.taskList
+                .filter((item: TaskType) => {
+                    return item.date === date && moment().hours(hour).format('HH') === item.time.split(':')[0]
+                })
+                .map((item: TaskType) => {
+                    return (
+                        <TaskItemMobile
                             key={item.id.toString()}
                             element={item}
                             dateInterval={props.dateInterval}
-                            deleteTask={props.deleteTask}
-                            setDrawerData={props.setDrawerData}
-                            setInitialFormValues={props.setInitialFormValues}
-                            showDrawer={props.showDrawer}
-                            onComplete={props.onComplete}
+                            deleteTask={props.deleteTask ? props.deleteTask : () => { }}
+                            setDrawerData={props.setDrawerData ? props.setDrawerData : () => { }}
+                            setInitialFormValues={props.setInitialFormValues ? props.setInitialFormValues : () => { }}
+                            showDrawer={props.showDrawer ? props.showDrawer : () => { }}
+                            onComplete={props.onComplete ? props.onComplete : () => { }}
+                            isReadOnly={props.isReadOnly ? props.isReadOnly : false}
                         />
-                    }
-                }
-            })
+                    )
+                })
         }
         return tasksForHour
 
@@ -329,12 +357,12 @@ const TimeScale: React.FC<TimeScaleType> = (props) => {
         let hours: Array<JSX.Element | undefined> = []
         for (let index = 0; index < 24; index++) {
             hours.push(
-                <>
+                <div key={index + 'div'}>
                     <Divider key={index + 'to' + headlineDate} orientation="left">
                         {index <= 9 ? '0' : null}{index}:00
                     </Divider>
                     {getTasksForHour(headlineDate, index)}
-                </>
+                </div>
             )
         }
         return hours
@@ -345,10 +373,10 @@ const TimeScale: React.FC<TimeScaleType> = (props) => {
             {
                 dateArrey.map((date: moment.Moment) => {
                     return (
-                        <>
+                        <div key={date.format('DD MMMM') + 'divBlock'}>
                             <h3 key={date.format('DD MMMM') + 'dateHeader'}>{date.format('DD MMMM')}</h3>
                             {getHours(date.format('YYYY-MM-DD'))}
-                        </>
+                        </div>
                     )
                 })
             }
@@ -356,7 +384,7 @@ const TimeScale: React.FC<TimeScaleType> = (props) => {
     )
 }
 
-const TasksOnly: React.FC<TimeScaleType> = (props) => {
+export const TasksOnly: React.FC<TimeScaleType> = (props) => {
     const startDate = moment(props.dateInterval.startDate)
     let dateArrey: Array<moment.Moment> = []
     while (moment(startDate.format('YYYY-MM-DD')).isSameOrBefore(moment(props.dateInterval.endDate.format('YYYY-MM-DD')))) {
@@ -368,23 +396,24 @@ const TasksOnly: React.FC<TimeScaleType> = (props) => {
         <>
             {dateArrey.map((date: moment.Moment) => {
                 return (
-                    <>
+                    <div key={date.format('DD MMMM')}>
                         <h3>{date.format('DD MMMM')}</h3>
-                        {props.taskList?.map( (task: TaskType) => {
+                        {props.taskList?.map((task: TaskType) => {
                             if (task.date === date.format('YYYY-MM-DD')) {
                                 return <TaskItemMobile
                                     key={task.id.toString()}
                                     element={task}
                                     dateInterval={props.dateInterval}
-                                    deleteTask={props.deleteTask}
-                                    setDrawerData={props.setDrawerData}
-                                    showDrawer={props.showDrawer}
-                                    setInitialFormValues={props.setInitialFormValues}
-                                    onComplete={props.onComplete}
+                                    deleteTask={props.deleteTask ? props.deleteTask : () => { }}
+                                    setDrawerData={props.setDrawerData ? props.setDrawerData : () => { }}
+                                    showDrawer={props.showDrawer ? props.showDrawer : () => { }}
+                                    setInitialFormValues={props.setInitialFormValues ? props.setInitialFormValues : () => { }}
+                                    onComplete={props.onComplete ? props.onComplete : () => { }}
+                                    isReadOnly={props.isReadOnly ? props.isReadOnly : false}
                                 />
-                            }
+                            } else return null
                         })}
-                    </>
+                    </div>
                 )
             })}
         </>

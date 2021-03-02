@@ -3,22 +3,29 @@ import React, { useState } from 'react'
 
 const Item = Popover.Item
 
-const MenuPopover: React.FC<any> = (props) => {
+type MenuPopoverType = {
+    onLogout: ()=>void
+}
+
+const MenuPopover: React.FC<MenuPopoverType> = (props) => {
     const [visible, setVisible] = useState(false)
 
-    const onSelect = (opt: any, index?: number) => {
-        //console.log(opt.props);
+    const onSelect = (opt: JSX.Element, index?: number) => {
         setVisible(false)
-        if(opt.props.children === "Logout") {
-            props.onLogout()
+
+        switch (opt.props.children) {
+            case 'Logout':
+                props.onLogout()
+                break
+        
+            default:
+                break
         }
     }
 
     const handleVisibleChange = (visible: boolean) => {
         setVisible(visible)
     }
-
-    const fortest:String = "fortest"
 
     return (
         <div className="mr-3">

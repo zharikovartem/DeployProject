@@ -1,40 +1,29 @@
 import React, { useState } from 'react'
-import { Menu, ActivityIndicator, NavBar, Button } from 'antd-mobile'
+import { Menu, ActivityIndicator, NavBar } from 'antd-mobile'
 import { ValueType } from 'antd-mobile/lib/menu/PropsType'
 import './MenuMobile.css'
 import { useHistory, useLocation } from 'react-router-dom'
-import { MenuDataType } from './Header'
-import { MenuMobilePropsType } from './MenuMobileContainer'
+import { MenuPropsType } from './MenuContainer'
 import { Link } from 'react-router-dom'
-import { LogoutOutlined } from '@ant-design/icons'
 import MenuPopover from './MenuPopover'
+import { MenuDataItemType } from './Header'
 
-export type OwnMenuMobilePropsType = {
-    menuData: MenuDataType,
-    logout: () => void
-}
-
-const MenuMobile: React.FC<MenuMobilePropsType> = (props) => {
-    let history = useHistory();
-    const location = useLocation();
-    const [show, setShow] = useState(false)
-    type DataType = typeof props.menuData
-    const data = [...props.menuData]
-    const [initData, setInitData] = useState<DataType>(data)
+const MenuMobile: React.FC<MenuPropsType> = (props) => {
+    let history = useHistory()
+    const location = useLocation()
+    const [showMenu, setShowMenu] = useState(false)
 
     const getSelectedMenuItem = (): ValueType => {
-        let response: ValueType = [data[0].value, '']
-        data.forEach((dataItem: any) => {
+        let response: ValueType = [props.menuData[0].value, '']
+        props.menuData.forEach((dataItem: MenuDataItemType) => {
             if (dataItem.children) {
-                dataItem.children.forEach((item: any) => {
-                    //console.log('/',item.value,'===',location.pathname)
+                dataItem.children.forEach((item: MenuDataItemType) => {
                     if (item.value === location.pathname) {
                         response = [dataItem.value, item.value]
                     }
                 })
             }
         })
-        //console.log('getSelectedMenuItem response: ', response)
         return response
     }
 
@@ -42,25 +31,21 @@ const MenuMobile: React.FC<MenuMobilePropsType> = (props) => {
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault(); // Fix event propagation on Android
-        setShow(!show)
-        // if (!initData) {
-        //     setInitData(data)
-        // }
+        setShowMenu(!showMenu)
     }
 
     const onChange = (value?: ValueType | undefined) => {
-        //console.log('input values: ', value)
         if (value) {
             let subMenu = value[0]
 
-            data.forEach((dataItem) => {
+            props.menuData.forEach((dataItem) => {
                 if (dataItem.value === value[0]) {
                     subMenu = value[0]
                     if (dataItem.children && value[1]) {
-                        dataItem.children.forEach((cItem: { value: string | string[]; label: any }) => {
+                        dataItem.children.forEach((cItem: { value: string | string[]; label: string }) => {
                             if (cItem.value === value[1]) {
                                 history.replace(`${cItem.value}`)
-                                setShow(false)
+                                setShowMenu(false)
                             }
                         })
                     }
@@ -68,22 +53,21 @@ const MenuMobile: React.FC<MenuMobilePropsType> = (props) => {
             })
         
             if (subMenu === '') {
-                subMenu = data[0].value
+                subMenu = props.menuData[0].value
             }
-            //console.log('set values: ', [subMenu, value[1]])
             setSelectedMenuItem([subMenu, value[1]])
         }
         
     }
 
     const onMaskClick = () => {
-        setShow(false)
+        setShowMenu(false)
     }
 
     const menuEl = (
         <Menu
             className="foo-menu"
-            data={initData}
+            data={props.menuData}
             value={selectedMenuItem}
             onChange={onChange}
             height={document.documentElement.clientHeight * 0.6}
@@ -96,8 +80,6 @@ const MenuMobile: React.FC<MenuMobilePropsType> = (props) => {
         </div>
     );
 
-    //console.log(props)
-
     const onLogout = () => {
         onChange(['', ''])
         history.replace(props.appLocation + 'login')
@@ -105,7 +87,7 @@ const MenuMobile: React.FC<MenuMobilePropsType> = (props) => {
     }
 
     return (
-        <div className={show ? 'menu-active' : ''}>
+        <div className={showMenu ? 'menu-active' : ''}>
             <div>
                 <NavBar
                     leftContent=""
@@ -126,21 +108,15 @@ const MenuMobile: React.FC<MenuMobilePropsType> = (props) => {
                         <>
                         <div>
                             {props.user?.name}
-                            {/* <Button className="ml-5" size="small" icon={<LogoutOutlined />} onClick={onLogout} inline >
-
-                            </Button> */}
                         </div>
-                        {/* <div className="w-100">
-                            
-                        </div> */}
                         </>
                     }
                     
 
                 </NavBar>
             </div>
-            {show ? initData ? menuEl : loadingEl : null}
-            {show ? <div className="menu-mask" onClick={onMaskClick} /> : null}
+            {showMenu ? props.menuData ? menuEl : loadingEl : null}
+            {showMenu ? <div className="menu-mask" onClick={onMaskClick} /> : null}
         </div>
     )
 }
