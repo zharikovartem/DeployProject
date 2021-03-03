@@ -76,3 +76,8 @@ export type TimeScaleSettingsType = {
         timeScaleInrerval: boolean
     }
 }
+
+export type SelectOptionType = {
+    name: string,
+    value: number | string
+}

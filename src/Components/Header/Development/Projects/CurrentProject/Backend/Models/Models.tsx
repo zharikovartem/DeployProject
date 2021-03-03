@@ -2,9 +2,12 @@ import { Button, Collapse, Empty  } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import { Field, FieldArray, Form, Formik, FormikProps } from 'formik'
 import React, { ReactNode, useEffect, useState } from 'react'
+import { isConditionalExpression } from 'typescript'
 import { FieldType, ModelsType } from '../../../../../../../api/projectAPI'
 import { AntInput, AntSelect } from '../../../../../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
+import FieldList from './FieldList'
+import ModalForm from './ModelForm'
 import { ModelsPropsType } from './ModelsContainer'
 
 const { Panel } = Collapse
@@ -14,12 +17,12 @@ const Models: React.FC<ModelsPropsType> = (props) => {
         props.getModelsList(1)
     }, [])
 
-    console.log(props)
+    // console.log(props)
 
     return(
         <>
         <div className="w-100 d-flex flex-row-reverse">
-            <Button className="mr-4 ml-auto mb-3" type="primary">Add</Button>
+            <Button className="mr-4 ml-auto mb-3" type="primary">Add Model</Button>
         </div>
 
         <Collapse defaultActiveKey={[]} >
@@ -46,18 +49,16 @@ type ModelFormItemPropsType = {
 }
 
 const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
-    const handleSubmit = (val:any) => {
-        console.log(val)
+    const handleSubmit = (formValues:any) => {
+        console.log('formValues: ', formValues)
     }
-    // console.log(props.modelItem)
+
     let fields: Array<FieldType>
     if (Array.isArray(props.modelItem.fields)) {
         fields = props.modelItem.fields
     } else {
         fields = JSON.parse(props.modelItem.fields)
     }
-    
-    console.log(fields)
 
     type fieldsDataType = {[name: string]: string}
     let fieldsdata = []
@@ -70,15 +71,10 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
             fieldInit['field_'+field.name] = field.type
         }
     }
-    
 
-    console.log(fieldsdata)
-
-    console.log(fields)
     return(
         <Formik
             initialValues={ {...props.modelItem, fields: fieldsdata, ...fieldInit} }
-            // initialValues={initialValues}
             onSubmit={handleSubmit}
         >
             {ModelForm}
@@ -87,130 +83,176 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
 }
 
 const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
-    const [newFieldName, setNewFieldName] = useState<string>()
+    const [initialFieldValues, setInitialFieldValues] = useState(props.initialValues)
+
+    type InitialModalValuesType = {
+        newFieldName: string,
+        newFieldType: string,
+        isNullable: boolean,
+        isPrimary: boolean,
+        isNew: boolean,
+        id?: number
+    }
+    const emptyInitialModalValues: InitialModalValuesType = {
+        newFieldName: '',
+        newFieldType: '',
+        isNullable: false,
+        isPrimary: false,
+        isNew: true
+    }
+
+    const [initialModalValues, setInitialModalValues] = useState<InitialModalValuesType>(emptyInitialModalValues)
+    const [initialValues2 , setInitialValues2] = useState(props.initialValues)
+
+    useEffect( ()=>{
+    }, [initialModalValues])
+
     const onChange = (val:any) => {
         setIsDataChanged(true)
     }
 
-    const openModalToAddField = () => {
+    const openModalToAddField = (target: any | null, action?: any) => {
+        console.log('openModalToAddField', target.isNew)
+        console.log('action', action)
+
+        if (!target.isNew) {
+            console.log('ОБНУЛЯЕМ ФОРМУ', target)
+            
+            setInitialModalValues({
+                newFieldName: target.fieldName,
+                newFieldType: target.fieldType,
+                isNullable: false,
+                isPrimary: false,
+                isNew: false,
+                id: target.fieldId
+            })
+        } else {
+            setInitialModalValues({...emptyInitialModalValues})
+            console.log('СОЗДАЕМ НОВЫЙ ФИЛД', initialModalValues)
+            
+        }
+        
         setIsModalVisible(true)
     }
 
-    const onChangeNewFieldName = (name:string, value:any) => {
-        console.log(value.target.value)
-        setNewFieldName(value.target.value)
-    }
     const [isDataChanged, setIsDataChanged] = useState(false)
 
-    const getFieldList = () => {
-        let fieldForms: Array<any> = []
-        const object = props.initialValues
-        for (const key in object) {
-            if (Object.prototype.hasOwnProperty.call(object, key)) {
-                // @ts-ignore
-                const element: any = object[key];
-                // console.log(element)
-                if (Array.isArray(element) && element.length>0) {
-                    // console.log(key,'=>',element[0].name)
-                    for (let i = 0; i < element.length; i++) {
-                        const field = element[i];
-                        // console.log(field)
-                        fieldForms.push(
-                            <div  key={field.name}>
-                            <Field
-                                component={AntInput}
-                                name={'field_'+field.name}
-                                type="text"
-                                label={field.name}
-                                submitCount={props.submitCount}
-                                onChange={onChange}
-                            />
-                            </div>
-                        )
-                    }
-                }
-            }
-        }
-        return fieldForms
-    }
+    // const getFieldListArray = ():Array<JSX.Element | undefined> => {
+    //     console.log('getFieldListArray', initialFieldValues)
+    //     let fieldArray: Array<JSX.Element | undefined> = []
+    //     const object = {...initialFieldValues}
+    //     for (const key in object) {
+    //         if (Object.prototype.hasOwnProperty.call(object, key)) {
+    //             // @ts-ignore
+    //             const element: any = object[key];
+    //             if (Array.isArray(element) && element.length>0) {
+    //                 for (let i = 0; i < element.length; i++) {
+    //                     const field = element[i];
+    //                     console.log(field)
+    //                     fieldArray.push(
+    //                         <FieldRow 
+    //                             fieldName={field.name} 
+    //                             fieldType={field.type} 
+    //                             isNew={false}
+    //                             openModalToAddField={openModalToAddField}
+    //                             fieldId={field.id ? field.id : null}
+    //                         />
+    //                     )
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return fieldArray
+    // }
 
-    const getFieldListArray = ():Array<JSX.Element | undefined> => {
-        let fieldArray: Array<JSX.Element | undefined> = []
-        const object = props.initialValues
-        for (const key in object) {
-            if (Object.prototype.hasOwnProperty.call(object, key)) {
-                // @ts-ignore
-                const element: any = object[key];
-                if (Array.isArray(element) && element.length>0) {
-                    for (let i = 0; i < element.length; i++) {
-                        const field = element[i];
-                        fieldArray.push(
-                            // <div key={field.name}>
-                            //     <div className="row">
-                            //         <div className="col">{field.name}</div>
-                            //         <div className="col">actions</div>
-                            //     </div>
-                            // </div>
-                            <FieldRow fieldName={field.name} fieldType={field.type} openModalToAddField={openModalToAddField}/>
-                        )
-                    }
-                }
-            }
-        }
-        return fieldArray
-    }
-
-    const [fieldsList, setFieldsList] = useState<Array<any>>(getFieldListArray())
-    const [newFieldKey, setNewFieldKey] = useState<number>(1)
+    // const [fieldsList, setFieldsList] = useState<Array<any>>(getFieldListArray())
     const [isModalVisible, setIsModalVisible] = useState(false)
 
-    const handleOk = (val: any) => {
-        console.log('handleOk', val)
-        addField()
+    const handleOk = () => {
+        console.log('handleOk')
+        // addField()
         setIsModalVisible(false)
     }
 
-    const handleCancel = (val: any) => {
-        console.log('handleCancel', val)
+    const handleCancel = () => {
+        console.log('handleCancel')
+        setInitialModalValues(emptyInitialModalValues)
+        console.log(initialModalValues)
         setIsModalVisible(false)
     }
 
-    const addField = () => {
-        console.log('addField')
-        let fieldsListCopy = [...fieldsList]
-        let newFieldKeyCopy = newFieldKey
-        setNewFieldKey(Number(newFieldKeyCopy)+1)
-        fieldsListCopy.push(
-            // <div key={newFieldName}>
-            // <Field
-            //     component={AntInput}
-            //     name={'field_'+newFieldName}
-            //     type="text"
-            //     label={newFieldName}
-            //     submitCount={props.submitCount}
-            //     onChange={onChange}
-            // />
-            // </div>
-            // <div key={newFieldName}>
-            //     <div className="row">
-            //         <div className="col">{newFieldName}</div>
-            //         <div className="col">actions</div>
-            //     </div>
-            // </div>
-            <FieldRow fieldName={newFieldName} fieldType={newFieldName} openModalToAddField={openModalToAddField}/>
-        )
-        setFieldsList(fieldsListCopy)
-        // console.log(fieldForms)
-    }
-    
-    // const fields = JSON.parse(props.values.fields)
-    // console.log('initialValues', props.initialValues)  
+    const handleSubmit = (modalFieldFormValues:any, actions: any) => {
+        console.log('handleSubmit', modalFieldFormValues)
+        if (!modalFieldFormValues.isNew) {
+            let isUpdate = false
+            // @ts-ignore
+            const newFields = initialFieldValues.fields.map( (item) => {
+                // console.log(item)
+                if (modalFieldFormValues.id === item.id) {
+                    if (item.name !== modalFieldFormValues.newFieldName || item.type !== modalFieldFormValues.newFieldType) {
+                        isUpdate = true
+                        return {
+                            description: "",
+                            id: modalFieldFormValues.id,
+                            name: modalFieldFormValues.newFieldName,
+                            primary: false,
+                            type: modalFieldFormValues.newFieldType
+                        }
+                    } else {
+                        return item
+                    }
+                }
+                return item
+            } )
 
-    
+            if (isUpdate) {
+                setInitialValues2( {...props.initialValues, fields: newFields} )
+                setInitialFieldValues( {...initialFieldValues, fields: newFields} )
+                console.log('NEED DML!!!!', props)
+                props.handleSubmit()
+            }
+        } else {
+            console.log('NEW FIELD')
+            // @ts-ignore
+            let newFields = initialFieldValues.fields
+            newFields.push({
+                description: "",
+                // @ts-ignore
+                id: props.initialValues.fields.length+1,
+                name: modalFieldFormValues.newFieldName,
+                primary: false,
+                type: modalFieldFormValues.newFieldType
+            })
+            setInitialValues2( {...props.initialValues, fields: newFields} )
 
-    if (fieldsList && fieldsList.length === 0) {
-        setFieldsList([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />])
+            console.log('NEED DML!!!!', props)
+            props.handleSubmit()
+        }
+        actions.resetForm()
     }
+
+    // const addField = (fildValues: InitialModalValuesType) => {
+    //     // console.log('addField', fildValues)
+    //     let fieldsListCopy = [...fieldsList]
+    //     let newFieldKeyCopy = newFieldKey
+    //     setNewFieldKey(Number(newFieldKeyCopy)+1)
+    //     fieldsListCopy.push(
+    //         <FieldRow 
+    //             fieldName={fildValues.newFieldName}
+    //             fieldType={fildValues.newFieldType}
+    //             isNew={false}
+    //             openModalToAddField={openModalToAddField}
+    //             fieldId={fildValues.id ? fildValues.id : null}
+    //         />
+    //     )
+    //     setFieldsList(fieldsListCopy)
+    // }
+
+    // if (fieldsList && fieldsList.length === 0) {
+    //     setFieldsList([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />])
+    // }
+
+    // console.log('fieldsList', fieldsList)
 
     return(
         <>
@@ -238,10 +280,17 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             />
 
             <div className="w-100 d-flex flex-row mt-2 mb-2">
-                <h5>Field List:</h5><Button className="mr-4 ml-auto" type="primary" onClick={openModalToAddField}>Add Field</Button>
+                <h5>Field List:</h5><Button className="mr-4 ml-auto" type="primary" onClick={()=>{openModalToAddField({isNew: true})}}>Add Field</Button>
             </div>
-
-            {fieldsList}
+            
+            <FieldList 
+                fields={
+                // @ts-ignore
+                // props.initialValues.fields ? props.initialValues.fields : []
+                initialValues2.fields
+                }
+                openModalToAddField={openModalToAddField}
+            />
 
             <div className="w-100 d-flex flex-row mt-2 mb-2">
                 <h5>Methods:</h5><Button className="mr-4 ml-auto" type="primary">Add method</Button>
@@ -257,37 +306,30 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         </Form>
 
         <Modal title="New Field Form" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-            {/* <input type="text"></input> */}
-            <Field
-                component={AntInput}
-                name="newFieldName"
-                type="text"
-                label="New fieldName"
-                validate={validateRequired}
-                hasFeedback
-                onChange={onChangeNewFieldName}
-            />
-            <Field
-                component={AntSelect}
-                selectOptions={[]}
-                name="fieldType"
-                type="select"
-                label="Field type"
-                submitCount={props.submitCount}
-            />
+            <Formik
+                initialValues={initialModalValues}
+                onSubmit={handleSubmit}
+                enableReinitialize={true}
+            >
+                {ModalForm}
+            </Formik>
         </Modal>
 
         </>
     )
 }
 
+
+
 type FieldRowPropsType = {
     fieldName: string | undefined,
     fieldType: string | undefined,
     isNulleble?: boolean,
-    onFieldEdit?: (val:any)=>void,
-    openModalToAddField: ()=>void
+    isNew: boolean
+    openModalToAddField: (target: any | null)=>void,
+    fieldId?: number | null
 }
+
 const FieldRow: React.FC<FieldRowPropsType> = (props) => {
     return(
         <div key={props.fieldName} className="row py-2 border">
@@ -295,7 +337,8 @@ const FieldRow: React.FC<FieldRowPropsType> = (props) => {
             <div className="col">{props.fieldType}</div>
             <div className="col">isNulleble</div>
             <div className="col">
-                <Button type="ghost" size="small" onClick={props.openModalToAddField}>Edit</Button>
+                <Button type="ghost" className="ml-2" size="small" onClick={()=>{props.openModalToAddField(props)}}>Edit</Button>
+                <Button type="primary" size="small" className="ml-2" onClick={()=>{}}>Delete</Button>
             </div>
         </div>
     )
