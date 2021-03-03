@@ -93,12 +93,12 @@ export type FieldType = {
 }
 
 export type ModelsType = {
-    backend_id: number,
+    backend_id?: number,
     created_at?: string,
     deleted_at?: string,
     updated_at?: string,
     fields: string //| Array<FieldType>,
-    id: number,
+    id?: number,
     name: string,
 }
 
@@ -113,6 +113,23 @@ export const modelsAPI = {
         getToken()
         return instance.get<getModelsListResponseType>(`models/`+backendId)
         .then(response => {
+            return response.status === 200 ? response : null
+        })
+        .catch(err => {
+            if (err.response) {
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
+    },
+    updateModel(values: ModelsType, modelId: number) {
+        console.log(values)
+        console.log('modelId', modelId)
+        return instance.put<ModelsType>(`models/${modelId}`, values)
+        .then(response => {
+            console.log(response)
             return response.status === 200 ? response : null
         })
         .catch(err => {

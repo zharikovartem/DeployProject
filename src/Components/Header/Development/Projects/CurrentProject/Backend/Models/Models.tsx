@@ -17,8 +17,6 @@ const Models: React.FC<ModelsPropsType> = (props) => {
         props.getModelsList(1)
     }, [])
 
-    // console.log(props)
-
     return(
         <>
         <div className="w-100 d-flex flex-row-reverse">
@@ -30,8 +28,8 @@ const Models: React.FC<ModelsPropsType> = (props) => {
             {
                 props.modelsList.map(item => {
                     return(
-                        <Panel header={item.name} key={item.id}>
-                            <ModelFormItem modelItem={item}/>
+                        <Panel header={item.name} key={item.id ? item.id.toString() : 'null'}>
+                            <ModelFormItem modelItem={item} updateModel={props.updateModel}/>
                         </Panel>
                     )
                 })
@@ -45,14 +43,12 @@ const Models: React.FC<ModelsPropsType> = (props) => {
 export default Models
 
 type ModelFormItemPropsType = {
-    modelItem: ModelsType
+    modelItem: ModelsType,
+    updateModel: (values: ModelsType, modelId: number) => void
 }
 
 const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
-    const handleSubmit = (formValues:any) => {
-        console.log('formValues: ', formValues)
-    }
-
+    
     let fields: Array<FieldType>
     if (Array.isArray(props.modelItem.fields)) {
         fields = props.modelItem.fields
@@ -61,7 +57,7 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
     }
 
     type fieldsDataType = {[name: string]: string}
-    let fieldsdata = []
+    let fieldsdata: Array<FieldType> = []
     let fieldInit:fieldsDataType = {}
     if (fields) {
         for (let index = 0; index < fields.length; index++) {
@@ -70,6 +66,28 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
             fieldsdata.push(field)
             fieldInit['field_'+field.name] = field.type
         }
+    }
+
+    const handleSubmit = (formValues:any) => {
+        const oldValue = {...props.modelItem, fields: fieldsdata, ...fieldInit}
+        console.log('formValues: ', formValues)
+        // compere model
+        let ismodelChange = false
+        if ( oldValue.name !== formValues.name ) {
+            ismodelChange = true
+        }
+
+        console.log(props.modelItem)
+        const newFieldData: ModelsType = {
+            // ...props.modelItem,
+            fields: JSON.stringify(formValues.fields),
+            name: formValues.name,
+            backend_id: props.modelItem.backend_id,
+            id: props.modelItem.id
+        }
+
+        console.log(newFieldData)
+        props.updateModel(newFieldData, props.modelItem.id ? props.modelItem.id : 0)
     }
 
     return(
@@ -137,40 +155,10 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
 
     const [isDataChanged, setIsDataChanged] = useState(false)
 
-    // const getFieldListArray = ():Array<JSX.Element | undefined> => {
-    //     console.log('getFieldListArray', initialFieldValues)
-    //     let fieldArray: Array<JSX.Element | undefined> = []
-    //     const object = {...initialFieldValues}
-    //     for (const key in object) {
-    //         if (Object.prototype.hasOwnProperty.call(object, key)) {
-    //             // @ts-ignore
-    //             const element: any = object[key];
-    //             if (Array.isArray(element) && element.length>0) {
-    //                 for (let i = 0; i < element.length; i++) {
-    //                     const field = element[i];
-    //                     console.log(field)
-    //                     fieldArray.push(
-    //                         <FieldRow 
-    //                             fieldName={field.name} 
-    //                             fieldType={field.type} 
-    //                             isNew={false}
-    //                             openModalToAddField={openModalToAddField}
-    //                             fieldId={field.id ? field.id : null}
-    //                         />
-    //                     )
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return fieldArray
-    // }
-
-    // const [fieldsList, setFieldsList] = useState<Array<any>>(getFieldListArray())
     const [isModalVisible, setIsModalVisible] = useState(false)
 
     const handleOk = () => {
         console.log('handleOk')
-        // addField()
         setIsModalVisible(false)
     }
 
@@ -187,7 +175,6 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             let isUpdate = false
             // @ts-ignore
             const newFields = initialFieldValues.fields.map( (item) => {
-                // console.log(item)
                 if (modalFieldFormValues.id === item.id) {
                     if (item.name !== modalFieldFormValues.newFieldName || item.type !== modalFieldFormValues.newFieldType) {
                         isUpdate = true
@@ -209,6 +196,10 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 setInitialValues2( {...props.initialValues, fields: newFields} )
                 setInitialFieldValues( {...initialFieldValues, fields: newFields} )
                 console.log('NEED DML!!!!', props)
+                props.setValues({
+                    ...props.values,
+                    fields: newFields
+                })
                 props.handleSubmit()
             }
         } else {
@@ -216,43 +207,24 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             // @ts-ignore
             let newFields = initialFieldValues.fields
             newFields.push({
-                description: "",
                 // @ts-ignore
                 id: props.initialValues.fields.length+1,
                 name: modalFieldFormValues.newFieldName,
                 primary: false,
-                type: modalFieldFormValues.newFieldType
+                type: modalFieldFormValues.newFieldType,
+                description: "",
             })
             setInitialValues2( {...props.initialValues, fields: newFields} )
 
             console.log('NEED DML!!!!', props)
+            props.setValues({
+                ...props.values,
+                fields: newFields
+            })
             props.handleSubmit()
         }
         actions.resetForm()
     }
-
-    // const addField = (fildValues: InitialModalValuesType) => {
-    //     // console.log('addField', fildValues)
-    //     let fieldsListCopy = [...fieldsList]
-    //     let newFieldKeyCopy = newFieldKey
-    //     setNewFieldKey(Number(newFieldKeyCopy)+1)
-    //     fieldsListCopy.push(
-    //         <FieldRow 
-    //             fieldName={fildValues.newFieldName}
-    //             fieldType={fildValues.newFieldType}
-    //             isNew={false}
-    //             openModalToAddField={openModalToAddField}
-    //             fieldId={fildValues.id ? fildValues.id : null}
-    //         />
-    //     )
-    //     setFieldsList(fieldsListCopy)
-    // }
-
-    // if (fieldsList && fieldsList.length === 0) {
-    //     setFieldsList([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />])
-    // }
-
-    // console.log('fieldsList', fieldsList)
 
     return(
         <>
@@ -286,7 +258,6 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             <FieldList 
                 fields={
                 // @ts-ignore
-                // props.initialValues.fields ? props.initialValues.fields : []
                 initialValues2.fields
                 }
                 openModalToAddField={openModalToAddField}
@@ -318,8 +289,6 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         </>
     )
 }
-
-
 
 type FieldRowPropsType = {
     fieldName: string | undefined,

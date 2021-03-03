@@ -2,8 +2,9 @@ import {connect} from 'react-redux'
 import Models from './Models'
 import { AppStateType } from '../../../../../../../redux/store'
 import { getUsersList, updateUser, actions } from '../../../../../../../redux/usersReducer'
-import { getModelsList } from '../../../../../../../redux/projectReducer'
+import { getModelsList, updateModel } from '../../../../../../../redux/projectReducer'
 import { UserType } from '../../../../../../../redux/authReducer'
+import { ModelsType } from '../../../../../../../api/projectAPI'
 // import CurrentUserMobile from './CurrentUserMobile'
 
 type OwnModelsPropsType = {
@@ -15,8 +16,8 @@ type OwnModelsPropsType = {
 type MapPropsType = ReturnType<typeof mapStateToProps>
 
 type MapDispatchPropsType = {
-    getModelsList: (backendId: number) =>void
-    // setUsersDataChanged: (isUsersDataChanged: boolean)=>void
+    getModelsList: (backendId: number) => void
+    updateModel: (values: ModelsType, modelId: number) => void
 }
 
 export type ModelsPropsType = MapPropsType & MapDispatchPropsType & OwnModelsPropsType
@@ -37,7 +38,7 @@ let mapStateToProps = (state:AppStateType) => {
 }
 
 export default connect<MapPropsType, MapDispatchPropsType, OwnModelsPropsType, AppStateType>(mapStateToProps, 
-    {getModelsList}) 
+    {getModelsList, updateModel}) 
     (Models)
     
 

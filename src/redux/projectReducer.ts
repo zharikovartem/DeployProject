@@ -100,11 +100,18 @@ export const updateBackend = (values: BackendType, backendId: number): ThunkType
     }
 }
 
-export const getModelsList = (backendId: number): ThunkType => {
+export const getModelsList = (backendId: number):ThunkType => {
     return async (dispatch, getState) => {
         const response: getModelsListResponseType = await modelsAPI.getModelsList(backendId)
         console.log(response.data.models)
         dispatch(actions.setModelsList(response.data.models))
+    }
+}
+
+export const updateModel = (values: ModelsType, modelId: number):ThunkType => {
+    return async (dispatch, getState) => {
+        const response: any = await modelsAPI.updateModel(values, modelId)
+        console.log(response)
     }
 }
 
