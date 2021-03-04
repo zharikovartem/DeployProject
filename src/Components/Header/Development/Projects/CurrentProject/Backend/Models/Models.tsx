@@ -1,10 +1,9 @@
 import { Button, Collapse, Empty  } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
-import { Field, FieldArray, Form, Formik, FormikProps } from 'formik'
+import { Field, Form, Formik, FormikProps } from 'formik'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { isConditionalExpression } from 'typescript'
 import { FieldType, ModelsType } from '../../../../../../../api/projectAPI'
-import { AntInput, AntSelect } from '../../../../../../../utils/Formik/CreateAntField'
+import { AntInput } from '../../../../../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
 import FieldList from './FieldList'
 import ModalForm from './ModelForm'
@@ -27,7 +26,6 @@ const Models: React.FC<ModelsPropsType> = (props) => {
 
             {
                 props.modelsList.map(item => {
-                    console.log(item)
                     return(
                         <Panel header={item.name} key={item.id ? item.id.toString() : 'null'}>
                             <ModelFormItem modelItem={item} updateModel={props.updateModel}/>
@@ -171,6 +169,22 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         setIsModalVisible(false)
     }
 
+    const deleteField = (fieldId: number) => {
+        console.log('deleteField', fieldId)
+        console.log(props)
+        
+        // @ts-ignore
+        const fields = initialFieldValues.fields.filter( field => field.id !== fieldId ) 
+        console.log(fields)
+        setInitialValues2( {...props.initialValues, fields: fields} )
+        setInitialFieldValues( {...initialFieldValues, fields: fields} )
+        props.setValues({
+            ...props.values,
+            fields: fields
+        })
+        props.handleSubmit()
+    }
+
     const handleSubmit = (modalFieldFormValues:any, actions: any) => {
         console.log('handleSubmit', modalFieldFormValues)
         if (!modalFieldFormValues.isNew) {
@@ -213,12 +227,13 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             console.log('NEW FIELD')
             // @ts-ignore
             let newFields = initialFieldValues.fields
-            newFields.push({
+            newFields.push({               
                 // @ts-ignore
                 id: props.initialValues.fields.length+1,
                 name: modalFieldFormValues.newFieldName,
-                primary: false,
+                isPrimary: modalFieldFormValues.isPrimary,
                 type: modalFieldFormValues.newFieldType,
+                isNulleble: modalFieldFormValues.isNulleble,
                 description: "",
             })
             setInitialValues2( {...props.initialValues, fields: newFields} )
@@ -271,6 +286,7 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 initialValues2.fields
                 }
                 openModalToAddField={openModalToAddField}
+                deleteField={deleteField}
             />
 
             <div className="w-100 d-flex flex-row mt-2 mb-2">

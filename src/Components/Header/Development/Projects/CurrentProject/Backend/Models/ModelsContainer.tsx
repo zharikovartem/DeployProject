@@ -1,16 +1,11 @@
 import {connect} from 'react-redux'
 import Models from './Models'
 import { AppStateType } from '../../../../../../../redux/store'
-import { getUsersList, updateUser, actions } from '../../../../../../../redux/usersReducer'
 import { getModelsList, updateModel } from '../../../../../../../redux/projectReducer'
-import { UserType } from '../../../../../../../redux/authReducer'
 import { ModelsType } from '../../../../../../../api/projectAPI'
-// import CurrentUserMobile from './CurrentUserMobile'
 
 type OwnModelsPropsType = {
-    // match: any
-    // location: any
-    // history: any
+
 }
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
@@ -25,15 +20,6 @@ export type ModelsPropsType = MapPropsType & MapDispatchPropsType & OwnModelsPro
 let mapStateToProps = (state:AppStateType) => {
     return {
         modelsList: state.projects.modelsList
-        // projectsList: state.projects.projectList,
-        // isProjectsLoaded: state.projects.isProjectLoaded
-        // errorMessage: state.task.errorMessage,
-        // isInterval: state.task.isInterval,
-        // taskSaveStatus: state.task.taskSaveStatus,
-        // settings:state.auth.viewSettings,
-        // appLocation: state.app.location,
-        // viewSettings: state.auth.viewSettings,
-        // isUsersDataChanged: state.users.isUsersDataChanged
     }
 }
 

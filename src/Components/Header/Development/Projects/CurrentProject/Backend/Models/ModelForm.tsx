@@ -21,6 +21,18 @@ const ModalForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         {
             name: 'VARCHAR',
             value: 'varchar'
+        },
+        {
+            name: 'JSON',
+            value: 'json'
+        },
+        {
+            name: 'TIMESTAMP',
+            value:'timestamp'
+        },
+        {
+            name: 'TEXT',
+            value:'text'
         }
 
     ]
