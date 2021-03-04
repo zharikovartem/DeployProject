@@ -11,10 +11,21 @@ import {SelectOptionType} from './../../../../../../../Types/types'
 const ModalForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     const newFieldTypepOtions: Array<SelectOptionType> = [
         {
-            name: 'Boolean',
+            name: 'BOOLEAN',
             value: 'boolean'
+        },
+        {
+            name: 'BIGINT',
+            value: 'bigint'
+        },
+        {
+            name: 'VARCHAR',
+            value: 'varchar'
         }
+
     ]
+
+    console.log(props.initialValues)
 
     return (
         <Form
@@ -40,9 +51,9 @@ const ModalForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             />
             <Field
                 component={AntCheckbox}
-                name="isNullable"
+                name="isNulleble"
                 type="checkbox"
-                label="isNullable"
+                label="isNulleble"
                 submitCount={props.submitCount}
                 // onClick={submitBackEnd}
                 // onSelect={submitBackEnd}

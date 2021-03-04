@@ -88,8 +88,9 @@ export const backendAPI = {
 export type FieldType = {
         name: string,
         type: string,
-        primary: boolean,
-        description: string
+        isPrimary: boolean,
+        description: string,
+        isNulleble: boolean,
 }
 
 export type ModelsType = {

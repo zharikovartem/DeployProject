@@ -112,6 +112,7 @@ export const updateModel = (values: ModelsType, modelId: number):ThunkType => {
     return async (dispatch, getState) => {
         const response: any = await modelsAPI.updateModel(values, modelId)
         console.log(response)
+        dispatch(actions.setModelsList(response.data.models))
     }
 }
 

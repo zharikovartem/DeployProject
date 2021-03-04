@@ -27,6 +27,7 @@ const Models: React.FC<ModelsPropsType> = (props) => {
 
             {
                 props.modelsList.map(item => {
+                    console.log(item)
                     return(
                         <Panel header={item.name} key={item.id ? item.id.toString() : 'null'}>
                             <ModelFormItem modelItem={item} updateModel={props.updateModel}/>
@@ -71,6 +72,7 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
     const handleSubmit = (formValues:any) => {
         const oldValue = {...props.modelItem, fields: fieldsdata, ...fieldInit}
         console.log('formValues: ', formValues)
+
         // compere model
         let ismodelChange = false
         if ( oldValue.name !== formValues.name ) {
@@ -90,6 +92,7 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
         props.updateModel(newFieldData, props.modelItem.id ? props.modelItem.id : 0)
     }
 
+    console.log({...props.modelItem, fields: fieldsdata, ...fieldInit})
     return(
         <Formik
             initialValues={ {...props.modelItem, fields: fieldsdata, ...fieldInit} }
@@ -106,7 +109,7 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     type InitialModalValuesType = {
         newFieldName: string,
         newFieldType: string,
-        isNullable: boolean,
+        isNulleble: boolean,
         isPrimary: boolean,
         isNew: boolean,
         id?: number
@@ -114,7 +117,7 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     const emptyInitialModalValues: InitialModalValuesType = {
         newFieldName: '',
         newFieldType: '',
-        isNullable: false,
+        isNulleble: false,
         isPrimary: false,
         isNew: true
     }
@@ -129,9 +132,8 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         setIsDataChanged(true)
     }
 
-    const openModalToAddField = (target: any | null, action?: any) => {
+    const openModalToAddField = (target: any | null) => {
         console.log('openModalToAddField', target.isNew)
-        console.log('action', action)
 
         if (!target.isNew) {
             console.log('ОБНУЛЯЕМ ФОРМУ', target)
@@ -139,8 +141,8 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             setInitialModalValues({
                 newFieldName: target.fieldName,
                 newFieldType: target.fieldType,
-                isNullable: false,
-                isPrimary: false,
+                isNulleble: target.isNulleble,
+                isPrimary: target.isPrimary,
                 isNew: false,
                 id: target.fieldId
             })
@@ -176,14 +178,19 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             // @ts-ignore
             const newFields = initialFieldValues.fields.map( (item) => {
                 if (modalFieldFormValues.id === item.id) {
-                    if (item.name !== modalFieldFormValues.newFieldName || item.type !== modalFieldFormValues.newFieldType) {
+                    if (item.name !== modalFieldFormValues.newFieldName || 
+                        item.type !== modalFieldFormValues.newFieldType ||
+                        item.isNulleble !== modalFieldFormValues.isNulleble ||
+                        item.isPrimary !== modalFieldFormValues.isPrimary 
+                        ) {
                         isUpdate = true
                         return {
                             description: "",
                             id: modalFieldFormValues.id,
                             name: modalFieldFormValues.newFieldName,
-                            primary: false,
-                            type: modalFieldFormValues.newFieldType
+                            isPrimary: modalFieldFormValues.isPrimary,
+                            type: modalFieldFormValues.newFieldType,
+                            isNulleble: modalFieldFormValues.isNulleble
                         }
                     } else {
                         return item
@@ -224,7 +231,10 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
             props.handleSubmit()
         }
         actions.resetForm()
+        setInitialModalValues(modalFieldFormValues)
     }
+    // @ts-ignore
+    console.log(initialValues2.fields)
 
     return(
         <>
@@ -287,28 +297,5 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         </Modal>
 
         </>
-    )
-}
-
-type FieldRowPropsType = {
-    fieldName: string | undefined,
-    fieldType: string | undefined,
-    isNulleble?: boolean,
-    isNew: boolean
-    openModalToAddField: (target: any | null)=>void,
-    fieldId?: number | null
-}
-
-const FieldRow: React.FC<FieldRowPropsType> = (props) => {
-    return(
-        <div key={props.fieldName} className="row py-2 border">
-            <div className="col">{props.fieldName}</div>
-            <div className="col">{props.fieldType}</div>
-            <div className="col">isNulleble</div>
-            <div className="col">
-                <Button type="ghost" className="ml-2" size="small" onClick={()=>{props.openModalToAddField(props)}}>Edit</Button>
-                <Button type="primary" size="small" className="ml-2" onClick={()=>{}}>Delete</Button>
-            </div>
-        </div>
     )
 }
