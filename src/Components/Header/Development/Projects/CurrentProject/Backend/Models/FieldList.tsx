@@ -8,12 +8,10 @@ type FieldListPropsType = {
 }
 
 const FieldList: React.FC<FieldListPropsType> = (props) => {
-    // console.log(props.fields)
     return(
         <div key="fieldList">
         {
             props.fields.map( (item: any) => {
-                console.log(item)
                 return(
                     <div key={item.name}>
                     <FieldRow 
@@ -48,10 +46,8 @@ type FieldRowPropsType = {
 }
 
 const FieldRow: React.FC<FieldRowPropsType> = (props) => {
-    console.log(props)
 
     const deleteField = (fieldId: number) => {
-        console.log('deleteField', fieldId)
         props.deleteField(fieldId)
     }
     const rowBG = props.isPrimary ? 'bg-light' : null

@@ -128,7 +128,7 @@ export const modelsAPI = {
     updateModel(values: ModelsType, modelId: number) {
         console.log(values)
         console.log('modelId', modelId)
-        return instance.put<ModelsType>(`models/${modelId}`, values)
+        return instance.put<getModelsListResponseType>(`models/${modelId}`, values)
         .then(response => {
             console.log(response)
             return response.status === 200 ? response : null
@@ -141,5 +141,48 @@ export const modelsAPI = {
             }
             return null
         })
+    },
+    createModel(values: ModelsType) {
+        return instance.post<getModelsListResponseType>(`models`, values)
+        .then(response => {
+            console.log(response)
+            return response.status === 200 ? response : null
+        })
+        .catch(err => {
+            if (err.response) {
+                console.log(err.response)
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
+    }
+}
+
+export type getControllersListResponseType = {
+    data: {
+        controllers: Array<any>
+    }
+}
+
+export const controllersAPI = {
+    getControllersList(backendId: number) {
+        getToken()
+        return instance.get<getControllersListResponseType>(`controllers/`+backendId)
+        .then(response => {
+            return response.status === 200 ? response : null
+        })
+        .catch(err => {
+            if (err.response) {
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
+    },
+    createController(values: any) {
+
     }
 }

@@ -1,5 +1,5 @@
 import { BaseThunkType, InferActionsTypes } from "./store"
-import { projectAPI, backendAPI, BackendType, modelsAPI, getModelsListResponseType, ModelsType } from './../api/projectAPI'
+import { projectAPI, backendAPI, BackendType, modelsAPI, getModelsListResponseType, ModelsType, controllersAPI, getControllersListResponseType } from './../api/projectAPI'
 // import { NewTaskListType, TaskListType } from "../Types/types"
 import { Dispatch } from "react"
 
@@ -25,17 +25,22 @@ export type ProjectItemType = {
 export type InitialStateType = {
     projectList: Array<ProjectItemType>,
     isProjectLoaded: boolean,
-    modelsList: Array<ModelsType>
+    modelsList: Array<ModelsType>,
+    controllersList: Array<any>
 }
 
 let initialState:InitialStateType = {
     projectList: [],
     isProjectLoaded: false,
-    modelsList:[]
+    modelsList: [],
+    controllersList: []
 }
 
 const projectReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
+        case 'SN/PROJECT/SET_CONTROLLERS_LIST':
+            return ({...state, controllersList: action.controllersList})
+
         case 'SN/PROJECT/SET_MODELS_LIST':
             return ({...state, modelsList: action.modelsList})
 
@@ -67,6 +72,7 @@ export const actions = {
     setIsLoaded: (isLoaded: boolean) => ({type: 'SN/PROJECT/SET_IS_LOADED', isLoaded} as const),
     setBackendData: (projectId: number ,backendData: backendDataType) => ({type: 'SN/PROJECT/SET_BACKEND_DATA', backendData, projectId} as const),
     setModelsList: (modelsList: Array<ModelsType>) => ({type: 'SN/PROJECT/SET_MODELS_LIST', modelsList} as const),
+    setControllersList: (controllersList: Array<any>) => ({type: 'SN/PROJECT/SET_CONTROLLERS_LIST', controllersList} as const),
 }
 
 export const getProjectList = (): ThunkType => {
@@ -113,6 +119,30 @@ export const updateModel = (values: ModelsType, modelId: number):ThunkType => {
         const response: any = await modelsAPI.updateModel(values, modelId)
         console.log(response)
         dispatch(actions.setModelsList(response.data.models))
+    }
+}
+
+export const createModel = (values: ModelsType):ThunkType => {
+    return async (dispatch, getState) => {
+        const response: any = await modelsAPI.createModel(values)
+        console.log(response)
+        dispatch(actions.setModelsList(response.data.models))
+    }
+}
+
+export const getControllersList = (backendId: number):ThunkType => {
+    return async (dispatch, getState) => {
+        const response: getControllersListResponseType = await controllersAPI.getControllersList(backendId)
+        console.log(response.data)
+        dispatch(actions.setControllersList(response.data.controllers))
+    }
+}
+
+export const createController = (values: any):ThunkType => {
+    return async (dispatch, getState) => {
+        const response: any = await controllersAPI.createController(values)
+        console.log(response)
+        // dispatch(actions.setControllersList(response.data.controllers))
     }
 }
 

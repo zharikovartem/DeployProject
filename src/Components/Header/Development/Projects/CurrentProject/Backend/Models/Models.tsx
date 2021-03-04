@@ -6,35 +6,63 @@ import { FieldType, ModelsType } from '../../../../../../../api/projectAPI'
 import { AntInput } from '../../../../../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
 import FieldList from './FieldList'
-import ModalForm from './ModelForm'
+import FieldForm from './FieldForm'
 import { ModelsPropsType } from './ModelsContainer'
+import ModelForm from './ModelForm'
 
 const { Panel } = Collapse
 
 const Models: React.FC<ModelsPropsType> = (props) => {
     useEffect( ()=>{
-        props.getModelsList(1)
+        props.getModelsList(props.backendId)
     }, [])
+
+    const [isModalVisible, setIsModalVisible] = useState(false)
+
+    const addModel = () => {
+        console.log('addModel')
+        setIsModalVisible(!isModalVisible)
+    }
+
+    const handleOk = () => {setIsModalVisible(!isModalVisible)}
+    const handleCancel = () => {setIsModalVisible(!isModalVisible)}
+
+    const handleSubmit = (vals: any) => {
+        console.log(vals)
+        console.log(props)
+        props.createModel({
+            ...vals,
+            backend_id: props.backendId
+        })
+    }
 
     return(
         <>
-        <div className="w-100 d-flex flex-row-reverse">
-            <Button className="mr-4 ml-auto mb-3" type="primary">Add Model</Button>
-        </div>
+            <div className="w-100 d-flex flex-row-reverse">
+                <Button className="mr-4 ml-auto mb-3" type="primary" onClick={addModel}>Add Model</Button>
+            </div>
 
-        <Collapse defaultActiveKey={[]} >
-
-            {
-                props.modelsList.map(item => {
-                    return(
-                        <Panel header={item.name} key={item.id ? item.id.toString() : 'null'}>
-                            <ModelFormItem modelItem={item} updateModel={props.updateModel}/>
-                        </Panel>
-                    )
-                })
-            }
-
-        </Collapse>
+            <Collapse defaultActiveKey={[]} >
+                {
+                    props.modelsList.map(item => {
+                        return(
+                            <Panel header={item.name} key={item.id ? item.id.toString() : 'null'}>
+                                <ModelFormItem modelItem={item} updateModel={props.updateModel}/>
+                            </Panel>
+                        )
+                    })
+                }
+            </Collapse>
+            <Modal title="Create new Model" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                <Formik
+                    // initialValues={initialModalValues}
+                    initialValues={{}}
+                    onSubmit={handleSubmit}
+                    enableReinitialize={true}
+                >
+                    {ModelForm}
+                </Formik>
+            </Modal>
         </>
     )
 }
@@ -61,7 +89,6 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
     if (fields) {
         for (let index = 0; index < fields.length; index++) {
             const field = fields[index];
-            console.log(field)
             fieldsdata.push(field)
             fieldInit['field_'+field.name] = field.type
         }
@@ -90,18 +117,18 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
         props.updateModel(newFieldData, props.modelItem.id ? props.modelItem.id : 0)
     }
 
-    console.log({...props.modelItem, fields: fieldsdata, ...fieldInit})
+    // console.log({...props.modelItem, fields: fieldsdata, ...fieldInit})
     return(
         <Formik
             initialValues={ {...props.modelItem, fields: fieldsdata, ...fieldInit} }
             onSubmit={handleSubmit}
         >
-            {ModelForm}
+            {ModelView}
         </Formik>
     )
 }
 
-const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
+const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     const [initialFieldValues, setInitialFieldValues] = useState(props.initialValues)
 
     type InitialModalValuesType = {
@@ -248,8 +275,9 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         actions.resetForm()
         setInitialModalValues(modalFieldFormValues)
     }
+
     // @ts-ignore
-    console.log(initialValues2.fields)
+    // console.log(initialValues2.fields)
 
     return(
         <>
@@ -308,7 +336,7 @@ const ModelForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 onSubmit={handleSubmit}
                 enableReinitialize={true}
             >
-                {ModalForm}
+                {FieldForm}
             </Formik>
         </Modal>
 

@@ -5,6 +5,7 @@ import { Collapse, Spin } from 'antd'
 import { Formik } from 'formik'
 import InstansesForm from './Instanses/InstansesForm'
 import Models from './Models/ModelsContainer'
+import Controllers from './Controllers/ControllersContainer'
 
 const { Panel } = Collapse
 
@@ -34,6 +35,8 @@ const Backend: React.FC<BackendPropsType> = (props) => {
         props.updateBackend(val, project.backendData.id)
     }
 
+    // console.log(project)
+
     if (project.backendData) {
         return(
             <>
@@ -48,10 +51,13 @@ const Backend: React.FC<BackendPropsType> = (props) => {
                         </Formik>
                     </Panel>
                     <Panel header="Models" key="2">
-                        <Models />
+                        <Models backendId={project.backend_id}/>
+                    </Panel>
+                    <Panel header="Controllers" key="3">
+                        <Controllers backendId={project.backend_id}/>
                     </Panel>
                 </Collapse>
-                <li>Controllers</li>
+                <br/><br/><br/>
                 <li>Migrations</li>
                 <li>Api</li>
                 <li>Seeders</li>
