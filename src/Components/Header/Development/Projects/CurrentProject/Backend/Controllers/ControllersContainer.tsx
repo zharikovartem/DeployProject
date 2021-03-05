@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import Controllers from './Controllers'
 import { AppStateType } from '../../../../../../../redux/store'
-import { getControllersList } from '../../../../../../../redux/projectReducer'
+import { getControllersList, createController } from '../../../../../../../redux/projectReducer'
 import { ModelsType } from '../../../../../../../api/projectAPI'
 
 type OwnControllersPropsType = {
@@ -12,7 +12,7 @@ type MapPropsType = ReturnType<typeof mapStateToProps>
 
 type MapDispatchPropsType = {
     getControllersList: (backendId: number) => void
-    // updateModel: (values: ModelsType, modelId: number) => void,
+    createController: (values: any) => void,
     // createModel: (values: ModelsType) => void
 }
 
@@ -25,7 +25,7 @@ let mapStateToProps = (state:AppStateType) => {
 }
 
 export default connect<MapPropsType, MapDispatchPropsType, OwnControllersPropsType, AppStateType>(mapStateToProps, 
-    {getControllersList}) 
+    {getControllersList, createController}) 
     (Controllers)
     
 

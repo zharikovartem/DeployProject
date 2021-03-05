@@ -142,7 +142,7 @@ export const createController = (values: any):ThunkType => {
     return async (dispatch, getState) => {
         const response: any = await controllersAPI.createController(values)
         console.log(response)
-        // dispatch(actions.setControllersList(response.data.controllers))
+        dispatch(actions.setControllersList(response.data.controllers))
     }
 }
 

@@ -43,6 +43,8 @@ const CreateAntField = (AntComponent: any) => (
     const touchedError = hasError && touched;
 
     const onInputChange = (value: any) => {
+        //console.log(value)
+        //console.log(props)
 
         if (props.onChange) {
             props.onChange(field.name, value)
@@ -50,20 +52,31 @@ const CreateAntField = (AntComponent: any) => (
 
         if (value === undefined) {
             if (type === 'select' || type === 'time') {
+                //console.log('1')
                 form.setFieldValue(field.name, null)
             }
         } else if(value === null) {
+            //console.log('2')
             form.setFieldValue(field.name, null)
         } else if (type === 'checkbox') {
+            //console.log('3')
             form.setFieldValue(field.name, value.target.checked)
         } else if (value.target) {
+            //console.log('4')
             form.setFieldValue(field.name, value.target.value)
         } else {
             if (type === 'time') {
+                //console.log('5')
                 form.setFieldValue(field.name, value)
             } else if (Array.isArray(value)) {
-                form.setFieldValue(field.name, value[0])
+                //console.log('6')
+                if (props.mode && props.mode === 'multiple') {
+                    form.setFieldValue(field.name, value) // Для select mode === 'multiple'
+                } else {
+                    form.setFieldValue(field.name, value[0])
+                }
             } else {
+                //console.log('7')
                 form.setFieldValue(field.name, value)
             }
         }
