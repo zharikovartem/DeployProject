@@ -1,6 +1,5 @@
 import { BaseThunkType, InferActionsTypes } from "./store"
 import { projectAPI, backendAPI, BackendType, modelsAPI, getModelsListResponseType, ModelsType, controllersAPI, getControllersListResponseType } from './../api/projectAPI'
-// import { NewTaskListType, TaskListType } from "../Types/types"
 import { Dispatch } from "react"
 
 type backendDataType = {

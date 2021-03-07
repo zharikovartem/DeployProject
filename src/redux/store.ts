@@ -2,6 +2,7 @@ import {Action, applyMiddleware, combineReducers, createStore} from "redux"
 import thunkMiddleware, {ThunkAction} from "redux-thunk"
 import appReducer from "./appReducer"
 import authReducer from "./authReducer"
+import codeReducer from "./codeReducer"
 import projectReducer from "./projectReducer"
 import taskListReducer from "./TaskListReducer"
 import taskReducer from './taskReducer'
@@ -14,7 +15,8 @@ let rootReducer = combineReducers({
     auth: authReducer,
     taskList: taskListReducer,
     users: usersReducer,
-    projects: projectReducer
+    projects: projectReducer,
+    code: codeReducer,
 })
 
 type rootReducerType = typeof rootReducer

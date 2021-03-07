@@ -3,12 +3,19 @@ import React, { ReactNode, useState, useEffect } from 'react'
 import { AntCheckbox, AntInput, AntSelect } from '../../../../../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
 import {SelectOptionType} from '../../../../../../../Types/types'
+import { Radio } from 'antd'
 // import { AntInput, AntSelect, AntTextArea, AntTimePicker } from '../../../utils/Formik/CreateAntField'
 // import { validateRequired } from '../../../utils/Formik/ValidateFields'
 // import ProjectForm from './Project/ProjectForm'
 
 
 const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
+    const [radioValue, setRadioValue] = useState()
+
+    const onRadioChange = (e:any) => {
+        setRadioValue(e.target.value)
+        props.setValues({...props.values, fieldParam: e.target.value})
+    }
     const newFieldTypepOtions: Array<SelectOptionType> = [
         {
             name: 'BOOLEAN',
@@ -76,10 +83,15 @@ const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 type="checkbox"
                 label="isPrimary"
                 submitCount={props.submitCount}
-                // onClick={submitBackEnd}
-                // onSelect={submitBackEnd}
             />
-            <div className="submit-container">
+
+            <Radio.Group onChange={onRadioChange} value={radioValue} name="fieldParam">
+                <Radio value={'fillable'}>Fillable</Radio>
+                <Radio value={'hidden'}>Hidden</Radio>
+                <Radio value={'readOnly'}>ReadOnly</Radio>
+            </Radio.Group>
+                
+            <div className="submit-container" >
                 <button className="ant-btn ant-btn-primary" type="submit">
                     Save
                 </button>

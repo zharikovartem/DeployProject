@@ -3,12 +3,13 @@ import Modal from 'antd/lib/modal/Modal'
 import { Field, Form, Formik, FormikProps } from 'formik'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { FieldType, ModelsType } from '../../../../../../../api/projectAPI'
-import { AntInput } from '../../../../../../../utils/Formik/CreateAntField'
+import { AntCheckbox, AntInput } from '../../../../../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
-import FieldList from './FieldList'
+import FieldList from './FieldListContainer'
 import FieldForm from './FieldForm'
 import { ModelsPropsType } from './ModelsContainer'
 import ModelForm from './ModelForm'
+import CodeModalContainer from '../../../../Code/CodeModalContainer'
 
 const { Panel } = Collapse
 
@@ -18,6 +19,7 @@ const Models: React.FC<ModelsPropsType> = (props) => {
     }, [])
 
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [isCodeVisible, setIsCodeVisible] = useState(false)
 
     const addModel = () => {
         console.log('addModel')
@@ -36,6 +38,7 @@ const Models: React.FC<ModelsPropsType> = (props) => {
         })
     }
 
+
     return(
         <>
             <div className="w-100 d-flex flex-row-reverse">
@@ -47,7 +50,7 @@ const Models: React.FC<ModelsPropsType> = (props) => {
                     props.modelsList.map(item => {
                         return(
                             <Panel header={item.name} key={item.id ? item.id.toString() : 'null'}>
-                                <ModelFormItem modelItem={item} updateModel={props.updateModel}/>
+                                <ModelFormItem modelItem={item} updateModel={props.updateModel} />
                             </Panel>
                         )
                     })
@@ -63,6 +66,8 @@ const Models: React.FC<ModelsPropsType> = (props) => {
                     {ModelForm}
                 </Formik>
             </Modal>
+
+            <CodeModalContainer />
         </>
     )
 }
@@ -71,11 +76,11 @@ export default Models
 
 type ModelFormItemPropsType = {
     modelItem: ModelsType,
-    updateModel: (values: ModelsType, modelId: number) => void
+    updateModel: (values: ModelsType, modelId: number) => void,
 }
 
 const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
-    
+    console.log(props)
     let fields: Array<FieldType>
     if (Array.isArray(props.modelItem.fields)) {
         fields = props.modelItem.fields
@@ -276,6 +281,10 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         setInitialModalValues(modalFieldFormValues)
     }
 
+    // const showCode = () => {
+    //     console.log(props)
+    // }
+
     // @ts-ignore
     // console.log(initialValues2.fields)
 
@@ -304,8 +313,28 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 onChange={onChange}
             />
 
+            <Field
+                component={AntCheckbox}
+                name="isPrimary"
+                type="checkbox"
+                label="Soft delete"
+                submitCount={props.submitCount}
+            />
+
+            <Field
+                component={AntCheckbox}
+                name="db"
+                type="checkbox"
+                label="Use DB"
+                submitCount={props.submitCount}
+            />
+
             <div className="w-100 d-flex flex-row mt-2 mb-2">
-                <h5>Field List:</h5><Button className="mr-4 ml-auto" type="primary" onClick={()=>{openModalToAddField({isNew: true})}}>Add Field</Button>
+                <h5>Field List:</h5>
+                {/* <Button type="primary" className="mr-1 ml-auto" onClick={showCode} >Code</Button> */}
+                <Button className="mr-4 ml-auto" type="primary" onClick={()=>{openModalToAddField({isNew: true})}}>
+                    Add Field
+                </Button>
             </div>
             
             <FieldList 
@@ -315,6 +344,7 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 }
                 openModalToAddField={openModalToAddField}
                 deleteField={deleteField}
+                targetName='user'
             />
 
             <div className="w-100 d-flex flex-row mt-2 mb-2">

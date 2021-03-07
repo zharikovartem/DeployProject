@@ -1,15 +1,26 @@
 import { Button } from 'antd'
 import React from 'react'
+import { FieldListPropsType } from './FieldListContainer'
 
-type FieldListPropsType = {
-    fields: Array<any>
-    openModalToAddField: (target: any | null)=>void,
-    deleteField:(fieldId: number)=>void
-}
+// type FieldListPropsType = {
+//     fields: Array<any>
+//     openModalToAddField: (target: any | null)=>void,
+//     deleteField:(fieldId: number)=>void
+// }
 
 const FieldList: React.FC<FieldListPropsType> = (props) => {
+
+    const showCode = () => {
+        console.log(props)
+        props.setShowCodeModal(true, 'model', props.fields, props.targetName)
+    }
+
     return(
         <div key="fieldList">
+            <div className="w-100 d-flex flex-row mt-2 mb-2">
+                <Button type="primary" className="mr-1 ml-auto" onClick={()=>{console.log('check')}} >Check</Button>
+                <Button type="primary" className="mr-4 ml-1" onClick={showCode} >Code</Button>
+            </div>
         {
             props.fields.map( (item: any) => {
                 return(
@@ -51,6 +62,7 @@ const FieldRow: React.FC<FieldRowPropsType> = (props) => {
         props.deleteField(fieldId)
     }
     const rowBG = props.isPrimary ? 'bg-light' : null
+
     return(
         <div className={'row py-2 border '+rowBG}>
             <div className="col">{props.fieldName}</div>
