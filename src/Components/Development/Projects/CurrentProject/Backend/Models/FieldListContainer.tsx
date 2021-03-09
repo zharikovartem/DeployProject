@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
-import { AppStateType } from '../../../../../../../redux/store'
+import { AppStateType } from '../../../../../../redux/store'
 import FieldList from './FieldList'
-import {actions, codeTypeList} from './../../../../../../../redux/codeReducer'
+import {actions, codeTypeList} from './../../../../../../redux/codeReducer'
 
 type OwnFieldListPropsType = {
     fields: Array<any>

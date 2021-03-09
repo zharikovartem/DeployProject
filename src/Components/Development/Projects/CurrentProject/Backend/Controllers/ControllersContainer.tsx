@@ -1,8 +1,8 @@
 import {connect} from 'react-redux'
 import Controllers from './Controllers'
-import { AppStateType } from '../../../../../../../redux/store'
-import { getControllersList, createController } from '../../../../../../../redux/projectReducer'
-import { ModelsType } from '../../../../../../../api/projectAPI'
+import { AppStateType } from '../../../../../../redux/store'
+import { getControllersList, createController } from '../../../../../../redux/projectReducer'
+// import { ModelsType } from '../../../.././../api/projectAPI'
 
 type OwnControllersPropsType = {
     backendId: number

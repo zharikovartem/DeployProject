@@ -1,11 +1,11 @@
 import {connect} from 'react-redux'
 import Backend from './Backend'
-import { AppStateType } from '../../../../../../redux/store'
+import { AppStateType } from '../../../../../redux/store'
 import { isMobile } from 'react-device-detect'
 // import { getUsersList, updateUser, actions } from '../../../../../../redux/usersReducer'
-import { getProjectList, getBackendData, updateBackend } from '../../../../../../redux/projectReducer'
-import { UserType } from '../../../../../../redux/authReducer'
-import { BackendType } from '../../../../../../api/projectAPI'
+import { getProjectList, getBackendData, updateBackend } from '../../../../../redux/projectReducer'
+import { UserType } from '../../../../../redux/authReducer'
+import { BackendType } from '../../../../../api/projectAPI'
 // import CurrentUserMobile from './CurrentUserMobile'
 
 type OwnBackendPropsType = {

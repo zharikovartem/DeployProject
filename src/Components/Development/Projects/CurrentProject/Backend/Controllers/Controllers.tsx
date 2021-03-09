@@ -4,7 +4,7 @@ import { Field, Form, Formik, FormikProps } from 'formik'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ControllersPropsType } from './ControllersContainer'
 import ControllerForm from './ControllerForm'
-import { AntCheckbox, AntSelect } from '../../../../../../../utils/Formik/CreateAntField'
+import { AntCheckbox, AntSelect } from '../../../../../../utils/Formik/CreateAntField'
 
 const { Panel } = Collapse
 

@@ -1,8 +1,8 @@
 import {connect} from 'react-redux'
 import Models from './Models'
-import { AppStateType } from '../../../../../../../redux/store'
-import { getModelsList, updateModel, createModel } from '../../../../../../../redux/projectReducer'
-import { ModelsType } from '../../../../../../../api/projectAPI'
+import { AppStateType } from '../../../../../../redux/store'
+import { getModelsList, updateModel, createModel } from '../../../../../../redux/projectReducer'
+import { ModelsType } from '../../../../../../api/projectAPI'
 
 type OwnModelsPropsType = {
     backendId: number

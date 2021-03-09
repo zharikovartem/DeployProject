@@ -91,6 +91,7 @@ export type FieldType = {
         isPrimary: boolean,
         description: string,
         isNulleble: boolean,
+        fieldParam?: string
 }
 
 export type ModelsType = {

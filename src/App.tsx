@@ -19,8 +19,8 @@ import TasksTree from './Components/TasksTree/TasksTreeContainer'
 import Register from './Components/Register/RegisterContainer'
 import Users from './Components/Users/UsersContainer'
 import CurrentUser from './Components/Users/CurrentUser/CurrentUserContainer'
-import Projects from './Components/Header/Development/Projects/ProjectsContainer'
-import CurrentProject from './Components/Header/Development/Projects/CurrentProject/CurrentProjectContainer'
+import Projects from './Components/Development/Projects/ProjectsContainer'
+import CurrentProject from './Components/Development/Projects/CurrentProject/CurrentProjectContainer'
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {

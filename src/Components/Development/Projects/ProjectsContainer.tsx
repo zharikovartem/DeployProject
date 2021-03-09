@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import Projects, { OwnProjectsPropsType } from './Projects'
-import { AppStateType } from '../../../../redux/store'
-import {getProjectList} from './../../../../redux/projectReducer'
+import { AppStateType } from '../../../redux/store'
+import {getProjectList} from './../../../redux/projectReducer'
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 

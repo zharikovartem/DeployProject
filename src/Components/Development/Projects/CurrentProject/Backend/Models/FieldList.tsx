@@ -34,6 +34,7 @@ const FieldList: React.FC<FieldListPropsType> = (props) => {
                         openModalToAddField={props.openModalToAddField}
                         fieldId={item.id}
                         deleteField={props.deleteField}
+                        fieldParam={item.fieldParam}
                     />
                     </div>
                 ) 
@@ -50,10 +51,12 @@ type FieldRowPropsType = {
     fieldType: string | undefined,
     isNulleble?: boolean,
     isPrimary?: boolean,
-    isNew: boolean
+    isNew: boolean,
+    fieldId: number,
+    fieldParam: string
+
     openModalToAddField: (target: any | null)=>void,
     deleteField:(fieldId: number)=>void
-    fieldId: number
 }
 
 const FieldRow: React.FC<FieldRowPropsType> = (props) => {

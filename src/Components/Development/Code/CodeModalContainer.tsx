@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
-import { AppStateType } from './../../../../redux/store'
+import { AppStateType } from './../../../redux/store'
 import CodeModal from './CodeModal'
-import {actions, codeTypeList} from './../../../../redux/codeReducer'
+import {actions, codeTypeList} from './../../../redux/codeReducer'
 
 type OwnCodeModalPropsType = {
     

@@ -1,10 +1,10 @@
 import {connect} from 'react-redux'
 import CurrentProject from './CurrentProject'
-import { AppStateType } from '../../../../../redux/store'
+import { AppStateType } from '../../../../redux/store'
 import { isMobile } from 'react-device-detect'
-import { getUsersList, updateUser, actions } from '../../../../../redux/usersReducer'
-import { getProjectList } from '../../../../../redux/projectReducer'
-import { UserType } from '../../../../../redux/authReducer'
+import { getUsersList, updateUser, actions } from '../../../../redux/usersReducer'
+import { getProjectList } from '../../../../redux/projectReducer'
+import { UserType } from '../../../../redux/authReducer'
 // import CurrentUserMobile from './CurrentUserMobile'
 
 type OwnCurrentProjectPropsType = {

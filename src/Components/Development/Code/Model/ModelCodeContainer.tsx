@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
-import { AppStateType } from './../../../../../redux/store'
+import { AppStateType } from './../../../../redux/store'
 import ModelCode from './ModelCode'
-import {actions, codeTypeList} from './../../../../../redux/codeReducer'
+import {actions, codeTypeList} from './../../../../redux/codeReducer'
 
 type OwnModelCodePropsType = {
     

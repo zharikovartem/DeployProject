@@ -1,8 +1,8 @@
 import { Form, Field, FormikProps } from 'formik'
 import React, { ReactNode, useState, useEffect } from 'react'
-import { AntCheckbox, AntInput, AntSelect } from '../../../../../../../utils/Formik/CreateAntField'
-import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
-import { SelectOptionType } from '../../../../../../../Types/types'
+import { AntCheckbox, AntInput, AntSelect } from '../../../../../../utils/Formik/CreateAntField'
+import { validateRequired } from '../../../../../../utils/Formik/ValidateFields'
+import { SelectOptionType } from '../../../../../../Types/types'
 import { Radio } from 'antd'
 // import { AntInput, AntSelect, AntTextArea, AntTimePicker } from '../../../utils/Formik/CreateAntField'
 // import { validateRequired } from '../../../utils/Formik/ValidateFields'
@@ -10,7 +10,13 @@ import { Radio } from 'antd'
 
 
 const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
-    const [radioValue, setRadioValue] = useState()
+    // @ts-ignore
+    const [radioValue, setRadioValue] = useState(props.initialValues.fieldParam)
+
+    useEffect( ()=> {
+        // @ts-ignore
+        setRadioValue(props.initialValues.fieldParam)
+    },[props.initialValues])
 
     const onRadioChange = (e: any) => {
         setRadioValue(e.target.value)
@@ -45,7 +51,8 @@ const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
 
     ]
 
-    // console.log(props.initialValues)
+    console.log(props.initialValues)
+    console.log(radioValue)
 
     return (
         <Form

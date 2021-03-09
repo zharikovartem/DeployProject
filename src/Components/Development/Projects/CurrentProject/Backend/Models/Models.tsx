@@ -2,14 +2,15 @@ import { Button, Collapse, Empty  } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import { Field, Form, Formik, FormikProps } from 'formik'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { FieldType, ModelsType } from '../../../../../../../api/projectAPI'
-import { AntCheckbox, AntInput } from '../../../../../../../utils/Formik/CreateAntField'
-import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
+import { FieldType, ModelsType } from '../../../../../../api/projectAPI'
+import { AntCheckbox, AntInput } from '../../../../../../utils/Formik/CreateAntField'
+import { validateRequired } from '../../../../../../utils/Formik/ValidateFields'
 import FieldList from './FieldListContainer'
 import FieldForm from './FieldForm'
 import { ModelsPropsType } from './ModelsContainer'
 import ModelForm from './ModelForm'
 import CodeModalContainer from '../../../../Code/CodeModalContainer'
+import { stringify } from 'querystring'
 
 const { Panel } = Collapse
 
@@ -142,14 +143,16 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         isNulleble: boolean,
         isPrimary: boolean,
         isNew: boolean,
-        id?: number
+        id?: number,
+        fieldParam?: string
     }
     const emptyInitialModalValues: InitialModalValuesType = {
         newFieldName: '',
         newFieldType: '',
         isNulleble: false,
         isPrimary: false,
-        isNew: true
+        isNew: true,
+        fieldParam: '',
     }
 
     const [initialModalValues, setInitialModalValues] = useState<InitialModalValuesType>(emptyInitialModalValues)
@@ -163,7 +166,7 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     }
 
     const openModalToAddField = (target: any | null) => {
-        console.log('openModalToAddField', target.isNew)
+        console.log('openModalToAddField', target)
 
         if (!target.isNew) {
             console.log('ОБНУЛЯЕМ ФОРМУ', target)
@@ -173,7 +176,8 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 isNulleble: target.isNulleble,
                 isPrimary: target.isPrimary,
                 isNew: false,
-                id: target.fieldId
+                id: target.fieldId,
+                fieldParam: target.fieldParam
             })
         } else {
             setInitialModalValues({...emptyInitialModalValues})
@@ -226,7 +230,8 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                     if (item.name !== modalFieldFormValues.newFieldName || 
                         item.type !== modalFieldFormValues.newFieldType ||
                         item.isNulleble !== modalFieldFormValues.isNulleble ||
-                        item.isPrimary !== modalFieldFormValues.isPrimary 
+                        item.isPrimary !== modalFieldFormValues.isPrimary ||
+                        item.fieldParam !== modalFieldFormValues.fieldParam
                         ) {
                         isUpdate = true
                         return {
@@ -235,7 +240,8 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                             name: modalFieldFormValues.newFieldName,
                             isPrimary: modalFieldFormValues.isPrimary,
                             type: modalFieldFormValues.newFieldType,
-                            isNulleble: modalFieldFormValues.isNulleble
+                            isNulleble: modalFieldFormValues.isNulleble,
+                            fieldParam: modalFieldFormValues.fieldParam
                         }
                     } else {
                         return item
@@ -265,6 +271,7 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 isPrimary: modalFieldFormValues.isPrimary,
                 type: modalFieldFormValues.newFieldType,
                 isNulleble: modalFieldFormValues.isNulleble,
+                fieldParam: modalFieldFormValues.fieldParam,
                 description: "",
             })
             setInitialValues2( {...props.initialValues, fields: newFields} )
