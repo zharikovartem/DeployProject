@@ -1,5 +1,5 @@
 import { BaseThunkType, InferActionsTypes } from "./store"
-import { projectAPI, backendAPI, BackendType, modelsAPI, getModelsListResponseType, ModelsType, controllersAPI, getControllersListResponseType } from './../api/projectAPI'
+import { projectAPI, backendAPI, BackendType, modelsAPI, getModelsListResponseType, ModelsType, controllersAPI, getControllersListResponseType, ControllersType } from './../api/projectAPI'
 import { Dispatch } from "react"
 
 type backendDataType = {
@@ -25,7 +25,7 @@ export type InitialStateType = {
     projectList: Array<ProjectItemType>,
     isProjectLoaded: boolean,
     modelsList: Array<ModelsType>,
-    controllersList: Array<any>
+    controllersList: Array<ControllersType>
 }
 
 let initialState:InitialStateType = {

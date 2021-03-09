@@ -5,18 +5,38 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import { ControllersPropsType } from './ControllersContainer'
 import ControllerForm from './ControllerForm'
 import { AntCheckbox, AntSelect } from '../../../../../../utils/Formik/CreateAntField'
+import { ControllersType, ModelsType } from '../../../../../../api/projectAPI'
+import {SelectOptionType} from './../../../../../../Types/types'
+import { initialValues } from '../../../../../ToDo/ToDoMobile'
+import Item from 'antd/lib/list/Item'
 
 const { Panel } = Collapse
 
 const Controllers: React.FC<ControllersPropsType> = (props) => {
     useEffect(() => {
         props.getControllersList(props.backendId)
+
+        if (props.modelsList.length === 0) {
+            console.log('getModelsList')
+            props.getModelsList(props.backendId)
+        }
+
     }, [])
 
     useEffect(() => {
     }, [props.controllersList])
 
     const [isModalVisible, setIsModalVisible] = useState(false)
+
+    if (props.modelsList.length > 0) {
+        const modelsListOptions = props.modelsList.map( (item: ModelsType) => {
+            return ( {
+                name: item.name,
+                value: item.id
+            } )
+        })
+    }
+    
 
     const addController = () => {
         setIsModalVisible(true)
@@ -35,7 +55,7 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
         })
     }
 
-    console.log(props.controllersList)
+    console.log(props)
 
     if (props.controllersList.length > 0) {
         return (
@@ -53,7 +73,7 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
                             key={item.id ? item.id.toString() : 'null'}
                             extra={[<div>any</div>]}
                         >
-                            <ControllerItem item={item}/>
+                            <ControllerItem item={item} modelsList={props.modelsList}/>
                         </Panel>
                         // </div>
                     )
@@ -79,15 +99,48 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
 
 export default Controllers
 
-const ControllerItem:React.FC<any> = (props) => {
+type ControllerItemType = {
+    item: ControllersType,
+    modelsList: Array<ModelsType>
+}
+
+const ControllerItem:React.FC<ControllerItemType> = (props) => {
+    console.log(props.item.models)
+
+    type initialFormValuesType = {
+        isResurce: boolean,
+        modelsOptions: Array<SelectOptionType>,
+        models: Array<number>
+    }
+
+    const getOptions = ():Array<SelectOptionType> => {
+        let options:Array<SelectOptionType> = []
+        for (let index = 0; index < props.modelsList.length; index++) {
+            const element = props.modelsList[index];
+            options.push({
+                name: element.name,
+                value: element.id ? Number(element.id) : 0
+            })
+        }
+        return options
+    }
+
+    const initialFormValues: initialFormValuesType = {
+        isResurce: props.item.isResource,
+        modelsOptions: getOptions(),
+        models: props.item.models!==undefined ? props.item.models.map( (i: ModelsType) => i.id !== undefined ? i.id : 0) : []
+    }
+
+    console.log(props)
+
     return(
     <div >
         <h4>{props.item.name}</h4>
         <Collapse defaultActiveKey={[]} ghost>
             <Panel header="Instanses" key="instanse">
                 <Formik
-                    // initialValues={initialModalValues}
-                    initialValues={{}}
+                    initialValues={initialFormValues}
+                    // initialValues={{}}
                     onSubmit={()=>{}}
                     enableReinitialize={true}
                 >
@@ -107,6 +160,9 @@ const ControllerItem:React.FC<any> = (props) => {
 }
 
 const ControllerInstansesForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
+
+    console.log(props.initialValues)
+
     return (
         <Form
             className="form-container"
@@ -128,7 +184,10 @@ const ControllerInstansesForm: ((props: FormikProps<{}>) => ReactNode) = (props)
                 type="select"
                 label="Including Models"
                 mode="multiple"
-                selectOptions={modelsListOptions}
+                selectOptions={
+                    // @ts-ignore
+                    props.initialValues.modelsOptions
+                }
                 // onSelect = {onSelect}
             />
 

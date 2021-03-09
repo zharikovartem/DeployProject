@@ -88,7 +88,14 @@ const ModelCode: React.FC<ModelCodePropsType> = (props) => {
 
             <code>{tab(2,'});')}</code><br/>
             <code>{tab(1,'}')}</code><br/>
-            <code>{'}'}</code><br/>
+
+            <code>{tab(1,'}')}</code><br/>
+
+            <br/>
+            <code>{tab(1,'public function down()')}</code><br/>
+            <code>{tab(1,'{')}</code><br/>
+            <code>{tab(2,'Schema::dropIfExists("controllers");')}</code><br/>
+            <code>{tab(1,'}')}</code><br/>
         </div>
     )
 }

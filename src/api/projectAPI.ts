@@ -163,9 +163,19 @@ export const modelsAPI = {
     }
 }
 
+export type ControllersType = {
+    id: number,
+    name: string,
+    folder: string,
+    model_id: number,
+    backend_id: number,
+    isResource: boolean,
+    models: Array<ModelsType>
+}
+
 export type getControllersListResponseType = {
     data: {
-        controllers: Array<any>
+        controllers: Array<ControllersType>
     }
 }
 
