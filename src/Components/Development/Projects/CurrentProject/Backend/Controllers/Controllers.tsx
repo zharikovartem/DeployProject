@@ -128,7 +128,7 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
     const initialFormValues: initialFormValuesType = {
         isResurce: props.item.isResource,
         modelsOptions: getOptions(),
-        models: props.item.models!==undefined ? props.item.models.map( (i: ModelsType) => i.id !== undefined ? i.id : 0) : []
+        models: props.item.models.length>0 ? props.item.models.map( (i: ModelsType) => i.id ) : []
     }
 
     console.log(props)

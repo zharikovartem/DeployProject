@@ -100,7 +100,7 @@ export type ModelsType = {
     deleted_at?: string,
     updated_at?: string,
     fields: string //| Array<FieldType>,
-    id?: number,
+    id: number,
     name: string,
     db: boolean,
     soft_delete: boolean
@@ -167,7 +167,7 @@ export type ControllersType = {
     id: number,
     name: string,
     folder: string,
-    model_id: number,
+    model_id: Array<number>,
     backend_id: number,
     isResource: boolean,
     models: Array<ModelsType>
