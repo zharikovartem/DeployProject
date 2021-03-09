@@ -124,7 +124,7 @@ export const getModelsList = (backendId: number):ThunkType => {
 
 export const updateModel = (values: ModelsType, modelId: number):ThunkType => {
     return async (dispatch, getState) => {
-        const response: any = await modelsAPI.updateModel(values, modelId)
+        const response: getModelsListResponseType = await modelsAPI.updateModel(values, modelId)
         console.log(response)
         dispatch(actions.setModelsList(response.data.models))
     }
@@ -132,7 +132,7 @@ export const updateModel = (values: ModelsType, modelId: number):ThunkType => {
 
 export const createModel = (values: ModelsType):ThunkType => {
     return async (dispatch, getState) => {
-        const response: any = await modelsAPI.createModel(values)
+        const response: getModelsListResponseType = await modelsAPI.createModel(values)
         console.log(response)
         dispatch(actions.setModelsList(response.data.models))
     }
@@ -140,7 +140,7 @@ export const createModel = (values: ModelsType):ThunkType => {
 
 export const getControllersList = (backendId: number):ThunkType => {
     return async (dispatch, getState) => {
-        const response: getControllersListResponseType = await controllersAPI.getControllersList(backendId)
+        const response: AxiosResponse<getControllersListResponseType> = await controllersAPI.getControllersList(backendId)
         console.log(response.data)
         dispatch(actions.setControllersList(response.data.controllers))
     }
@@ -148,7 +148,7 @@ export const getControllersList = (backendId: number):ThunkType => {
 
 export const createController = (values: any):ThunkType => {
     return async (dispatch, getState) => {
-        const response: any = await controllersAPI.createController(values)
+        const response: AxiosResponse<getControllersListResponseType> = await controllersAPI.createController(values)
         console.log(response)
         dispatch(actions.setControllersList(response.data.controllers))
     }

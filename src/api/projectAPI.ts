@@ -174,9 +174,9 @@ export type ControllersType = {
 }
 
 export type getControllersListResponseType = {
-    data: {
+    // data: {
         controllers: Array<ControllersType>
-    }
+    // }
 }
 
 export const controllersAPI = {
