@@ -9,6 +9,7 @@ import { ControllersType, ModelsType } from '../../../../../../api/projectAPI'
 import {SelectOptionType} from './../../../../../../Types/types'
 import { initialValues } from '../../../../../ToDo/ToDoMobile'
 import Item from 'antd/lib/list/Item'
+import ControllerMethods from './ControllerMethodsContainer'
 
 const { Panel } = Collapse
 
@@ -149,7 +150,7 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
                 
             </Panel>
             <Panel header="Methods" key="methods">
-
+                <ControllerMethods />
             </Panel>
             <Panel header="Code" key="code">
 

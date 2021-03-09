@@ -41,11 +41,13 @@ const ModelCode: React.FC<ModelCodePropsType> = (props) => {
             <code>{'{'}</code><br/>
 
             {props.codeData.soft_delete ? 
-                <><code>{tab(1,'use SoftDeletes;')}</code><br/></>
+                <><code>{tab(1,'use SoftDeletes;')}</code><br/><br/></>
             :
                 null
             }
             
+            {/* 'protected $table = 'Models_instanses';' */}
+            <code>{tab(1,'protected $table = "'+props.codeTargetName+'";')}</code><br/>
 
             <Fillable codeRowsArray={props.codeRowsArray}/>
 
@@ -94,7 +96,7 @@ const ModelCode: React.FC<ModelCodePropsType> = (props) => {
             <br/>
             <code>{tab(1,'public function down()')}</code><br/>
             <code>{tab(1,'{')}</code><br/>
-            <code>{tab(2,'Schema::dropIfExists("controllers");')}</code><br/>
+            <code>{tab(2,'Schema::dropIfExists("'+props.codeTargetName+'");')}</code><br/>
             <code>{tab(1,'}')}</code><br/>
         </div>
     )

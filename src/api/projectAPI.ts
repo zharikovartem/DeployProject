@@ -1,6 +1,6 @@
 import {getToken, instance} from './api'
 
-type ProjectResponseType = {
+export type ProjectResponseType = {
     projects: [
         {
             backend_id: number,

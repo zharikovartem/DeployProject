@@ -1,6 +1,8 @@
 import { BaseThunkType, InferActionsTypes } from "./store"
 import { projectAPI, backendAPI, BackendType, modelsAPI, getModelsListResponseType, ModelsType, controllersAPI, getControllersListResponseType, ControllersType } from './../api/projectAPI'
 import { Dispatch } from "react"
+import { ControllerMethodsType, controllerMethodsAPI, GetControllerMethodsResponseType} from "../api/ControllerMethodsAPI"
+import { AxiosResponse } from "axios"
 
 type backendDataType = {
     created_at: string,
@@ -25,14 +27,20 @@ export type InitialStateType = {
     projectList: Array<ProjectItemType>,
     isProjectLoaded: boolean,
     modelsList: Array<ModelsType>,
-    controllersList: Array<ControllersType>
+    controllersList: Array<ControllersType>,
+    controllerMethods: {
+        controllerMethodsList: Array<ControllerMethodsType>
+    }
 }
 
 let initialState:InitialStateType = {
     projectList: [],
     isProjectLoaded: false,
     modelsList: [],
-    controllersList: []
+    controllersList: [],
+    controllerMethods: {
+        controllerMethodsList: []
+    }
 }
 
 const projectReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
@@ -67,11 +75,12 @@ const projectReducer = (state = initialState, action: ActionsTypes): InitialStat
 }
 
 export const actions = {
-    setProjectList: (projectList: Array<any>) => ({ type: 'SN/PROJECT/SET_PROJECT_LIST', projectList } as const),
+    setProjectList: (projectList: Array<ProjectItemType>) => ({ type: 'SN/PROJECT/SET_PROJECT_LIST', projectList } as const),
     setIsLoaded: (isLoaded: boolean) => ({type: 'SN/PROJECT/SET_IS_LOADED', isLoaded} as const),
     setBackendData: (projectId: number ,backendData: backendDataType) => ({type: 'SN/PROJECT/SET_BACKEND_DATA', backendData, projectId} as const),
     setModelsList: (modelsList: Array<ModelsType>) => ({type: 'SN/PROJECT/SET_MODELS_LIST', modelsList} as const),
-    setControllersList: (controllersList: Array<any>) => ({type: 'SN/PROJECT/SET_CONTROLLERS_LIST', controllersList} as const),
+    setControllersList: (controllersList: Array<ControllersType>) => ({type: 'SN/PROJECT/SET_CONTROLLERS_LIST', controllersList} as const),
+    setControllerMethodsList: (controllerMethodsList: Array<ControllerMethodsType>) => ({type: 'SN/PROJECT/SET_CONTROLLER_METHOD_LIST', controllerMethodsList} as const),
 }
 
 export const getProjectList = (): ThunkType => {
@@ -145,6 +154,12 @@ export const createController = (values: any):ThunkType => {
     }
 }
 
+export const getControllerMethodsList = ():ThunkType => {
+    return async (dispatch, getState) => {
+        const response: AxiosResponse<GetControllerMethodsResponseType> = await controllerMethodsAPI.getControllerMethods()
+        dispatch(actions.setControllerMethodsList(response.data.controllerMethods))
+    }
+}
 export default projectReducer
 
 type ActionsTypes = InferActionsTypes<typeof actions>
