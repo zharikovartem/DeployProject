@@ -43,6 +43,9 @@ const ModelCode: React.FC<ModelCodePropsType> = (props) => {
                     </div>
                 )
             })}
+
+            <br/><br/>
+            <li>Migrate</li>
         </div>
     )
 }

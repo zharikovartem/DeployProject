@@ -92,6 +92,8 @@ const CreateAntField = (AntComponent: any) => (
     }
 
     const onBlur = () => form.setFieldTouched(field.name, true);
+
+    // console.log('props.: ', props)
     
     return (
         <FormItem
@@ -127,7 +129,14 @@ const CreateAntField = (AntComponent: any) => (
                     {selectOptions &&
                         selectOptions.map((item: any) => <Option title={item.name} value={item.value} key={item.name}>{item.name}</Option>)}
 
-
+                    {/* {
+                        type === 'radio' ? 
+                        // <label htmlFor={'1'}>
+                            // {label} 
+                            <>label</>
+                        // </label>
+                        : null
+                    } */}
                 </AntComponent>
             }
 
@@ -135,13 +144,7 @@ const CreateAntField = (AntComponent: any) => (
     )
 }
 
-export const AntSelect = !isMobile ? CreateAntField(Select) : CreateAntField(Picker)
-export const AntDatePicker = !isMobile ? CreateAntField(DatePicker) : CreateAntField(DatePickerMobile)
-export const AntInput = !isMobile ? CreateAntField(Input) : CreateAntField(InputItem)
-export const AntInputPassword = !isMobile ? CreateAntField(Input.Password) : CreateAntField(InputItem)
-export const AntTimePicker = !isMobile ? CreateAntField(TimePicker) : CreateAntField(DatePickerMobile)
-export const AntCheckbox = !isMobile ? CreateAntField(Checkbox) : CreateAntField(CheckboxItem)
-export const AntTextArea = !isMobile ? CreateAntField(TextArea) : CreateAntField(TextareaItem)
+
 
 type SelectOptionsType = {
     name: string,
@@ -264,3 +267,12 @@ const MobileComponent: React.FC<MobileComponentType> = (props) => {
         </List>
     )
 }
+
+
+export const AntSelect = !isMobile ? CreateAntField(Select) : CreateAntField(Picker)
+export const AntDatePicker = !isMobile ? CreateAntField(DatePicker) : CreateAntField(DatePickerMobile)
+export const AntInput = !isMobile ? CreateAntField(Input) : CreateAntField(InputItem)
+export const AntInputPassword = !isMobile ? CreateAntField(Input.Password) : CreateAntField(InputItem)
+export const AntTimePicker = !isMobile ? CreateAntField(TimePicker) : CreateAntField(DatePickerMobile)
+export const AntCheckbox = !isMobile ? CreateAntField(Checkbox) : CreateAntField(CheckboxItem)
+export const AntTextArea = !isMobile ? CreateAntField(TextArea) : CreateAntField(TextareaItem)

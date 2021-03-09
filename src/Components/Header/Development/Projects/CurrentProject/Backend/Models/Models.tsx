@@ -167,7 +167,6 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
 
         if (!target.isNew) {
             console.log('ОБНУЛЯЕМ ФОРМУ', target)
-            
             setInitialModalValues({
                 newFieldName: target.fieldName,
                 newFieldType: target.fieldType,

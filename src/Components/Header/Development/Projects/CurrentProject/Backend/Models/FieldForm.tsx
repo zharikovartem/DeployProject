@@ -2,7 +2,7 @@ import { Form, Field, FormikProps } from 'formik'
 import React, { ReactNode, useState, useEffect } from 'react'
 import { AntCheckbox, AntInput, AntSelect } from '../../../../../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
-import {SelectOptionType} from '../../../../../../../Types/types'
+import { SelectOptionType } from '../../../../../../../Types/types'
 import { Radio } from 'antd'
 // import { AntInput, AntSelect, AntTextArea, AntTimePicker } from '../../../utils/Formik/CreateAntField'
 // import { validateRequired } from '../../../utils/Formik/ValidateFields'
@@ -12,9 +12,10 @@ import { Radio } from 'antd'
 const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     const [radioValue, setRadioValue] = useState()
 
-    const onRadioChange = (e:any) => {
+    const onRadioChange = (e: any) => {
         setRadioValue(e.target.value)
-        props.setValues({...props.values, fieldParam: e.target.value})
+        props.setValues({ ...props.values, fieldParam: e.target.value })
+        console.log('Добавили значение fieldParam: ',e.target.value)
     }
     const newFieldTypepOtions: Array<SelectOptionType> = [
         {
@@ -35,16 +36,16 @@ const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         },
         {
             name: 'TIMESTAMP',
-            value:'timestamp'
+            value: 'timestamp'
         },
         {
             name: 'TEXT',
-            value:'text'
+            value: 'text'
         }
 
     ]
 
-    console.log(props.initialValues)
+    // console.log(props.initialValues)
 
     return (
         <Form
@@ -58,7 +59,7 @@ const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 label="New fieldName"
                 validate={validateRequired}
                 hasFeedback
-                // onChange={onChangeNewFieldName}
+            // onChange={onChangeNewFieldName}
             />
             <Field
                 component={AntSelect}
@@ -74,8 +75,8 @@ const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 type="checkbox"
                 label="isNulleble"
                 submitCount={props.submitCount}
-                // onClick={submitBackEnd}
-                // onSelect={submitBackEnd}
+            // onClick={submitBackEnd}
+            // onSelect={submitBackEnd}
             />
             <Field
                 component={AntCheckbox}
@@ -85,12 +86,38 @@ const FieldForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 submitCount={props.submitCount}
             />
 
-            <Radio.Group onChange={onRadioChange} value={radioValue} name="fieldParam">
+            {/* <Radio.Group onChange={onRadioChange} value={radioValue} name="fieldParam">
                 <Radio value={'fillable'}>Fillable</Radio>
                 <Radio value={'hidden'}>Hidden</Radio>
                 <Radio value={'readOnly'}>ReadOnly</Radio>
-            </Radio.Group>
+            </Radio.Group> */}
+
+            <div className="ant-row ant-form-item">
+                <div className="ant-col ant-form-item-label">
+                    <label>
+                        Picked
+                    </label>
+                </div>
+                <div className="mt-1">
+                    <Radio.Group onChange={onRadioChange} value={radioValue} name="fieldParam">
+                        <Radio value={'fillable'}>Fillable</Radio>
+                        <Radio value={'hidden'}>Hidden</Radio>
+                        <Radio value={'readOnly'}>ReadOnly</Radio>
+                    </Radio.Group>
+                </div>
                 
+            {/* <div role="group" aria-labelledby="my-radio-group">
+                    <label>
+                        <Field type="radio" name="picked" value="One" label="one" />
+                        One
+                    </label>
+                    <label>
+                        <Field type="radio" name="picked" value="Two" />
+                        Two
+                    </label>
+                </div>*/}
+            </div> 
+
             <div className="submit-container" >
                 <button className="ant-btn ant-btn-primary" type="submit">
                     Save
