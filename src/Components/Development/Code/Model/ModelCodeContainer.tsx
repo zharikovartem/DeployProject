@@ -10,7 +10,7 @@ type OwnModelCodePropsType = {
 type MapPropsType = ReturnType<typeof mapStateToProps>
 
 type MapDispatchPropsType = {
-    setShowCodeModal: (isShow: boolean, codeType: codeTypeList, codeRowsArray: Array<any>, codeTargetName: string) => void,
+    setShowCodeModal: (isShow: boolean, codeType: codeTypeList, codeRowsArray: Array<any>, codeTargetName: string, codeData: Array<any>) => void,
 }
 
 export type ModelCodePropsType = MapPropsType & MapDispatchPropsType & OwnModelCodePropsType
@@ -20,7 +20,8 @@ let mapStateToProps = (state:AppStateType) => {
         isModalVisible: state.code.isModalVisible,
         codeRowsArray: state.code.codeRowsArray,
         codeType: state.code.codeType,
-        codeTargetName: state.code.codeTargetName
+        codeTargetName: state.code.codeTargetName,
+        codeData: state.code.codeData
     }
 }
 

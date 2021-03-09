@@ -102,6 +102,8 @@ export type ModelsType = {
     fields: string //| Array<FieldType>,
     id?: number,
     name: string,
+    db: boolean,
+    soft_delete: boolean
 }
 
 export type getModelsListResponseType = {

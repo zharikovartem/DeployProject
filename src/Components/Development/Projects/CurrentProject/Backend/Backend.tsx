@@ -58,7 +58,6 @@ const Backend: React.FC<BackendPropsType> = (props) => {
                     </Panel>
                 </Collapse>
                 <br/><br/><br/>
-                <li>Migrations</li>
                 <li>Api</li>
                 <li>Seeders</li>
                 <li>Fasades</li>

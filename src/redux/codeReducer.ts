@@ -9,6 +9,7 @@ export type InitialStateType = {
     codeRowsArray: Array<any>,
     codeType: codeTypeList,
     codeTargetName: string,
+    codeData?: any // данные для формирования
 }
 
 let initialState:InitialStateType = {
@@ -22,15 +23,28 @@ const codeReducer = (state = initialState, action: ActionsTypes): InitialStateTy
     switch (action.type) {
         case 'SN/CODE/SET_SHOW_CODE_MODAL':
             console.log('SN/CODE/SET_SHOW_CODE_MODAL')
-            return {...state, isModalVisible: action.isShow, codeRowsArray: action.codeRowsArray, codeTargetName: action.codeTargetName}
+            return {...state, isModalVisible: action.isShow, codeRowsArray: action.codeRowsArray, }
+            // return {...state, isModalVisible: action.isShow, codeRowsArray: action.codeRowsArray, codeTargetName: action.codeTargetName}
     
+        case 'SN/CODE/SET_CODE_TARGET':
+            console.log(action.codeTargetName)
+            console.log(action.codeData)
+            return {...state, codeTargetName: action.codeTargetName, codeData: action.codeData}
+
         default:
             return state
     }
 }
 
 export const actions = {
-    setShowCodeModal: (isShow: boolean, codeType: codeTypeList, codeRowsArray: Array<any>, codeTargetName: string) => ({ type: 'SN/CODE/SET_SHOW_CODE_MODAL', isShow, codeType, codeRowsArray, codeTargetName} as const),
+    setShowCodeModal: (
+        isShow: boolean, 
+        codeType: codeTypeList, 
+        codeRowsArray: Array<any>, 
+        codeTargetName: string,
+        codeData: Array<any>
+        ) => ({ type: 'SN/CODE/SET_SHOW_CODE_MODAL', isShow, codeType, codeRowsArray, codeTargetName, codeData} as const),
+    setCodeTarget: (codeTargetName: string, codeData: any) => ({ type: 'SN/CODE/SET_CODE_TARGET', codeTargetName, codeData} as const),
 }
 
 export default codeReducer

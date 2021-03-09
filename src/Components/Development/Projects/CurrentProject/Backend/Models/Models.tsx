@@ -39,6 +39,22 @@ const Models: React.FC<ModelsPropsType> = (props) => {
         })
     }
 
+    const callback = (key:any) => {
+        console.log(key)
+        console.log(props.modelsList)
+        console.log(props.modelsList.filter(item => item.id === Number(key[0]))[0])
+        const target = props.modelsList.filter(item => item.id === Number(key[0]))[0]
+        if (target) {
+            props.setCodeTarget(
+                target.name,
+                {
+                    db: target.db, 
+                    soft_delete: target.soft_delete
+                }
+            )
+        }
+        
+    }
 
     return(
         <>
@@ -46,7 +62,7 @@ const Models: React.FC<ModelsPropsType> = (props) => {
                 <Button className="mr-4 ml-auto mb-3" type="primary" onClick={addModel}>Add Model</Button>
             </div>
 
-            <Collapse defaultActiveKey={[]} >
+            <Collapse defaultActiveKey={[]} onChange={callback}>
                 {
                     props.modelsList.map(item => {
                         return(
@@ -106,24 +122,31 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
 
         // compere model
         let ismodelChange = false
-        if ( oldValue.name !== formValues.name ) {
+        if ( 
+            oldValue.name !== formValues.name
+            || oldValue.db !== formValues.db
+            || oldValue.soft_delete !== formValues.soft_delete
+            ) {
             ismodelChange = true
         }
 
         console.log(props.modelItem)
+
         const newFieldData: ModelsType = {
             // ...props.modelItem,
             fields: JSON.stringify(formValues.fields),
             name: formValues.name,
             backend_id: props.modelItem.backend_id,
-            id: props.modelItem.id
+            id: props.modelItem.id,
+            db: formValues.db,
+            soft_delete: formValues.soft_delete
         }
 
         console.log(newFieldData)
         props.updateModel(newFieldData, props.modelItem.id ? props.modelItem.id : 0)
     }
 
-    // console.log({...props.modelItem, fields: fieldsdata, ...fieldInit})
+    console.log({...props.modelItem, fields: fieldsdata, ...fieldInit})
     return(
         <Formik
             initialValues={ {...props.modelItem, fields: fieldsdata, ...fieldInit} }
@@ -144,7 +167,7 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         isPrimary: boolean,
         isNew: boolean,
         id?: number,
-        fieldParam?: string
+        fieldParam?: string,
     }
     const emptyInitialModalValues: InitialModalValuesType = {
         newFieldName: '',
@@ -162,6 +185,7 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     }, [initialModalValues])
 
     const onChange = (val:any) => {
+        console.log('onChange in Models')
         setIsDataChanged(true)
     }
 
@@ -287,13 +311,6 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         setInitialModalValues(modalFieldFormValues)
     }
 
-    // const showCode = () => {
-    //     console.log(props)
-    // }
-
-    // @ts-ignore
-    // console.log(initialValues2.fields)
-
     return(
         <>
         <Form
@@ -321,9 +338,10 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
 
             <Field
                 component={AntCheckbox}
-                name="isPrimary"
+                name="soft_delete"
                 type="checkbox"
                 label="Soft delete"
+                onChange={onChange}
                 submitCount={props.submitCount}
             />
 
@@ -332,8 +350,17 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 name="db"
                 type="checkbox"
                 label="Use DB"
+                onChange={onChange}
                 submitCount={props.submitCount}
             />
+
+            {isDataChanged ?
+                <div className="submit-container">
+                    <button className="ant-btn ant-btn-primary" type="submit">
+                        Save
+                    </button>
+                </div>
+            : null}
 
             <div className="w-100 d-flex flex-row mt-2 mb-2">
                 <h5>Field List:</h5>
@@ -351,19 +378,12 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 openModalToAddField={openModalToAddField}
                 deleteField={deleteField}
                 targetName='user'
+                targetData={[]}
             />
 
             <div className="w-100 d-flex flex-row mt-2 mb-2">
                 <h5>Methods:</h5><Button className="mr-4 ml-auto" type="primary">Add method</Button>
             </div>
-            
-            {isDataChanged ?
-            <div className="submit-container">
-                <button className="ant-btn ant-btn-primary" type="submit">
-                    Save
-                </button>
-            </div>
-            : null}
         </Form>
 
         <Modal title="New Field Form" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>

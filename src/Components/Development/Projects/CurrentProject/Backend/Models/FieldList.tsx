@@ -12,7 +12,7 @@ const FieldList: React.FC<FieldListPropsType> = (props) => {
 
     const showCode = () => {
         console.log(props)
-        props.setShowCodeModal(true, 'model', props.fields, props.targetName)
+        props.setShowCodeModal(true, 'model', props.fields, props.targetName, [])
     }
 
     return(

@@ -10,7 +10,7 @@ type OwnCodeModalPropsType = {
 type MapPropsType = ReturnType<typeof mapStateToProps>
 
 type MapDispatchPropsType = {
-    setShowCodeModal: (isShow: boolean, codeType: codeTypeList, codeRowsArray: Array<any>, codeTargetName: string) => void,
+    setShowCodeModal: (isShow: boolean, codeType: codeTypeList, codeRowsArray: Array<any>, codeTargetName: string, codeData: Array<any>) => void,
 }
 
 export type CodeModalPropsType = MapPropsType & MapDispatchPropsType & OwnCodeModalPropsType

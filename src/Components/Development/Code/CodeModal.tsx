@@ -5,7 +5,7 @@ import ModelCodeContainer from './Model/ModelCodeContainer'
 
 const CodeModal: React.FC<CodeModalPropsType> = (props) => {
     const onClose = () => {
-        props.setShowCodeModal(false, props.codeType, props.codeRowsArray, props.codeTargetName)
+        props.setShowCodeModal(false, props.codeType, props.codeRowsArray, props.codeTargetName, [])
     }
 
     const getTargetComponennt = () => {
@@ -19,7 +19,7 @@ const CodeModal: React.FC<CodeModalPropsType> = (props) => {
     }
 
     return(
-        <Modal title="Code modal" visible={props.isModalVisible} onOk={onClose} onCancel={onClose} >
+        <Modal title="Code modal" visible={props.isModalVisible} onOk={onClose} onCancel={onClose} width={1000}>
             {getTargetComponennt()}
         </Modal>
     )

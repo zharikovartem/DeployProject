@@ -47,6 +47,7 @@ const CreateAntField = (AntComponent: any) => (
         //console.log(props)
 
         if (props.onChange) {
+            console.log('onChange field in create', value)
             props.onChange(field.name, value)
         }
 
@@ -84,6 +85,10 @@ const CreateAntField = (AntComponent: any) => (
     }
 
     const onChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
+        if (props.onChange) {
+            console.log('onChange field in create')
+            props.onChange(field.name, value)
+        }
         if (typeof value !== "string" && value.target.type === 'checkbox') {
             form.setFieldValue(field.name, value.target.checked)
         } else {

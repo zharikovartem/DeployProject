@@ -7,13 +7,14 @@ type OwnFieldListPropsType = {
     fields: Array<any>
     openModalToAddField: (target: any | null)=>void,
     deleteField:(fieldId: number)=>void,
-    targetName: string
+    targetName: string,
+    targetData: Array<any>
 }
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 
 type MapDispatchPropsType = {
-    setShowCodeModal: (isShow: boolean, codeType: codeTypeList, codeRowsArray: Array<any>, codeTargetName: string) => void,
+    setShowCodeModal: (isShow: boolean, codeType: codeTypeList, codeRowsArray: Array<any>, codeTargetName: string, codeData: Array<any>) => void,
 }
 
 export type FieldListPropsType = MapPropsType & MapDispatchPropsType & OwnFieldListPropsType
