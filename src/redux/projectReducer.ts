@@ -45,6 +45,10 @@ let initialState:InitialStateType = {
 
 const projectReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
+        // case 'SN/PROJECT/SET_CONTROLLER_METHOD_LIST':
+        //     return ({...state, controllersList: controllerMethods: {
+        //         controllerMethodsList: action.controllerMethodsList
+        //     }})
         case 'SN/PROJECT/SET_CONTROLLERS_LIST':
             return ({...state, controllersList: action.controllersList})
 
