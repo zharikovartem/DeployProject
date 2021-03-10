@@ -182,8 +182,9 @@ export type getControllersListResponseType = {
 export const controllersAPI = {
     getControllersList(backendId: number) {
         getToken()
-        return instance.get<getControllersListResponseType>(`controllers/`+backendId)
+        return instance.get<getControllersListResponseType>(`currentControllers/`+backendId)
         .then(response => {
+            console.log(response)
             return response.status === 200 ? response : null
         })
         .catch(err => {
@@ -196,7 +197,7 @@ export const controllersAPI = {
         })
     },
     createController(values: any) {
-        return instance.post<getModelsListResponseType>(`controllers`, values)
+        return instance.post<getControllersListResponseType>(`controllers`, values)
         .then(response => {
             console.log(response)
             return response.status === 200 ? response : null
@@ -210,5 +211,22 @@ export const controllersAPI = {
             }
             return null
         })
-    }
+    },
+    updateController(values: ControllersType, controllerId: number) {
+        console.log(values)
+        console.log('controllerId', controllerId)
+        return instance.put<getControllersListResponseType>(`controllers/${controllerId}`, values)
+        .then(response => {
+            console.log(response)
+            return response.status === 200 ? response : null
+        })
+        .catch(err => {
+            if (err.response) {
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
+    },
 }

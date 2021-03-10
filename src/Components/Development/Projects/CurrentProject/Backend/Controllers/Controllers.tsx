@@ -74,7 +74,7 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
                             key={item.id ? item.id.toString() : 'null'}
                             extra={[<div>any</div>]}
                         >
-                            <ControllerItem item={item} modelsList={props.modelsList}/>
+                            <ControllerItem item={item} modelsList={props.modelsList} updateController={props.updateController}/>
                         </Panel>
                         // </div>
                     )
@@ -102,7 +102,8 @@ export default Controllers
 
 type ControllerItemType = {
     item: ControllersType,
-    modelsList: Array<ModelsType>
+    modelsList: Array<ModelsType>,
+    updateController: (values: ControllersType, controllerId: number) => void
 }
 
 const ControllerItem:React.FC<ControllerItemType> = (props) => {
@@ -134,6 +135,20 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
 
     console.log(props)
 
+    const onControllerInstanseSubmit = (values: any) => {
+        console.log(values)
+
+        props.updateController({
+            models: values.models,
+            backend_id: props.item.backend_id,
+            folder: props.item.folder,
+            id: props.item.id,
+            isResource: values.isResurce,
+            model_id: props.item.model_id,
+            name: props.item.name,
+        }, props.item.id)
+    }
+
     return(
     <div >
         <h4>{props.item.name}</h4>
@@ -142,7 +157,7 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
                 <Formik
                     initialValues={initialFormValues}
                     // initialValues={{}}
-                    onSubmit={()=>{}}
+                    onSubmit={onControllerInstanseSubmit}
                     enableReinitialize={true}
                 >
                     {ControllerInstansesForm}
@@ -162,7 +177,7 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
 
 const ControllerInstansesForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
 
-    console.log(props.initialValues)
+    // console.log(props.initialValues)
 
     return (
         <Form
@@ -192,7 +207,11 @@ const ControllerInstansesForm: ((props: FormikProps<{}>) => ReactNode) = (props)
                 // onSelect = {onSelect}
             />
 
-            <li>Models include</li>
+            <div className="submit-container">
+                <button className="ant-btn ant-btn-primary" type="submit">
+                    Save
+                </button>
+            </div>
 
         </Form>
     )

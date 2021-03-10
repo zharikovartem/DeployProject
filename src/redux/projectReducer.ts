@@ -160,6 +160,15 @@ export const getControllerMethodsList = ():ThunkType => {
         dispatch(actions.setControllerMethodsList(response.data.controllerMethods))
     }
 }
+
+export const updateController = (values: ControllersType, controllerId: number):ThunkType => {
+    return async (dispatch, getState) => {
+
+        const response: AxiosResponse<getControllersListResponseType> = await controllersAPI.updateController(values, controllerId)
+        console.log(response)
+    }
+}
+
 export default projectReducer
 
 type ActionsTypes = InferActionsTypes<typeof actions>

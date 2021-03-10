@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import ControllerMethods from './ControllerMethods'
 import { AppStateType } from '../../../../../../redux/store'
-import { getControllersList, createController, getModelsList } from '../../../../../../redux/projectReducer'
+import { getControllersList, createController, getModelsList, getControllerMethodsList } from '../../../../../../redux/projectReducer'
 // import { ModelsType } from '../../../.././../api/projectAPI'
 
 type OwnControllerMethodsPropsType = {
@@ -11,6 +11,7 @@ type OwnControllerMethodsPropsType = {
 type MapPropsType = ReturnType<typeof mapStateToProps>
 
 type MapDispatchPropsType = {
+    getControllerMethodsList: ()=>void,
     // getControllersList: (backendId: number) => void
     // createController: (values: any) => void,
     // getModelsList: (backendId: number) => void,
@@ -21,12 +22,13 @@ export type ControllerMethodsPropsType = MapPropsType & MapDispatchPropsType & O
 let mapStateToProps = (state:AppStateType) => {
     return {
         controllersList: state.projects.controllersList,
-        modelsList: state.projects.modelsList
+        modelsList: state.projects.modelsList,
+        controllerMethodsList: state.projects.controllerMethods.controllerMethodsList
     }
 }
 
 export default connect<MapPropsType, MapDispatchPropsType, OwnControllerMethodsPropsType, AppStateType>(mapStateToProps, 
-    {}) 
+    {getControllerMethodsList}) 
     (ControllerMethods)
     
 
