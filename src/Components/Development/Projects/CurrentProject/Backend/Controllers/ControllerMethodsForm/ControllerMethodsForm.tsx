@@ -1,16 +1,35 @@
 import { Form, Field, FormikProps } from 'formik'
 import React, { ReactNode, useState, useEffect } from 'react'
-import { AntCheckbox, AntInput, AntSelect } from '../../../../../../utils/Formik/CreateAntField'
-import { validateRequired } from '../../../../../../utils/Formik/ValidateFields'
-import {SelectOptionType} from '../../../../../../Types/types'
+import { AntCheckbox, AntInput, AntSelect } from '../../../../../../../utils/Formik/CreateAntField'
+import { validateRequired } from '../../../../../../../utils/Formik/ValidateFields'
+import {SelectOptionType} from '../../../../../../../Types/types'
 import { Button, Checkbox, Input, TreeSelect } from 'antd'
-import { TreeNode } from 'rc-tree-select'
+import { ModelsType } from '../../../../../../../api/projectAPI'
+import RequestItem from './RequestItem'
+
+export type RequestType = {
+    label: string,
+    type: string,
+    name: string,
+    id: number
+}
 
 const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
-    const [request, setRequest] = useState<Array<string>>([])
+    // @ts-ignore
+    const [request, setRequest] = useState<Array<RequestType>>(props.initialValues.request)
     const [isRequest, setIsRequest] = useState(false)
+    const [response, setResponse] = useState<Array<string>>([])
     const [isResponse, setIsResponse] = useState(false)
     const [value, setValue] = useState(undefined)
+
+    useEffect( () => {
+        // @ts-ignore
+        // setRequest(props.initialValues.request)
+        console.log('useEffect', request)
+        // @ts-ignore
+        // console.log('useEffect', props.initialValues.request)
+        setRequest(props.initialValues.request)
+    },[props.initialValues])
 
     const onRequest = (val: any) => {
         console.log(val)
@@ -24,8 +43,15 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
 
     const onAddRequest = () => {
         let newRequest = [...request]
-        newRequest.push('param '+ (request.length+1) + ':' )
+        // newRequest.push('param '+ (request.length+1) + ':' )
+        newRequest.push({
+            label: 'param '+ (request.length+1),
+            type: '',
+            name: '',
+            id: request.length
+        })
         setRequest(newRequest)
+        props.setValues({...props.values, request: newRequest})
     }
 
     const onDeleteRequest = () => {
@@ -35,15 +61,27 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
         if (newRequest.length === 0) {
             setIsRequest(false)
         }
+        props.setValues({...props.values, request: newRequest})
     }
 
     const onResponse = () => {
         setIsResponse(!isResponse)
     }
 
-    const onRequestTypeChange = (value: any) => {
-        console.log(value)
+    const onRowChange = (id: number, type: string, name: string) => {
+        let requestCopy = [...request]
+
+        for (let index = 0; index < request.length; index++) {
+            const element = request[index];
+            if (element.id === id) {
+                requestCopy[index] = {...element, name: name, type: type}
+            }
+        }
+        setRequest(requestCopy)
+        props.setValues({...props.values, request: requestCopy})
     }
+
+    console.log(props.initialValues)
 
     return (
         <Form
@@ -56,6 +94,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 type="text"
                 label="Method name"
                 validate={validateRequired}
+                submitCount={props.submitCount}
                 hasFeedback
             />
             <Field
@@ -66,14 +105,6 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 selectOptions={RestTypeOtions}
             /> 
 
-            {/* <Field
-                component={AntCheckbox}
-                name="isNulleble"
-                type="checkbox"
-                label="isNulleble"
-                submitCount={props.submitCount}
-            /> */}
-
             <div className="ant-row ant-form-item ">
                 <div className="ant-col ant-form-item-label pr-2">Request:</div>
                 <div className="ant-col ant-form-item-control">
@@ -82,40 +113,8 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
             </div>
 
             {request.length>0 ? 
-                request.map( (item: any) => {
-                    return (
-                    <div key={item} className="row mt-1">
-                        <div className="ant-col ant-form-item-label mt-2">
-                            {item}
-                        </div>
-                        <div className="col-4">
-                            <TreeSelect
-                                className=" ml-2"
-                                // style={{width: '33%'}}
-                                style={{ width: '100%' }}
-                                showSearch
-                                value={value}
-                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                placeholder="Reqest type"
-                                allowClear
-                                showCheckedStrategy={'SHOW_PARENT'}
-                                // treeDefaultExpandAll
-                                onChange={onRequestTypeChange}
-                            >
-                                <TreeNode value="model" title="Model">
-                                    <TreeNode value="user" title="User"></TreeNode>
-                                    <TreeNode value="ControllerMethod" title="ControllerMethod"></TreeNode>
-                                </TreeNode>
-                                <TreeNode value="request" title="Request">
-
-                                </TreeNode>
-                            </TreeSelect>
-                        </div>
-                        <div className="col-4">
-                            <Input className="w-100 ml-2" placeholder="Param name" />
-                        </div>
-                    </div>
-                    )
+                request.map( (item: RequestType) => {
+                    return <RequestItem item={item} initialValues={props.initialValues} onRowChange={onRowChange}/>
                 })
             :
                 null
@@ -137,7 +136,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
             <div className="ant-row ant-form-item ">
                 <div className="ant-col ant-form-item-label pr-2">body_actions:</div>
                 <div className="ant-col ant-form-item-control">
-                    <Checkbox onChange={()=>{}} checked={isResponse}></Checkbox>
+                    <Checkbox onChange={()=>{}} checked={false}></Checkbox>
                 </div>
             </div>
 
@@ -154,7 +153,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                     Save
                 </button>
             </div>
-            
+
         </Form>
     )
 }

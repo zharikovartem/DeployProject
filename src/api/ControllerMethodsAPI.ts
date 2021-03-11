@@ -1,12 +1,14 @@
 import {getToken, instance} from './api'
 
+export type rest_typeType = 'get'|'post'|'put'|'delete'| null
+
 export type ControllerMethodsType = {
     id: number,
     controller_id: number,
     name: string,
     request: string,
     response: string,
-    rest_type: 'get'|'post'|'put'|'delete',
+    rest_type: rest_typeType,
     isMiddleware: boolean,
     body_actions: string,
 }
