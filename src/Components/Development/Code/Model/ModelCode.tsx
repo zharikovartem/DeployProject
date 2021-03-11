@@ -164,7 +164,7 @@ const Hidden: React.FC<any> = (props) => {
     }
 }
 
-const tab = (count: number, text?: string) => {
+export const tab = (count: number, text?: string) => {
     const getTabs = ():Array<JSX.Element> => {
         let i = 1
         let tabs: Array<JSX.Element> = []

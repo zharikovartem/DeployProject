@@ -165,7 +165,7 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
                 
             </Panel>
             <Panel header="Methods" key="methods">
-                <ControllerMethods />
+                <ControllerMethods controllerData={props.item}/>
             </Panel>
             <Panel header="Code" key="code">
 

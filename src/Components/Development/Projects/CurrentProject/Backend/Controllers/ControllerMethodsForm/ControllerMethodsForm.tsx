@@ -108,14 +108,14 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 </div>
             </div>
 
-            {request.length>0 ? 
+            {request && request.length>0 ? 
                 request.map( (item: RequestType) => {
                     return <RequestItem item={item} initialValues={props.initialValues} onRowChange={onRowChange}/>
                 })
             :
                 null
             }
-            {request.length>=1 ? 
+            {request && request.length>=1 ? 
             <div className="my-2">
                 <Button className="mr-3" type="primary" size="small" onClick={onAddRequest}>Add</Button> 
                 <Button className="mr-3" type="primary" size="small" onClick={onDeleteRequest}>del</Button>

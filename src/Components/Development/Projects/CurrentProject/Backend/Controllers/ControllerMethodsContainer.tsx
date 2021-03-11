@@ -2,10 +2,11 @@ import {connect} from 'react-redux'
 import ControllerMethods from './ControllerMethods'
 import { AppStateType } from '../../../../../../redux/store'
 import { getControllersList, createController, getModelsList, getControllerMethodsList } from '../../../../../../redux/projectReducer'
+import { ControllersType } from '../../../../../../api/projectAPI'
 // import { ModelsType } from '../../../.././../api/projectAPI'
 
 type OwnControllerMethodsPropsType = {
-    // backendId: number
+    controllerData: ControllersType
 }
 
 type MapPropsType = ReturnType<typeof mapStateToProps>

@@ -62,7 +62,7 @@ const RequestItem: React.FC<RequestItemPropsType> = (props) => {
 
                         }
                     </TreeNode>
-                    <TreeNode per_id={props.item.id} value="request" title="Request"></TreeNode>
+                    <TreeNode per_id={props.item.id} value="Request" title="Request"></TreeNode>
                     <TreeNode selectable={false} per_id={props.item.id} value="list" title="List"></TreeNode>
                 </TreeSelect>
             </div>
