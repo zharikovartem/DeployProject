@@ -23,7 +23,7 @@ let mapStateToProps = (state:AppStateType) => {
     return {
         controllersList: state.projects.controllersList,
         modelsList: state.projects.modelsList,
-        controllerMethodsList: state.projects.controllerMethods.controllerMethodsList
+        controllerMethodsList: state.projects.controllerMethodsList
     }
 }
 

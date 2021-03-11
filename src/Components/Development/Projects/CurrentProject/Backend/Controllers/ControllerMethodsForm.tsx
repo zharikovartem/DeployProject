@@ -3,14 +3,15 @@ import React, { ReactNode, useState, useEffect } from 'react'
 import { AntCheckbox, AntInput, AntSelect } from '../../../../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../../../../utils/Formik/ValidateFields'
 import {SelectOptionType} from '../../../../../../Types/types'
-import { Button, Checkbox } from 'antd'
+import { Button, Checkbox, Input, TreeSelect } from 'antd'
+import { TreeNode } from 'rc-tree-select'
 
 const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     const [request, setRequest] = useState<Array<string>>([])
     const [isRequest, setIsRequest] = useState(false)
     const [isResponse, setIsResponse] = useState(false)
+    const [value, setValue] = useState(undefined)
 
-    
     const onRequest = (val: any) => {
         console.log(val)
         if (request.length === 0) {
@@ -39,6 +40,11 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     const onResponse = () => {
         setIsResponse(!isResponse)
     }
+
+    const onRequestTypeChange = (value: any) => {
+        console.log(value)
+    }
+
     return (
         <Form
             className="form-container"
@@ -59,7 +65,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 label="REST Type"
                 selectOptions={RestTypeOtions}
             /> 
-            
+
             {/* <Field
                 component={AntCheckbox}
                 name="isNulleble"
@@ -78,9 +84,36 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
             {request.length>0 ? 
                 request.map( (item: any) => {
                     return (
-                    <div key={item}>
-                        {item}
-                        
+                    <div key={item} className="row mt-1">
+                        <div className="ant-col ant-form-item-label mt-2">
+                            {item}
+                        </div>
+                        <div className="col-4">
+                            <TreeSelect
+                                className=" ml-2"
+                                // style={{width: '33%'}}
+                                style={{ width: '100%' }}
+                                showSearch
+                                value={value}
+                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                placeholder="Reqest type"
+                                allowClear
+                                showCheckedStrategy={'SHOW_PARENT'}
+                                // treeDefaultExpandAll
+                                onChange={onRequestTypeChange}
+                            >
+                                <TreeNode value="model" title="Model">
+                                    <TreeNode value="user" title="User"></TreeNode>
+                                    <TreeNode value="ControllerMethod" title="ControllerMethod"></TreeNode>
+                                </TreeNode>
+                                <TreeNode value="request" title="Request">
+
+                                </TreeNode>
+                            </TreeSelect>
+                        </div>
+                        <div className="col-4">
+                            <Input className="w-100 ml-2" placeholder="Param name" />
+                        </div>
                     </div>
                     )
                 })
@@ -116,6 +149,12 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 submitCount={props.submitCount}
             />
 
+            <div className="submit-container">
+                <button className="ant-btn ant-btn-primary" type="submit">
+                    Save
+                </button>
+            </div>
+            
         </Form>
     )
 }
