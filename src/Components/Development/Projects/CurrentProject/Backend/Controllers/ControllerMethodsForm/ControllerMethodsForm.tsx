@@ -24,10 +24,6 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
 
     useEffect( () => {
         // @ts-ignore
-        // setRequest(props.initialValues.request)
-        console.log('useEffect', request)
-        // @ts-ignore
-        // console.log('useEffect', props.initialValues.request)
         setRequest(props.initialValues.request)
     },[props.initialValues])
 
