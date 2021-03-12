@@ -47,9 +47,7 @@ const RequestItem: React.FC<RequestItemPropsType> = (props) => {
                     placeholder="Reqest type"
                     allowClear
                     showCheckedStrategy={'SHOW_PARENT'}
-                    // onTreeExpand={onTreeExpand}
                     onChange={onRequestTypeChange}
-
                 >
                     <TreeNode selectable={false} per_id={props.item.id} value="model" title="Model">
                         {

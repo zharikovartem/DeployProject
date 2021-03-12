@@ -6,6 +6,7 @@ import {SelectOptionType} from '../../../../../../../Types/types'
 import { Button, Checkbox, Input, TreeSelect } from 'antd'
 import { ModelsType } from '../../../../../../../api/projectAPI'
 import RequestItem from './RequestItem'
+import ResponseItem from './ResponseItem'
 
 export type RequestType = {
     label: string,
@@ -14,41 +15,57 @@ export type RequestType = {
     id: number
 }
 
+export type ResponreItemsType = {
+    key: string,
+    variable: string,
+}
+
 export type ResponseType = {
-    type: 'response' | 'method',
+    type: 'Response' | 'method' | '',
     methodId?: number,
-    responreitems?: Array<any>
+    responreitems?: Array<ResponreItemsType>
 }
 
 const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     // @ts-ignore
-    const [request, setRequest] = useState<Array<RequestType>>(props.initialValues.request)
+    const [request, setRequest] = useState<Array<RequestType>>(props.initialValues.request !== undefined ? props.initialValues.request : [])
     // @ts-ignore
     const [isRequest, setIsRequest] = useState(props.initialValues.request && props.initialValues.request.length !== 0 ? true : false)
-    const [response, setResponse] = useState<ResponseType>()
+    const [response, setResponse] = useState<ResponseType | undefined>()
     const [isResponse, setIsResponse] = useState(false)
     const [value, setValue] = useState(undefined)
 
     useEffect( () => {
         // @ts-ignore
-        setRequest(props.initialValues.request)
+        setRequest(props.initialValues.request !== undefined ? props.initialValues.request : [])
         // @ts-ignore
         setIsRequest(props.initialValues.request && props.initialValues.request.length !== 0 ? true : false)
     },[props.initialValues])
 
     const onRequest = (val: any) => {
-        console.log(val)
-        if (request.length === 0) {
+        console.log(val.target.checked)
+        console.log(request)
+
+        if (val.target.checked) {
+            if (request!==undefined && request.length === 0) {
+
+            }
+        }
+
+        if (request!==undefined && request.length === 0) {
+            console.log('onAddRequest')
             onAddRequest()
         } else {
+            console.log('setRequest')
             setRequest([])
         }
         setIsRequest(!isRequest)
     }
 
     const onAddRequest = () => {
+        console.log(request)
         let newRequest = [...request]
-        // newRequest.push('param '+ (request.length+1) + ':' )
+
         newRequest.push({
             label: 'param '+ (request.length+1),
             type: '',
@@ -71,6 +88,14 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
 
     const onResponse = () => {
         setIsResponse(!isResponse)
+        console.log('response: ', response)
+        if (!response) {
+            setResponse({
+                type: ''
+            })
+        } else {
+            setResponse(undefined)
+        }
     }
 
     const onAddResponse = () => {
@@ -90,7 +115,16 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
         props.setValues({...props.values, request: requestCopy})
     }
 
+    const setResponseValues = (responseValues: ResponseType) => {
+        console.log('setResponseValues:', responseValues)
+        props.setValues({...props.values, response: responseValues})
+    }
+
     console.log(props.initialValues)
+    console.log(response)
+    if (response !== undefined && response.type !== undefined) {
+        console.log('show response')
+    }
 
     return (
         <Form
@@ -135,6 +169,13 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
             </div>
             : null}
 
+            <div className="ant-row ant-form-item">
+                <div className="ant-col ant-form-item-label pr-2">body_actions:</div>
+                <div className="ant-col ant-form-item-control">
+                    <Checkbox onChange={()=>{}} checked={false}></Checkbox>
+                </div>
+            </div>
+
             <div className="ant-row ant-form-item ">
                 <div className="ant-col ant-form-item-label pr-2">Response:</div>
                 <div className="ant-col ant-form-item-control">
@@ -142,12 +183,15 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 </div>
             </div>
 
-            <div className="ant-row ant-form-item ">
-                <div className="ant-col ant-form-item-label pr-2">body_actions:</div>
-                <div className="ant-col ant-form-item-control">
-                    <Checkbox onChange={()=>{}} checked={false}></Checkbox>
-                </div>
-            </div>
+            {response !== undefined && response.type !== undefined ? 
+                <ResponseItem 
+                    responseInit={response} 
+                    initialValues={props.initialValues}
+                    setResponseValues={setResponseValues}
+                />
+            :
+            null
+            }
 
             <Field
                 component={AntCheckbox}

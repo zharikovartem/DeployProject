@@ -64,6 +64,7 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
             <code>{tab(1,'}')}</code><br/>
         {/* <code>{tab(0,'}')}</code><br/> */}
         
+        <li>Какой код возвращает метод,</li>
         </>
     )
 }

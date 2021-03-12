@@ -87,9 +87,9 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
         setMethodData(controllerMethods)
 
         if(values.id) {
-            console.log('update')
+            console.log('UPDATE: ', controllerMethods)
         } else {
-            console.log('create')
+            console.log('CREATE: ', controllerMethods)
         }
     }
 
