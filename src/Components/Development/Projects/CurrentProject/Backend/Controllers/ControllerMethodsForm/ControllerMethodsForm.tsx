@@ -14,17 +14,26 @@ export type RequestType = {
     id: number
 }
 
+export type ResponseType = {
+    type: 'response' | 'method',
+    methodId?: number,
+    responreitems?: Array<any>
+}
+
 const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
     // @ts-ignore
     const [request, setRequest] = useState<Array<RequestType>>(props.initialValues.request)
-    const [isRequest, setIsRequest] = useState(false)
-    const [response, setResponse] = useState<Array<string>>([])
+    // @ts-ignore
+    const [isRequest, setIsRequest] = useState(props.initialValues.request && props.initialValues.request.length !== 0 ? true : false)
+    const [response, setResponse] = useState<ResponseType>()
     const [isResponse, setIsResponse] = useState(false)
     const [value, setValue] = useState(undefined)
 
     useEffect( () => {
         // @ts-ignore
         setRequest(props.initialValues.request)
+        // @ts-ignore
+        setIsRequest(props.initialValues.request && props.initialValues.request.length !== 0 ? true : false)
     },[props.initialValues])
 
     const onRequest = (val: any) => {
@@ -62,6 +71,10 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
 
     const onResponse = () => {
         setIsResponse(!isResponse)
+    }
+
+    const onAddResponse = () => {
+
     }
 
     const onRowChange = (id: number, type: string, name: string) => {
