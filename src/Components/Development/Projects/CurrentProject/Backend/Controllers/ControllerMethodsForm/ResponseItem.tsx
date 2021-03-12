@@ -66,6 +66,12 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
         setValue({...value, responseItems: responseItems })
     }
 
+    const dellParam = () => {
+        let responseItems: Array<ResponreItemsType> = value.responseItems ? [... value.responseItems] : []
+        responseItems.pop()
+        setValue({...value, responseItems: responseItems })
+    }
+
     console.log(value)
     console.log(props)
 
@@ -120,7 +126,10 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
             </div>
             <div className="col-4">
                 {value.type === 'Response' ? 
-                <Button className="mt-1" type="primary" size="small" onClick={addParam}>Add param</Button>
+                    <>
+                        <Button className="ml-2" type="primary" onClick={addParam}>Add param</Button>
+                        <Button className="ml-2" type="primary" onClick={dellParam}>Del param</Button>
+                    </>
                 :null}
             </div>
         </div>
@@ -164,11 +173,14 @@ const ResponseRows: React.FC<ResponseRowsPropsType> = (props) => {
     return(
         <>
             {props.responseRows.map( (item, index: number)=> {
-                return(<>
+                return(
+                <>
                     {/* <div className="col-4"> */}
-                        <div className="ant-col ant-form-item-label pr-2 mt-2">param {index+1}:</div>
+                        <div className="ant-col ant-form-item-label pr-2 mt-3">
+                            param {index+1}:
+                        </div>
                     {/* </div> */}
-                    <div className="col-4">
+                    <div className="col-4 mt-2">
                         <Input 
                             className="w-100 ml-2" 
                             value={item.key} 
@@ -177,7 +189,7 @@ const ResponseRows: React.FC<ResponseRowsPropsType> = (props) => {
                             placeholder="Param name" 
                         />
                     </div>
-                    <div className="col-4">
+                    <div className="col-4 mt-2">
                         <Input 
                             className="w-100 ml-2" 
                             value={item.variable} 
@@ -186,7 +198,8 @@ const ResponseRows: React.FC<ResponseRowsPropsType> = (props) => {
                             placeholder="Param variable" 
                         />
                     </div>
-                </>)
+                </>
+                )
             })}
         </>
     )
