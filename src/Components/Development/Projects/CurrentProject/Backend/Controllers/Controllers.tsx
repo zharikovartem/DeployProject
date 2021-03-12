@@ -216,18 +216,3 @@ const ControllerInstansesForm: ((props: FormikProps<{}>) => ReactNode) = (props)
         </Form>
     )
 }
-
-const modelsListOptions = [
-    {
-        name: 'model1',
-        value: 1
-    },
-    {
-        name: 'model2',
-        value: 2
-    },
-    {
-        name: 'model3',
-        value: 3
-    },
-]

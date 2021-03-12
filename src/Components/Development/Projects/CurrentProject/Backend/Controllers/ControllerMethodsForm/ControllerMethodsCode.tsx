@@ -44,9 +44,19 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
             <code>{tab(1,'* @return \\Illuminate\\Http\\Response')}</code><br/>
             <code>{tab(1,'*/')}</code><br/>
 
-            <code>{tab(1,'public function '+props.methodData?.name+'(Request $request)')}</code><br/>
+            <code>{tab(1,'public function '+props.methodData?.name+'(')}</code>
+
+            {request.length > 0 ?
+                request.map( item => {
+                    return <code>{tab(0, ''+item.type+'  $'+item.name)}</code>
+                })
+            :
+                null
+            }
+
+            <code>{tab(0,')')}</code><br/>
             <code>{tab(1,'{')}</code><br/>
-                <code>{tab(2,'...')}</code><br/>
+                <code>{tab(2,'//...')}</code><br/>
                 <code>{tab(2,'return response()->json([')}</code><br/>
                 {/* <br/> */}
                 <code>{tab(3,'"key"=>"$value" // example')}</code><br/>
