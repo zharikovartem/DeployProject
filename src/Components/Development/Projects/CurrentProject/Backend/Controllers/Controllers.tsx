@@ -66,19 +66,17 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
                 </div>
 
                 <Collapse defaultActiveKey={[]}>
-                {props.controllersList.map((item: any) => {
-                    return (
-                        // <div key={item.name} >
-                        <Panel 
-                            header={item.name} 
-                            key={item.id ? item.id.toString() : 'null'}
-                            extra={[<div>any</div>]}
-                        >
-                            <ControllerItem item={item} modelsList={props.modelsList} updateController={props.updateController}/>
-                        </Panel>
-                        // </div>
-                    )
-                })}
+                    {props.controllersList.map((item: ControllersType) => {
+                        return (
+                            <Panel 
+                                key={item.name}
+                                header={item.name} 
+                                // extra={[<div key={'any_'+item.name}>any</div>]}
+                            >
+                                <ControllerItem item={item} modelsList={props.modelsList} updateController={props.updateController}/>
+                            </Panel>
+                        )
+                    })}
                 </Collapse>
 
                 <Modal title="Create new Controller" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
@@ -150,7 +148,7 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
     }
 
     return(
-    <div >
+    <div key={props.item.name}>
         <h4>{props.item.name}</h4>
         <Collapse defaultActiveKey={[]} ghost>
             <Panel header="Instanses" key="instanse">

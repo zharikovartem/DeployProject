@@ -7,6 +7,7 @@ import { Button, Checkbox, Input, TreeSelect } from 'antd'
 import { ModelsType } from '../../../../../../../api/projectAPI'
 import RequestItem from './RequestItem'
 import ResponseItem from './ResponseItem'
+import TextArea from 'antd/lib/input/TextArea'
 
 export type RequestType = {
     label: string,
@@ -185,6 +186,10 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                     <Checkbox onChange={onBodyActions} checked={isBody_actions}></Checkbox>
                 </div>
             </div>
+
+            {isBody_actions ? 
+                <TextArea rows={4}/>
+            : null }
 
             <div className="ant-row ant-form-item ">
                 <div className="ant-col ant-form-item-label pr-2">Response:</div>

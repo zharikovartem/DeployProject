@@ -21,27 +21,12 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
     return (
         <div>
             <h5>ControllerMethodsCode:</h5>
-            {/* <code>{tab(0,'<?php')}</code><br/>
-            <br/>
-            <code>{tab(0,'namespace App\\Http\\Controllers;')}</code><br/>
-            <br/>
-            {
-                props.controllerData.models.map( (item) => {
-                    return <><code>{tab(0,'namespace App\\Http\\'+item.name+';')}</code><br/></>
-                })
-            }
-            <code>{tab(0,'use Illuminate\\Http\\Request;')}</code><br/>
-            <br/>
-            <code>{tab(0,'class '+props.controllerData.name+' extends Controller')}</code><br/>
-            <code>{tab(0,'{')}</code><br/> */}
-
             <code>{tab(1, '/**')}</code><br />
             <code>{tab(1, '* Descriptions')}</code><br />
-            {/* <code>{tab(1,'* @param  \\Illuminate\\Http\\Request  $request')}</code><br/> */}
             {request.map(item => {
                 return (
                     <div key={item.name}>
-                        <code>{tab(1, '* @param  \\Illuminate\\Http\\' + item.type + '  $' + item.name)}</code><br />
+                        <code key={item.name}>{tab(1, '* @param  \\Illuminate\\Http\\' + item.type + '  $' + item.name)}</code><br />
                     </div>
                 )
             })}
@@ -51,12 +36,19 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
             <code>{tab(1, 'public function ' + props.methodData?.name + '(')}</code>
 
             {request.length > 0 ?
-                request.map(item => {
-                    return (
-                        <div key={item.name}>
-                            <code>{tab(0, '' + item.type + '  $' + item.name)}</code>
-                        </div>
-                    )
+                request.map( (item, index: number) => {
+                    // return (
+                    //     <code key={item.name}>{tab(0, '' + item.type + '  $' + item.name)}</code>
+                    // )
+                    if (index > 0 ) {
+                        return (
+                            <code key={item.name}>{tab(0, ', ' + item.type + '  $' + item.name)}</code>
+                        )
+                    } else {
+                        return (
+                            <code key={item.name}>{tab(0, '' + item.type + '  $' + item.name)}</code>
+                        )
+                    }
                 })
                 :
                 null
@@ -70,7 +62,6 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
             <code>{tab(3, '"key"=>"$value" // example')}</code><br />
             <code>{tab(2, '], 200);')}</code><br />
             <code>{tab(1, '}')}</code><br />
-            {/* <code>{tab(0,'}')}</code><br/> */}
 
             <li>Какой код возвращает метод,</li>
         </div>

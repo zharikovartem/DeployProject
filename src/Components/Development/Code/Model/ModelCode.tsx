@@ -170,14 +170,18 @@ export const tab = (count: number, text?: string) => {
         let tabs: Array<JSX.Element> = []
         while (i<=count) {
             i++
-            tabs.push(<>&nbsp;&nbsp;&nbsp;&nbsp;</>)
+            tabs.push(
+                <span key={i}>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+            )
         }
         return tabs
     }
 
     return (
         <>
-            <>{getTabs()}</>
+            {getTabs()}
             {text}
         </>
     )

@@ -148,7 +148,9 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
                 >
                     {ControllerMethodsForm}
                 </Formik>
-                <ControllerMethodsCode  methodData={methodData} controllerData={props.controllerData}/>
+
+                <ControllerMethodsCode methodData={methodData} controllerData={props.controllerData}/>
+
             </Modal>
         </>
     )
