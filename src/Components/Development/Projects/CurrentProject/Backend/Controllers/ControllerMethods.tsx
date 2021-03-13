@@ -9,6 +9,8 @@ import ControllerMethodsForm, { RequestType } from './ControllerMethodsForm/Cont
 
 export type initialValuesType = {
     modelsList: Array<ModelsType>,
+    controllerMethodsList: Array<ControllerMethodsType>
+
     name: string,
     rest_type?: rest_typeType,
     request?: Array<RequestType>,
@@ -18,9 +20,10 @@ export type initialValuesType = {
 
 const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
 
-    const emptyInitialValues: initialValuesType = {
+    let emptyInitialValues: initialValuesType = {
         modelsList: props.modelsList,
-        name: ''
+        name: '',
+        controllerMethodsList: props.controllerMethodsList
     }
 
     const [methodData, setMethodData] = useState<ControllerMethodsType | null>(null)
@@ -29,9 +32,20 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
 
     useEffect(() => {
         if (props.controllerMethodsList.length === 0) {
+            console.log('getControllerMethodsList in useEffect')
             props.getControllerMethodsList()
         }
     }, [])
+
+    console.log('props.controllerMethodsList', props.controllerMethodsList)
+        
+    useEffect(() => {
+        setinitialValues({
+            ...initialValues,
+            controllerMethodsList: props.controllerMethodsList
+        })
+        // emptyInitialValues.controllerMethodsList = props.controllerMethodsList
+    }, [props.controllerMethodsList])
 
     const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -92,6 +106,8 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
             console.log('CREATE: ', controllerMethods)
         }
     }
+
+    console.log('initialValues: ', initialValues)
 
     return (
         <>

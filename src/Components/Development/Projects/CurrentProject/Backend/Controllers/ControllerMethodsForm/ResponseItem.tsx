@@ -1,6 +1,7 @@
 import { Button, Input, TreeSelect } from 'antd'
 import { TreeNode } from 'rc-tree-select'
 import React, {useState} from 'react'
+import { ControllerMethodsType } from '../../../../../../../api/ControllerMethodsAPI'
 import { ResponreItemsType } from './ControllerMethodsForm'
 
 type ValueType = {
@@ -73,7 +74,7 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
     }
 
     console.log(value)
-    console.log(props)
+    console.log('props: ', props)
 
     return(
         <>
@@ -108,14 +109,16 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
                         title="Method"
                     >
                         {
-                            props.initialValues.modelsList !== undefined ?
+                            props.initialValues.controllerMethodsList !== undefined ?
                             // @ts-ignore
-                            props.initialValues.modelsList.map(( model: ModelsType ) => {
+                            props.initialValues.controllerMethodsList.filter((controllerMethod: ControllerMethodsType)=>controllerMethod.name !== props.initialValues.name)
+                                .map(( controllerMethod: ControllerMethodsType ) => {
                                 return (
                                     <TreeNode 
+                                        key={controllerMethod.name}
                                         // per_id={props.item.id} 
-                                        value={model.name} 
-                                        title={model.name}
+                                        value={controllerMethod.name} 
+                                        title={controllerMethod.name}
                                     ></TreeNode>
                                 )
                             })

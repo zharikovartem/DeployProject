@@ -54,7 +54,7 @@ const RequestItem: React.FC<RequestItemPropsType> = (props) => {
                             // @ts-ignore
                             props.initialValues.modelsList.map((model: ModelsType) => {
                                 return (
-                                    <TreeNode per_id={props.item.id} value={model.name} title={model.name}></TreeNode>
+                                    <TreeNode key={model.name} per_id={props.item.id} value={model.name} title={model.name}></TreeNode>
                                 )
                             })
 

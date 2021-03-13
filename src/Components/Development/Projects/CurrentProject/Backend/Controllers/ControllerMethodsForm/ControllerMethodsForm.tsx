@@ -31,8 +31,13 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     const [request, setRequest] = useState<Array<RequestType>>(props.initialValues.request !== undefined ? props.initialValues.request : [])
     // @ts-ignore
     const [isRequest, setIsRequest] = useState(props.initialValues.request && props.initialValues.request.length !== 0 ? true : false)
+
     const [response, setResponse] = useState<ResponseType | undefined>()
     const [isResponse, setIsResponse] = useState(false)
+
+    const [body_actions, setBody_actions] = useState()
+    const [isBody_actions, setIsBody_actions] = useState(false)
+    
     const [value, setValue] = useState(undefined)
 
     useEffect( () => {
@@ -98,6 +103,10 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
         }
     }
 
+    const onBodyActions = () => {
+        setIsBody_actions(!isBody_actions)
+    }
+
     const onAddResponse = () => {
 
     }
@@ -120,8 +129,9 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
         props.setValues({...props.values, response: responseValues})
     }
 
-    console.log(props.initialValues)
+    console.log('props.initialValues: ',props.initialValues)
     console.log(response)
+
     if (response !== undefined && response.type !== undefined) {
         console.log('show response')
     }
@@ -157,7 +167,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
 
             {request && request.length>0 ? 
                 request.map( (item: RequestType) => {
-                    return <RequestItem item={item} initialValues={props.initialValues} onRowChange={onRowChange}/>
+                    return <RequestItem key={item.id} item={item} initialValues={props.initialValues} onRowChange={onRowChange}/>
                 })
             :
                 null
@@ -172,7 +182,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
             <div className="ant-row ant-form-item">
                 <div className="ant-col ant-form-item-label pr-2">body_actions:</div>
                 <div className="ant-col ant-form-item-control">
-                    <Checkbox onChange={()=>{}} checked={false}></Checkbox>
+                    <Checkbox onChange={onBodyActions} checked={isBody_actions}></Checkbox>
                 </div>
             </div>
 

@@ -117,6 +117,7 @@ export const modelsAPI = {
         getToken()
         return instance.get<getModelsListResponseType>(`models/`+backendId)
         .then(response => {
+            console.log('getModelsList', response)
             return response.status === 200 ? response : null
         })
         .catch(err => {
