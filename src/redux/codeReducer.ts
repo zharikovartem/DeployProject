@@ -1,5 +1,7 @@
-import { BaseThunkType, InferActionsTypes } from "./store"
-import { projectAPI, backendAPI, BackendType, modelsAPI, getModelsListResponseType, ModelsType, controllersAPI, getControllersListResponseType } from './../api/projectAPI'
+import { 
+    // BaseThunkType, 
+    InferActionsTypes 
+} from "./store"
 import { Dispatch } from "react"
 
 export type codeTypeList = 'model'| 'controller'
@@ -50,5 +52,5 @@ export const actions = {
 export default codeReducer
 
 type ActionsTypes = InferActionsTypes<typeof actions>
-type ThunkType = BaseThunkType<ActionsTypes>
+// type ThunkType = BaseThunkType<ActionsTypes>
 export type DispatchType = Dispatch<ActionsTypes>

@@ -102,6 +102,7 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
 
         if(values.id) {
             console.log('UPDATE: ', controllerMethods)
+            props.updateControllerMethodsList(controllerMethods, values.id)
         } else {
             console.log('CREATE: ', controllerMethods)
         }

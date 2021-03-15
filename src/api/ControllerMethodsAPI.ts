@@ -49,5 +49,22 @@ export const controllerMethodsAPI = {
             }
             return null
         })
-    }
+    },
+    updateControllerMethods(values: any, controllerMethodId: number) {
+        console.log(values)
+        console.log('modelId', controllerMethodId)
+        return instance.put<GetControllerMethodsResponseType>(`controllerMethods/${controllerMethodId}`, values)
+        .then(response => {
+            console.log(response)
+            return response.status === 200 ? response : null
+        })
+        .catch(err => {
+            if (err.response) {
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
+    },
 }
