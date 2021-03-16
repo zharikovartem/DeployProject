@@ -73,6 +73,20 @@ const menuData = (appLocation: string, userStatus: string | null): MenuDataType 
             },
         ],
     },
+    {
+        value: 'english',
+        label: 'English',
+        children: [
+            {
+                label: 'Vocabulary',
+                value: appLocation + 'vocabulary',
+            }
+            , {
+                label: 'Grammer',
+                value: appLocation + 'grammer',
+            }
+        ],
+    },
     ]
 
     if (userStatus === 'admin' || userStatus ==='superAdmin') {
