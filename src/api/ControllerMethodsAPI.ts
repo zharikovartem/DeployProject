@@ -60,6 +60,7 @@ export const controllerMethodsAPI = {
         })
         .catch(err => {
             if (err.response) {
+                console.log(err.response)
                 return err.response
             } else if (err.request) {
             } else {

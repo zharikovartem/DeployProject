@@ -9,8 +9,8 @@ import ControllerMethodsForm, { RequestType } from './ControllerMethodsForm/Cont
 
 export type initialValuesType = {
     modelsList: Array<ModelsType>,
-    controllerMethodsList: Array<ControllerMethodsType>
-
+    controllerMethodsList: Array<ControllerMethodsType>,
+    body_actions?: string
     name: string,
     rest_type?: rest_typeType,
     request?: Array<RequestType>,
@@ -37,7 +37,7 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
         }
     }, [])
 
-    console.log('props.controllerMethodsList', props.controllerMethodsList)
+    // console.log('props.controllerMethodsList', props.controllerMethodsList)
         
     useEffect(() => {
         setinitialValues({
@@ -50,11 +50,11 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false)
 
     const showMethod = (id: number) => {
-        console.log(id)
         const target = props.controllerMethodsList.filter( (item) => item.id === id)[0]
+        console.log('target of method', target)
         setModalTitle('Edit Controller Method '+ target.name)
         setMethodData({
-            body_actions: '',
+            body_actions: target.body_actions,
             controller_id: target.controller_id,
             id: id,
             isMiddleware: false,
@@ -68,6 +68,8 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
             ...initialValues,
             name: target.name,
             request: target.request ? JSON.parse(target.request) : [],
+            response: target.response ? JSON.parse(target.response) : undefined,
+            body_actions: target.body_actions,
             rest_type: target.rest_type,
             id: target.id
         })
@@ -88,7 +90,7 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
         console.log(values)
 
         const controllerMethods: ControllerMethodsType = {
-            body_actions: '',
+            body_actions: values.body_actions? values.body_actions : '',
             controller_id: 123,
             id: values.id ? values.id : 0,
             isMiddleware: false,
@@ -97,6 +99,8 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
             response: JSON.stringify(values.response),
             rest_type: values.rest_type ? values.rest_type : null
         }
+
+        console.log(controllerMethods)
 
         setMethodData(controllerMethods)
 

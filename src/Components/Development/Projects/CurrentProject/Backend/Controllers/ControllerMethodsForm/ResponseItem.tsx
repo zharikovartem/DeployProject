@@ -1,6 +1,6 @@
 import { Button, Input, TreeSelect } from 'antd'
 import { TreeNode } from 'rc-tree-select'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { ControllerMethodsType } from '../../../../../../../api/ControllerMethodsAPI'
 import { ResponreItemsType } from './ControllerMethodsForm'
 
@@ -19,12 +19,19 @@ type ResponseItemPropsType = {
 
 const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
     const [value, setValue] = useState<ValueType>(props.responseInit)
+    // console.log(props)
+
+    useEffect( () => {
+        setValue(props.responseInit)
+    },[props.responseInit])
 
     const onResponseTypeChange = (typeValue: 'Response'|'method'|'', labelList: React.ReactNode[], extra: any) => {
-        let newValue = {...value, type: typeValue}
         let newResponse: Array<ResponreItemsType> = []
+        let methodId: number = 0
+        let type: 'Response'|'method'|'' = ''
 
         if(typeValue === 'Response') {
+            type = typeValue
             // if(value.responseItems && value.responseItems.length === 0) {
                 newResponse.push({
                     key: '',
@@ -32,20 +39,26 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
                 })
             // }
         } else {
-            console.log('GO TO METHOD!!!')
+            // console.log('GO TO METHOD!!!',typeValue)
+            // console.log(props)
+            methodId = props.initialValues.controllerMethodsList.filter( (item: any) => item.name === typeValue )[0].id
+            // console.log(methodId)
+
+            type = 'method'
         }
 
-        setValue({...value, type: typeValue, responseItems: newResponse})
+        setValue({...value, type: type, responseItems: newResponse, methodId: methodId})
+        props.setResponseValues({...value, type: type, responseItems: newResponse, methodId: methodId})
 
-        console.log(typeValue)
-        console.log(labelList)
-        console.log(extra.triggerValue)
+        // console.log(typeValue)
+        // console.log(labelList)
+        // console.log(extra.triggerValue)
     }
 
     const onRowChange = (rowValue: string, elementNumber: number, param: 'key'|'variable') => {
-        console.log(rowValue)
-        console.log(elementNumber)
-        console.log(param)
+        // console.log(rowValue)
+        // console.log(elementNumber)
+        // console.log(param)
 
         let responseItems: Array<ResponreItemsType> = value.responseItems ? value.responseItems : []
         if (responseItems[elementNumber]) {
@@ -73,8 +86,8 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
         setValue({...value, responseItems: responseItems })
     }
 
-    console.log(value)
-    console.log('props: ', props)
+    // console.log(value)
+    // console.log('props: ', props)
 
     return(
         <>
@@ -87,7 +100,9 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
                     className=" ml-2 TreeSelect_Request_Type"
                     style={{ width: '100%' }}
                     showSearch
-                    // value={value.type}
+                    value={value.type === 'Response' ? 'Response': 
+                    props.initialValues.controllerMethodsList.filter((controllerMethod: ControllerMethodsType)=>controllerMethod.id === value.methodId)[0].name
+                    }
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                     placeholder="Reqest type"
                     allowClear
@@ -147,7 +162,7 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
         null}
         {value.type === 'method' ?
             <div className="row mt-1 mb-3">
-                methodId
+                methodId: {value.methodId}
             </div>
         :
         null}
@@ -163,7 +178,7 @@ type ResponseRowsPropsType = {
 }
 
 const ResponseRows: React.FC<ResponseRowsPropsType> = (props) => {
-    console.log(props)
+    // console.log(props)
 
     const onNameChange = (event: any) => {
         props.onRowChange(event.target.value, Number(event.target.name), 'key')
@@ -177,12 +192,11 @@ const ResponseRows: React.FC<ResponseRowsPropsType> = (props) => {
         <>
             {props.responseRows.map( (item, index: number)=> {
                 return(
-                <>
-                    {/* <div className="col-4"> */}
+                // <>
+                <div key={index.toString()} className="row w-100" >
                         <div className="ant-col ant-form-item-label pr-2 mt-3">
                             param {index+1}:
                         </div>
-                    {/* </div> */}
                     <div className="col-4 mt-2">
                         <Input 
                             className="w-100 ml-2" 
@@ -201,7 +215,8 @@ const ResponseRows: React.FC<ResponseRowsPropsType> = (props) => {
                             placeholder="Param variable" 
                         />
                     </div>
-                </>
+                </div>
+                // </>
                 )
             })}
         </>

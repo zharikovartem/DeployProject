@@ -33,19 +33,32 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     // @ts-ignore
     const [isRequest, setIsRequest] = useState(props.initialValues.request && props.initialValues.request.length !== 0 ? true : false)
 
-    const [response, setResponse] = useState<ResponseType | undefined>()
-    const [isResponse, setIsResponse] = useState(false)
+    // @ts-ignore
+    const [response, setResponse] = useState<ResponseType | undefined>(props.initialValues.response)
+    // @ts-ignore
+    const [isResponse, setIsResponse] = useState(props.initialValues.response? true : false)
+    // console.log(isResponse)
 
-    const [body_actions, setBody_actions] = useState()
-    const [isBody_actions, setIsBody_actions] = useState(false)
+    // @ts-ignore
+    const [body_actions, setBody_actions] = useState<string>(props.initialValues.body_actions)
+    // @ts-ignore
+    const [isBody_actions, setIsBody_actions] = useState(props.initialValues.body_actions ? true : false)
     
     const [value, setValue] = useState(undefined)
 
     useEffect( () => {
         // @ts-ignore
+        // console.log('!!!!!!!!!!!!useEffect ControllerMethodsForm', props.initialValues.response.responseItems)
+        // @ts-ignore
         setRequest(props.initialValues.request !== undefined ? props.initialValues.request : [])
         // @ts-ignore
         setIsRequest(props.initialValues.request && props.initialValues.request.length !== 0 ? true : false)
+        // @ts-ignore
+        setResponse(props.initialValues.response ? props.initialValues.response : undefined)
+        // @ts-ignore
+        setBody_actions(props.initialValues.body_actions ? props.initialValues.body_actions : '')
+        // @ts-ignore
+        setIsBody_actions(props.initialValues.body_actions ? true : false)
     },[props.initialValues])
 
     const onRequest = (val: any) => {
@@ -69,7 +82,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     }
 
     const onAddRequest = () => {
-        console.log(request)
+        // console.log(request)
         let newRequest = [...request]
 
         newRequest.push({
@@ -109,7 +122,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     }
 
     const onAddResponse = () => {
-
+        
     }
 
     const onRowChange = (id: number, type: string, name: string) => {
@@ -126,16 +139,44 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     }
 
     const setResponseValues = (responseValues: ResponseType) => {
-        console.log('setResponseValues:', responseValues)
+        // console.log('setResponseValues:', responseValues)
         props.setValues({...props.values, response: responseValues})
     }
 
     console.log('props.initialValues: ',props.initialValues)
-    console.log(response)
+    // console.log(response)
 
-    if (response !== undefined && response.type !== undefined) {
-        console.log('show response')
+    // if (response !== undefined && response.type !== undefined) {
+    //     console.log('show response')
+    // }
+
+    const onKeyDown = (v: any) => {
+        if (v.keyCode === 9) {
+            v.preventDefault()
+
+            const before = body_actions.substr(0, v.target.selectionEnd)
+            const after = body_actions.substr(v.target.selectionEnd)
+
+            setBody_actions(before+'    '+after)
+            props.setValues({...props.values, body_actions: v.target.value})
+
+            const newStart = v.target.selectionStart+4
+            const newEnd = v.target.selectionEnd+4
+
+            setTimeout( ()=> {
+                v.target.selectionStart = newStart
+                v.target.selectionEnd = newEnd
+            }, 0)
+            
+        }
     }
+
+    const onBodyChange = (v: any) => {
+        setBody_actions(v.target.value)
+        props.setValues({...props.values, body_actions: v.target.value})
+    }
+
+    // console.log(response)
 
     return (
         <Form
@@ -188,8 +229,17 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
             </div>
 
             {isBody_actions ? 
-                <TextArea rows={4}/>
+                <TextArea 
+                    onKeyDown={onKeyDown} 
+                    // onBlur={onBlur} 
+                    rows={4} 
+                    value={body_actions}
+                    onChange={onBodyChange}
+                />
             : null }
+
+
+
 
             <div className="ant-row ant-form-item ">
                 <div className="ant-col ant-form-item-label pr-2">Response:</div>
@@ -207,6 +257,10 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
             :
             null
             }
+
+
+
+
 
             <Field
                 component={AntCheckbox}

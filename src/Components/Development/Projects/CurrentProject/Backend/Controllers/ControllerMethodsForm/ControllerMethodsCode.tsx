@@ -12,11 +12,11 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
 
     let request: Array<any> = []
     if (props.methodData?.request) {
-        console.log(JSON.parse(props.methodData?.request))
+        // console.log(JSON.parse(props.methodData?.request))
         request = JSON.parse(props.methodData?.request)
     }
 
-    console.log(props)
+    // console.log(props)
 
     return (
         <div>
