@@ -168,6 +168,14 @@ export const updateControllerMethodsList = (values: any, controllerMethodId: num
     }
 }
 
+export const createControllerMethodsList = (values: any):ThunkType => {
+    return async (dispatch, getState) => {
+        const response: AxiosResponse<GetControllerMethodsResponseType> = await controllerMethodsAPI.createControllerMethods(values)
+        console.log(response)
+        dispatch(actions.setControllerMethodsList(response.data.controllerMethods))
+    }
+}
+
 export const updateController = (values: ControllersType, controllerId: number):ThunkType => {
     return async (dispatch, getState) => {
 

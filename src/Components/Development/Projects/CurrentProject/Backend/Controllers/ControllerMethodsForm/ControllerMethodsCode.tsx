@@ -75,7 +75,9 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
             {/* <code>{tab(3, getResponse( props.methodData !== null ? JSON.parse(props.methodData.response) : null))}</code><br />  */}
 
             {
+                 props.methodData !== null && props.methodData.response?
                 getResponse(2, props.methodData !== null ? JSON.parse(props.methodData.response) : null )
+                : <><code>{tab(2, '//...')}</code><br /></>
             }
 
 

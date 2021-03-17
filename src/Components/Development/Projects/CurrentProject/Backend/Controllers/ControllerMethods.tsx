@@ -109,6 +109,7 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
             props.updateControllerMethodsList(controllerMethods, values.id)
         } else {
             console.log('CREATE: ', controllerMethods)
+            props.createControllerMethodsList(controllerMethods)
         }
     }
 

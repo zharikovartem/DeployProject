@@ -89,8 +89,8 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
         setValue({...value, responseItems: responseItems })
     }
 
-    // console.log(value)
-    // console.log('props: ', props)
+    console.log('ResponseItem value: ', value)
+    console.log('ResponseItem props: ', props)
 
     return(
         <>
