@@ -18,7 +18,7 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
         props.getControllersList(props.backendId)
 
         if (props.modelsList.length === 0) {
-            console.log('getModelsList')
+            // console.log('getModelsList')
             props.getModelsList(props.backendId)
         }
 
@@ -47,8 +47,8 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
     const handleCancel = () => { setIsModalVisible(!isModalVisible) }
 
     const handleSubmit = (vals: any) => {
-        console.log(vals)
-        console.log(props)
+        // console.log(vals)
+        // console.log(props)
 
         props.createController({
             ...vals,
@@ -56,7 +56,7 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
         })
     }
 
-    console.log(props)
+    // console.log(props)
 
     if (props.controllersList.length > 0) {
         return (
@@ -105,7 +105,7 @@ type ControllerItemType = {
 }
 
 const ControllerItem:React.FC<ControllerItemType> = (props) => {
-    console.log(props.item.models)
+    console.log('ControllerItem props', props)
 
     type initialFormValuesType = {
         isResurce: boolean,
@@ -131,10 +131,10 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
         models: props.item.models.length>0 ? props.item.models.map( (i: ModelsType) => i.id ) : []
     }
 
-    console.log(props)
+    // console.log(props)
 
     const onControllerInstanseSubmit = (values: any) => {
-        console.log(values)
+        // console.log(values)
 
         props.updateController({
             models: values.models,

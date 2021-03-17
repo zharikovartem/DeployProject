@@ -111,7 +111,7 @@ const getMetodResponse = (tabIndex: number, response: ResponseType) => {
     const methodName = response.methodName
     console.log('methodName: ', methodName)
     // return <>{'return self::'+methodName+'();'}</>
-    return [<><code>{tab(tabIndex, 'return self::'+methodName+'()')}</code><br/></>]
+    return [<><code>{tab(tabIndex, 'return self::'+methodName+'();')}</code><br/></>]
 }
 
 const getResponseResponse = (tabIndex: number, response: ResponseType) => {

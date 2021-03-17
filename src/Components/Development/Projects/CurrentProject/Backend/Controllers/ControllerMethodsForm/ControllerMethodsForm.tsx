@@ -38,7 +38,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     const [response, setResponse] = useState<ResponseType | undefined>(props.initialValues.response)
     // @ts-ignore
     const [isResponse, setIsResponse] = useState(props.initialValues.response? true : false)
-    // console.log(isResponse)
+    console.log('isResponse: ', isResponse)
 
     // @ts-ignore
     const [body_actions, setBody_actions] = useState<string>(props.initialValues.body_actions)
@@ -83,7 +83,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     }
 
     const onAddRequest = () => {
-        // console.log(request)
+        console.log('onAddRequest:', request)
         let newRequest = [...request]
 
         newRequest.push({
@@ -107,6 +107,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
     }
 
     const onResponse = () => {
+        console.log('onResponse', isResponse)
         setIsResponse(!isResponse)
         console.log('response: ', response)
         if (!response) {
@@ -199,6 +200,8 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 type="select"
                 label="REST Type"
                 selectOptions={RestTypeOtions}
+                validate={validateRequired}
+                hasFeedback
             /> 
 
             <div className="ant-row ant-form-item ">

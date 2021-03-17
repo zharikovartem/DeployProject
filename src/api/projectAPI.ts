@@ -36,7 +36,7 @@ export const projectAPI = {
         getToken()
         return instance.get<ProjectResponseType>(`project`)
         .then(response => {
-            console.log(response)
+            console.log('projectAPI.getProjects:', response)
             return response.status === 200 ? response : null
         })
         .catch(err => {
@@ -52,7 +52,7 @@ export const projectAPI = {
         getToken()
         return instance.get<getBackendDataResponseType>(`project/`+projectId)
         .then(response => {
-            console.log(response)
+            console.log('projectAPI.getBackendData:', response)
             return response.status === 200 ? response : null
         })
         .catch(err => {
@@ -117,7 +117,7 @@ export const modelsAPI = {
         getToken()
         return instance.get<getModelsListResponseType>(`models/`+backendId)
         .then(response => {
-            console.log('getModelsList', response)
+            console.log('modelsAPI.getModelsList', response)
             return response.status === 200 ? response : null
         })
         .catch(err => {
@@ -185,7 +185,7 @@ export const controllersAPI = {
         getToken()
         return instance.get<getControllersListResponseType>(`currentControllers/`+backendId)
         .then(response => {
-            console.log(response)
+            console.log('controllersAPI.getControllersList', response)
             return response.status === 200 ? response : null
         })
         .catch(err => {

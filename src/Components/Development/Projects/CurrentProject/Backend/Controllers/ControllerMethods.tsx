@@ -32,7 +32,7 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
 
     useEffect(() => {
         if (props.controllerMethodsList.length === 0) {
-            console.log('getControllerMethodsList in useEffect')
+            // console.log('getControllerMethodsList in useEffect')
             props.getControllerMethodsList()
         }
     }, [])
@@ -40,9 +40,12 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
     // console.log('props.controllerMethodsList', props.controllerMethodsList)
         
     useEffect(() => {
+        console.log('useEffect, setinitialValues for: ', props.controllerData.id)
+        const newControllerMethodsList = props.controllerMethodsList.filter(item=> item.controller_id === props.controllerData.id)
+        console.log('newControllerMethodsList', newControllerMethodsList)
         setinitialValues({
             ...initialValues,
-            controllerMethodsList: props.controllerMethodsList
+            controllerMethodsList: newControllerMethodsList
         })
         // emptyInitialValues.controllerMethodsList = props.controllerMethodsList
     }, [props.controllerMethodsList])
@@ -113,7 +116,8 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
         }
     }
 
-    console.log('initialValues: ', initialValues)
+    console.log('ControllerMethods props', props)
+    console.log('ControllerMethods initialValues: ', initialValues)
 
     return (
         <>
@@ -121,14 +125,15 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
                 <Button type="primary" onClick={addMethod}>Add Method</Button>
             </div>
 
-            {props.controllerMethodsList.length !== 0 ?
+            {
+            // props.controllerMethodsList.length !== 0 ?
                 <>
                     <List
                         className="mt-2"
                         header={<div>Controller Methods List:</div>}
                         // footer={<div>Footer</div>}
                         bordered
-                        dataSource={props.controllerMethodsList}
+                        dataSource={initialValues.controllerMethodsList}
                         renderItem={item => (
                             <List.Item
                                 actions={[<a key="list-loadmore-edit" onClick={()=>{showMethod(item.id)}}>edit</a>, <a key="list-loadmore-more">code</a>]}
@@ -142,8 +147,8 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
                         )}
                     />
                 </>
-                :
-                null
+                // :
+                // null
             }
 
             <Modal title={modalTitle} visible={isModalVisible} onOk={onOk} onCancel={() => { setIsModalVisible(false) }} width={1000}>

@@ -103,8 +103,9 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
                     className=" ml-2 TreeSelect_Request_Type"
                     style={{ width: '100%' }}
                     showSearch
-                    value={value.type === 'Response' ? 'Response': 
+                    value={value.type === 'method' ?  
                     props.initialValues.controllerMethodsList.filter((controllerMethod: ControllerMethodsType)=>controllerMethod.id === value.methodId)[0].name
+                    : value.type
                     }
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                     placeholder="Reqest type"

@@ -10,7 +10,7 @@ const English:React.FC<EnglishPropsType> = (props) => {
         <div>
             <h4>Vocabulary:</h4>
             <div className="row">
-                <Button type="primary">Get Vocabulary List</Button>
+                <Button className="ml-auto mr-5" type="primary">Get Vocabulary List</Button>
             </div>
             <li>Бэкэнд словаря</li>
             <li>Api</li>
@@ -18,6 +18,8 @@ const English:React.FC<EnglishPropsType> = (props) => {
             <li>CRUD</li>
             <li>Список слов с частотой использования</li>
             <li>Запрос данных на Яндекс</li>
+            <br/><br/>
+            <li>php artisan make:model Englesh/Vocabulary -mcr</li>
         </div>
     )
 }

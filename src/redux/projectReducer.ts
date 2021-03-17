@@ -10,6 +10,12 @@ type backendDataType = {
     updated_at: string,
     id: number,
     name: string,
+
+    url?: string,
+    ip?: string,
+    login?: string,
+    password?: string,
+    folder?: string,
 }
 
 export type ProjectItemType = {
@@ -116,7 +122,7 @@ export const updateBackend = (values: BackendType, backendId: number): ThunkType
 export const getModelsList = (backendId: number):ThunkType => {
     return async (dispatch, getState) => {
         const response: getModelsListResponseType = await modelsAPI.getModelsList(backendId)
-        console.log(response.data.models)
+        // console.log(response.data.models)
         dispatch(actions.setModelsList(response.data.models))
     }
 }
@@ -140,7 +146,7 @@ export const createModel = (values: ModelsType):ThunkType => {
 export const getControllersList = (backendId: number):ThunkType => {
     return async (dispatch, getState) => {
         const response: AxiosResponse<getControllersListResponseType> = await controllersAPI.getControllersList(backendId)
-        console.log(response.data)
+        // console.log(response.data)
         dispatch(actions.setControllersList(response.data.controllers))
     }
 }

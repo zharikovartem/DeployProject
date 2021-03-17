@@ -16,7 +16,7 @@ const Backend: React.FC<BackendPropsType> = (props) => {
 
     const project = getTargetProject(props.projectsList, props.projectId.toString())
 
-    console.log('project', project)
+    // console.log('project', project)
 
     const instansesInitialValues = {
         name: project.backendData ? project.backendData.name : null,
@@ -30,9 +30,11 @@ const Backend: React.FC<BackendPropsType> = (props) => {
     // console.log(props)
 
     const instansesHandleSubmit = (val: any) => {
-        console.log(project.backendData.id)
-        console.log(val)
-        props.updateBackend(val, project.backendData.id)
+        // console.log(project.backendData ? project.backendData.id : undefined)
+        // console.log(val)
+        if (project.backendData) {
+            props.updateBackend(val, project.backendData.id)
+        }
     }
 
     // console.log(project)

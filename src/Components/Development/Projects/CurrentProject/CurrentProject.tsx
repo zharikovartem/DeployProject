@@ -1,12 +1,13 @@
-import { Collapse, Spin, List, Pagination, Button, Drawer } from 'antd'
+import { Collapse, Spin } from 'antd'
 import React, { useEffect } from 'react'
+import { ProjectItemType } from '../../../../redux/projectReducer'
 import Backend from './Backend/BackendContainer'
 import { CurrenProjectPropsType } from './CurrentProjectContainer'
 
 const { Panel } = Collapse
 
-export const getTargetProject = (projectList: Array<any>, userId: string): any => {
-    return projectList.filter((item: any) => item.id.toString() === userId)[0]
+export const getTargetProject = (projectList: Array<ProjectItemType>, userId: string): ProjectItemType => {
+    return projectList.filter((item: ProjectItemType) => item.id.toString() === userId)[0]
 }
 
 const CurrentProject: React.FC<CurrenProjectPropsType> = (props) => {
@@ -15,8 +16,6 @@ const CurrentProject: React.FC<CurrenProjectPropsType> = (props) => {
             props.getProjectList()
         }
     }, [props.isProjectsLoaded])
-
-    console.log(props)
 
     const project = getTargetProject(props.projectsList, props.match.params.userId)
 
