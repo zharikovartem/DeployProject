@@ -7,6 +7,7 @@ import { ResponreItemsType } from './ControllerMethodsForm'
 type ValueType = {
     type: 'Response' | 'method' | '',
     methodId?: number,
+    methodName?: string,
     responseItems?: Array<ResponreItemsType>
 }
 
@@ -28,6 +29,7 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
     const onResponseTypeChange = (typeValue: 'Response'|'method'|'', labelList: React.ReactNode[], extra: any) => {
         let newResponse: Array<ResponreItemsType> = []
         let methodId: number = 0
+        let methodName: string = ''
         let type: 'Response'|'method'|'' = ''
 
         if(typeValue === 'Response') {
@@ -42,13 +44,14 @@ const ResponseItem: React.FC<ResponseItemPropsType> = (props) => {
             // console.log('GO TO METHOD!!!',typeValue)
             // console.log(props)
             methodId = props.initialValues.controllerMethodsList.filter( (item: any) => item.name === typeValue )[0].id
+            methodName = props.initialValues.controllerMethodsList.filter( (item: any) => item.name === typeValue )[0].name
             // console.log(methodId)
 
             type = 'method'
         }
 
-        setValue({...value, type: type, responseItems: newResponse, methodId: methodId})
-        props.setResponseValues({...value, type: type, responseItems: newResponse, methodId: methodId})
+        setValue({...value, type: type, responseItems: newResponse, methodId: methodId, methodName: methodName})
+        props.setResponseValues({...value, type: type, responseItems: newResponse, methodId: methodId, methodName: methodName})
 
         // console.log(typeValue)
         // console.log(labelList)

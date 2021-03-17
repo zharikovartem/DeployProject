@@ -24,7 +24,8 @@ export type ResponreItemsType = {
 export type ResponseType = {
     type: 'Response' | 'method' | '',
     methodId?: number,
-    responreitems?: Array<ResponreItemsType>
+    methodName?: string,
+    responseItems?: Array<ResponreItemsType>
 }
 
 const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
