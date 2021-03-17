@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { ProjectItemType } from '../../../../redux/projectReducer'
 import Backend from './Backend/BackendContainer'
 import { CurrenProjectPropsType } from './CurrentProjectContainer'
+import Frontend from './Frontend/Frontend'
 
 const { Panel } = Collapse
 
@@ -27,14 +28,14 @@ const CurrentProject: React.FC<CurrenProjectPropsType> = (props) => {
                     {project.backend_id ?
                         <Panel header="Backend" key="1">
                             Backend data to {project.backend_id}
-                            <Backend projectId={props.match.params.userId}/>
+                            <Backend projectId={Number(props.match.params.userId)}/>
                         </Panel>
                         :
                         null
                     }
                     {project.frontend_id ?
                         <Panel header="Frontend" key="2">
-                            Frontend data
+                            <Frontend projectId={Number(props.match.params.userId)}/>
                         </Panel>
                         :
                         null

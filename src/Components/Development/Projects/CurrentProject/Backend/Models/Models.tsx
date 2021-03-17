@@ -381,8 +381,18 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 targetData={[]}
             />
 
-            <div className="w-100 d-flex flex-row mt-2 mb-2">
+            <div className="w-100 d-flex flex-row mt-5 mb-2">
                 <h5>Methods:</h5><Button className="mr-4 ml-auto" type="primary">Add method</Button>
+            </div>
+
+            <div className="w-100 d-flex flex-row mt-5 mb-2">
+                
+                <h5 className="mr-auto ml-auto">Create : {
+                    // @ts-ignore
+                    props.initialValues.name
+                }Controller
+                <Button className="ml-4" type="primary">Create</Button>
+                </h5>
             </div>
         </Form>
 

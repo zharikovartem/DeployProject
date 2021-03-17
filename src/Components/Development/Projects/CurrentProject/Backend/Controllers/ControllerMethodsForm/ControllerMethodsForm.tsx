@@ -178,7 +178,7 @@ const ControllerMethodsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
         props.setValues({...props.values, body_actions: v.target.value})
     }
 
-    // console.log(response)
+    console.log('ResponseItem:', response)
 
     return (
         <Form

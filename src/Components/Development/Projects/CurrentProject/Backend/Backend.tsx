@@ -58,9 +58,12 @@ const Backend: React.FC<BackendPropsType> = (props) => {
                     <Panel header="Controllers" key="3">
                         <Controllers backendId={project.backend_id}/>
                     </Panel>
+                    <Panel header="Api" key="4">
+
+                    </Panel>
                 </Collapse>
                 <br/><br/><br/>
-                <li>Api</li>
+
                 <li>Seeders</li>
                 <li>Fasades</li>
                 <li>Middleware</li>

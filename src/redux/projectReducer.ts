@@ -187,6 +187,10 @@ export const updateController = (values: ControllersType, controllerId: number):
 
         const response: AxiosResponse<getControllersListResponseType> = await controllersAPI.updateController(values, controllerId)
         console.log(response)
+        if (response.data.needGetMethods) {
+            //getControllerMethodsList
+            dispatch(getControllerMethodsList())
+        }
     }
 }
 

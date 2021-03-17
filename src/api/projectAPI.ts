@@ -176,7 +176,8 @@ export type ControllersType = {
 
 export type getControllersListResponseType = {
     // data: {
-        controllers: Array<ControllersType>
+        controllers: Array<ControllersType>,
+        needGetMethods: boolean,
     // }
 }
 

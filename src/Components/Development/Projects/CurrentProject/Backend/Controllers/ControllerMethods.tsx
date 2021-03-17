@@ -90,11 +90,12 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
     }
 
     const onHandleSubmit = (values: initialValuesType) => {
-        console.log(values)
+        console.log('onHandleSubmit values:',values)
+        console.log('props: ', props)
 
         const controllerMethods: ControllerMethodsType = {
             body_actions: values.body_actions? values.body_actions : '',
-            controller_id: 123,
+            controller_id: props.controllerData.id,
             id: values.id ? values.id : 0,
             isMiddleware: false,
             name: values.name,
