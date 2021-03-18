@@ -1,12 +1,25 @@
 import { Button, Tree } from "antd"
-import { Field, Form, FormikProps } from "formik"
+import { Field, Form, FormikProps, FormikValues } from "formik"
 import React, { ReactNode, useState } from "react"
 import { AntInput } from "../../../../../../utils/Formik/CreateAntField"
 import { validateRequired } from "../../../../../../utils/Formik/ValidateFields"
 
+type OtherProps = {
 
-const InstansesFrontendForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
+}
+
+const InstansesFrontendForm: ((props: OtherProps & FormikProps<FormikValues>) => ReactNode) = (props) => {
     const [isDataChanged, setIsDataChanged] = useState(false)
+
+    // const [srcTree, setSrcTree] = useState(props.initialValues.src_tree)
+    const [srcTree, setSrcTree] = useState(treeData)
+
+    const addTreeItem = (trace:Array<string>) => {
+        for (let index = 0; index < trace.length; index++) {
+            const key = trace[index]
+            console.log(key)
+        }
+    }
 
     const onChange = (val: any) => {
         setIsDataChanged(true)
@@ -28,16 +41,13 @@ const InstansesFrontendForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 onChange={onChange}
             />
 
-            {/* <div className="d-flex justify-content-center"> */}
-                <TreeSRC />
-            {/* </div> */}
-            
+            <TreeSRC addTreeItem={addTreeItem}/>
 
             {isDataChanged ?
                 <div className="submit-container">
                     <button className="ant-btn ant-btn-primary" type="submit">
                         Save
-                </button>
+                    </button>
                 </div>
                 : null}
 
@@ -49,7 +59,7 @@ export default InstansesFrontendForm
 
 
 type TreeSRCPropsType = {
-
+    addTreeItem: (trace:Array<string>) => void,
 }
 
 const TreeSRC: React.FC<TreeSRCPropsType> = (props) => {
@@ -79,30 +89,39 @@ const TreeSRC: React.FC<TreeSRCPropsType> = (props) => {
 }
 
 type FolderRowPropsType = {
-    name: string
+    name: string,
+    trace: Array<string>
+    // addTreeItem: (trace:Array<string>) => void,
+    
 }
 
-const FolderRow:React.FC<FolderRowPropsType> = (props) => {
+export const FolderRow:React.FC<FolderRowPropsType> = (props) => {
+    const onAdd = (v: Array<string>) => {
+        console.log(v)
+        // addTreeItem(trace).bind(props.trace)
+    }
     return(
         <div>{props.name}
-            <Button className="ml-2" type="primary" size="small">Add</Button>
+            <Button onClick={()=>{onAdd(props.trace)}} className="ml-2" type="primary" size="small">Add</Button>
             <Button className="ml-2" type="primary" size="small">Dell</Button>
         </div>
     )
 }
 
-type treeDataItem = {
+export type treeDataItem = {
     title: string | JSX.Element,
     key: string,
     disableCheckbox?: boolean,
     disabled?: boolean,
-    children?: Array<treeDataItem>
+    children?: Array<treeDataItem>,
+    trace?: Array<string>,
 }
 
 const treeData: Array<treeDataItem> = [
     {
-        title: <FolderRow name="src"/>,
-        key: '0-0',
+        title: <FolderRow name="src" trace={['src']}/>,
+        key: '0',
+        trace:['0'],
         children: [
         //     {
         //         title: <FolderRow name="parent 1-0"/>,
@@ -121,9 +140,9 @@ const treeData: Array<treeDataItem> = [
         //         ],
         //     },
             {
-                title: <FolderRow name="Components"/>,
+                title: <FolderRow name="Components" trace={['src', 'Components']}/>,
                 key: '0-0-1',
-                children: [{ title: <FolderRow name="Development"/>, key: '0-0-1-0' }],
+                children: [{ title: <FolderRow name="Development" trace={['src', 'Components', 'Development']}/>,  key: '0-0-1-0' }],
             },
         ],
     },
