@@ -64,6 +64,7 @@ const Models: React.FC<ModelsPropsType> = (props) => {
 
             <Collapse defaultActiveKey={[]} onChange={callback}>
                 {
+                    props.modelsList ?
                     props.modelsList.map(item => {
                         return(
                             <Panel header={item.name} key={item.id ? item.id.toString() : 'null'}>
@@ -71,6 +72,7 @@ const Models: React.FC<ModelsPropsType> = (props) => {
                             </Panel>
                         )
                     })
+                    : <div>No DATA</div>
                 }
             </Collapse>
             <Modal title="Create new Model" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>

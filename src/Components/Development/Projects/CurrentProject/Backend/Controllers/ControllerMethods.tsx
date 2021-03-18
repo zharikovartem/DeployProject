@@ -32,7 +32,6 @@ const ControllerMethods: React.FC<ControllerMethodsPropsType> = (props) => {
 
     useEffect(() => {
         if (props.controllerMethodsList.length === 0) {
-            // console.log('getControllerMethodsList in useEffect')
             props.getControllerMethodsList()
         }
     }, [])

@@ -21,7 +21,7 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
 
     return (
         <div>
-            <h5>ControllerMethodsCode:</h5>
+            {/* <h5>ControllerMethodsCode:</h5> */}
             <code>{tab(1, '/**')}</code><br />
             <code>{tab(1, '* Descriptions')}</code><br />
             {request.map(item => {
@@ -63,7 +63,7 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
             {
                 props.methodData !== null && props.methodData.body_actions?
                 <><br />
-                {getBody(1,  props.methodData?.body_actions)}
+                <pre className="ml-5">{props.methodData?.body_actions}</pre>
                 </>
                 : <><code>{tab(2, '//...')}</code><br /></>
             }
@@ -87,7 +87,7 @@ const ControllerMethodsCode: React.FC<ControllerMethodsCodePropsType> = (props) 
 
             <code>{tab(1, '}')}</code><br />
 
-            <li>Какой код возвращает метод,</li>
+            {/* <li>Какой код возвращает метод,</li> */}
         </div>
     )
 }

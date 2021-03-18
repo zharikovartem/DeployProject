@@ -23,10 +23,12 @@ export const usersAPI = {
         getToken()
         return instance.put<UserType>(`account/${userId}`, values)
         .then(response => {
+            console.log(response)
             return response.status === 200 ? response : null
         })
         .catch(err => {
             if (err.response) {
+                console.log(err.response)
                 return err.response
             } else if (err.request) {
             } else {

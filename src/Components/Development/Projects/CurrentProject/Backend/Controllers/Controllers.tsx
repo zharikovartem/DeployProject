@@ -1,4 +1,4 @@
-import { Button, Collapse } from 'antd'
+import { Button, Collapse, Empty } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import { Field, Form, Formik, FormikProps } from 'formik'
 import React, { ReactNode, useEffect, useState } from 'react'
@@ -10,6 +10,7 @@ import {SelectOptionType} from './../../../../../../Types/types'
 import { initialValues } from '../../../../../ToDo/ToDoMobile'
 import Item from 'antd/lib/list/Item'
 import ControllerMethods from './ControllerMethodsContainer'
+import FullControllerMethodCode from './FullControllerMethodCode/FullControllerMethodCodeContainer'
 
 const { Panel } = Collapse
 
@@ -58,26 +59,30 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
 
     // console.log(props)
 
-    if (props.controllersList.length > 0) {
+    // if (props.controllersList.length > 0) {
         return (
             <div>
                 <div className="w-100 d-flex flex-row-reverse">
                     <Button className="mr-4 ml-auto mb-3" type="primary" onClick={addController}>Add Controller</Button>
                 </div>
 
-                <Collapse defaultActiveKey={[]}>
-                    {props.controllersList.map((item: ControllersType) => {
-                        return (
-                            <Panel 
-                                key={item.name}
-                                header={item.name} 
-                                // extra={[<div key={'any_'+item.name}>any</div>]}
-                            >
-                                <ControllerItem item={item} modelsList={props.modelsList} updateController={props.updateController}/>
-                            </Panel>
-                        )
-                    })}
-                </Collapse>
+                {
+                    props.controllersList.length > 0 ?
+                    <Collapse defaultActiveKey={[]}>
+                        {props.controllersList.map((item: ControllersType) => {
+                            return (
+                                <Panel 
+                                    key={item.name}
+                                    header={item.name} 
+                                    // extra={[<div key={'any_'+item.name}>any</div>]}
+                                >
+                                    <ControllerItem item={item} modelsList={props.modelsList} updateController={props.updateController}/>
+                                </Panel>
+                            )
+                        })}
+                    </Collapse>
+                    : <Empty />
+                }
 
                 <Modal title="Create new Controller" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                     <Formik
@@ -91,9 +96,17 @@ const Controllers: React.FC<ControllersPropsType> = (props) => {
                 </Modal>
             </div>
         )
-    } else {
-        return <div>No Data</div>
-    }
+    // } 
+    // else {
+    //     return(
+    //         <>
+    //             <div className="w-100 d-flex flex-row-reverse">
+    //                 <Button className="mr-4 ml-auto mb-3" type="primary" onClick={addController}>Add Controller</Button>
+    //             </div>
+    //             <div>No Data</div>
+    //         </>
+    //     ) 
+    // }
 }
 
 export default Controllers
@@ -165,8 +178,24 @@ const ControllerItem:React.FC<ControllerItemType> = (props) => {
             <Panel header="Methods" key="methods">
                 <ControllerMethods controllerData={props.item}/>
             </Panel>
-            <Panel header="Code" key="code">
-
+            <Panel header="Full code" key="code">
+                <FullControllerMethodCode controllerData={props.item}/>
+            </Panel>
+            <Panel header="Actions to create" key="actions">
+                {
+                    props.item.models[0] ?
+                    <h5>php artisan make:model {props.item.models[0].name} -mcr</h5>
+                    : <h5>No Model</h5>
+                }
+                <br/>
+                {
+                     props.item.models[0] ?
+                     <>
+                    <h5>php artisan make:controller {props.item.name} --resource</h5>
+                    <h5>php artisan make:model {props.item.models[0].name} --migration</h5>
+                    </>
+                    : <h5>No Model</h5>
+                }
             </Panel>
         </Collapse>
     </div>
@@ -214,3 +243,5 @@ const ControllerInstansesForm: ((props: FormikProps<{}>) => ReactNode) = (props)
         </Form>
     )
 }
+
+
