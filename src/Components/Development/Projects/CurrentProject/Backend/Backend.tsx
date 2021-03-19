@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {BackendPropsType} from './BackendContainer'
 import {getTargetProject} from './../CurrentProject'
 import { Collapse, Spin } from 'antd'
@@ -10,6 +10,8 @@ import Controllers from './Controllers/ControllersContainer'
 const { Panel } = Collapse
 
 const Backend: React.FC<BackendPropsType> = (props) => {
+    const [activeKey, setActiveKey] = useState<Array<string>>()
+
     useEffect( ()=>{
         props.getBackendData(1)
     }, [])
@@ -37,23 +39,40 @@ const Backend: React.FC<BackendPropsType> = (props) => {
         }
     }
 
+    const changePanel = (closeKey: string, openKey: Array<string>) => {
+        console.log(openKey)
+        if (openKey) {
+            setActiveKey(openKey)
+        } else {
+            setActiveKey([])
+        }
+        
+    }
+
+    const onCollapseChange = (v:any) => {
+        console.log('onCollapseChange', v)
+        console.log('activeKey: ', [activeKey])
+        changePanel('', v)
+    }
+
     // console.log(project)
 
     if (project.backendData) {
         return(
             <>
                 <h5>{project.backendData.name}</h5>
-                <Collapse defaultActiveKey={[]}>
+                <Collapse defaultActiveKey={[]} activeKey={activeKey} onChange={onCollapseChange}>
                     <Panel header="Instanses" key="1">
                         <Formik
                             initialValues={instansesInitialValues}
                             onSubmit={instansesHandleSubmit}
+                            enableReinitialize={true}
                         >
                             {InstansesForm}
                         </Formik>
                     </Panel>
                     <Panel header="Models" key="2">
-                        <Models backendId={project.backend_id}/>
+                        <Models backendId={project.backend_id} changePanel={changePanel} />
                     </Panel>
                     <Panel header="Controllers" key="3">
                         <Controllers backendId={project.backend_id}/>

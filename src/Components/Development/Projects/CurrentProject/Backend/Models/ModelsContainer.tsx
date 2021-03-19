@@ -6,7 +6,8 @@ import { ModelsType } from '../../../../../../api/projectAPI'
 import {actions} from './../../../../../../redux/codeReducer'
 
 type OwnModelsPropsType = {
-    backendId: number
+    backendId: number,
+    changePanel: (closeKey: string, openKey: Array<string>) => void,
 }
 
 type MapPropsType = ReturnType<typeof mapStateToProps>

@@ -1,6 +1,6 @@
 import { Button, Collapse, Empty  } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
-import { Field, Form, Formik, FormikProps } from 'formik'
+import { Field, Form, Formik, FormikProps, FormikValues } from 'formik'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { FieldType, ModelsType } from '../../../../../../api/projectAPI'
 import { AntCheckbox, AntInput } from '../../../../../../utils/Formik/CreateAntField'
@@ -10,7 +10,8 @@ import FieldForm from './FieldForm'
 import { ModelsPropsType } from './ModelsContainer'
 import ModelForm from './ModelForm'
 import CodeModalContainer from '../../../../Code/CodeModalContainer'
-import { stringify } from 'querystring'
+import { useDispatch } from 'react-redux'
+import {createController as createControllerThunk } from './../../../../../../redux/projectReducer'
 
 const { Panel } = Collapse
 
@@ -68,7 +69,7 @@ const Models: React.FC<ModelsPropsType> = (props) => {
                     props.modelsList.map(item => {
                         return(
                             <Panel header={item.name} key={item.id ? item.id.toString() : 'null'}>
-                                <ModelFormItem modelItem={item} updateModel={props.updateModel} />
+                                <ModelFormItem modelItem={item} changePanel={props.changePanel} updateModel={props.updateModel} />
                             </Panel>
                         )
                     })
@@ -96,6 +97,7 @@ export default Models
 type ModelFormItemPropsType = {
     modelItem: ModelsType,
     updateModel: (values: ModelsType, modelId: number) => void,
+    changePanel: (closeKey: string, openKey: Array<string>) => void,
 }
 
 const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
@@ -149,17 +151,24 @@ const ModelFormItem: React.FC<ModelFormItemPropsType> = (props) => {
     }
 
     console.log({...props.modelItem, fields: fieldsdata, ...fieldInit})
+    console.log(props.changePanel)
     return(
         <Formik
-            initialValues={ {...props.modelItem, fields: fieldsdata, ...fieldInit} }
+            enableReinitialize={true}
+            initialValues={ {...props.modelItem, fields: fieldsdata, ...fieldInit, changePanel: props.changePanel} }
             onSubmit={handleSubmit}
+            own={props.changePanel}
         >
             {ModelView}
         </Formik>
     )
 }
 
-const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
+type OwnModelViewPropsType = {
+    own: any
+}
+
+const ModelView: ((props: OwnModelViewPropsType & FormikProps<FormikValues>) => ReactNode) = (props) => {
     const [initialFieldValues, setInitialFieldValues] = useState(props.initialValues)
 
     type InitialModalValuesType = {
@@ -313,6 +322,22 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
         setInitialModalValues(modalFieldFormValues)
     }
 
+    const dispatch = useDispatch()
+
+    const createController = () => {
+
+        // console.log('createController: ', props)
+        let newController = {
+            name: props.initialValues.name+'Controller',
+            models: JSON.stringify([props.initialValues.id]) ,
+            backend_id: props.initialValues.backend_id,
+            isResource: true
+        }
+        // console.log('newController', newController)
+        props.initialValues.changePanel('', ['3'])
+        dispatch(createControllerThunk(newController))
+    }
+
     return(
         <>
         <Form
@@ -393,7 +418,7 @@ const ModelView: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                     // @ts-ignore
                     props.initialValues.name
                 }Controller
-                <Button className="ml-4" type="primary">Create</Button>
+                <Button onClick={createController} className="ml-4" type="primary">Create</Button>
                 </h5>
             </div>
         </Form>
