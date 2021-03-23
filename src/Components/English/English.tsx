@@ -71,13 +71,13 @@ const English:React.FC<EnglishPropsType> = (props) => {
                     // actions={item.eng_sound ? [<a key={item.eng_sound} onClick={()=>{onPlay(item.eng_sound)}}>sound</a>] : []}
                     >
                         <div className="row w-100">
-                            <div className="col-5">
+                            <div className="col-3">
                                 {item.eng_value}
                             </div>
-                            <div className="col-5">
+                            <div className="col-3">
                                 {item.rus_value}
                             </div>
-                            {item.eng_sound ? <div className="col-2">
+                            {item.eng_sound ? <div className="col-6">
                             <Button
                                 type={item.eng_sound ? "primary" : "ghost"} size="small"
                                 onClick={()=>{onPlay(item.eng_sound)}}

@@ -9,7 +9,8 @@ export type VocabularyType = {
 }
 
 type GetVocabularyPartType = {
-    vocabularyList: Array<VocabularyType>
+    vocabularyList: Array<VocabularyType>,
+    part: string,
 }
 
 export const vocabularyAPI = {
