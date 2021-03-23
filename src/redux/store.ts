@@ -7,6 +7,7 @@ import projectReducer from "./projectReducer"
 import taskListReducer from "./TaskListReducer"
 import taskReducer from './taskReducer'
 import usersReducer from "./usersReducer"
+import vocabularyReducer from "./vocabularyReducer"
 
 
 let rootReducer = combineReducers({
@@ -17,6 +18,7 @@ let rootReducer = combineReducers({
     users: usersReducer,
     projects: projectReducer,
     code: codeReducer,
+    vocabulary: vocabularyReducer,
 })
 
 type rootReducerType = typeof rootReducer

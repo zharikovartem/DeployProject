@@ -48,6 +48,7 @@ const Frontend:React.FC<FrontendPropsType> = (props) => {
                     <li>1.2) Create migrations</li>
                     <li>1.3) Create controller</li>
                     <li>2) Get componentList</li>
+                   
                 </CollapsePanel>
             </Collapse>
         </div>

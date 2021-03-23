@@ -21,7 +21,7 @@ import Users from './Components/Users/UsersContainer'
 import CurrentUser from './Components/Users/CurrentUser/CurrentUserContainer'
 import Projects from './Components/Development/Projects/ProjectsContainer'
 import CurrentProject from './Components/Development/Projects/CurrentProject/CurrentProjectContainer'
-import English from './Components/English/English'
+import English from './Components/English/EnglishContainer'
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
