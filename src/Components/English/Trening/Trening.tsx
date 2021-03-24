@@ -25,7 +25,9 @@ const Trening: React.FC<TreningPropsType> = (props) => {
             // @ts-ignore
             callback: (  { resetTranscript }  ) => {
                 console.log('next go to props')
-                setAnswer(!answer)
+                setAnswer(false) // скрыл подсказку
+                onNext(1) // шаг вперед
+                
                 resetTranscript()
             },
             
@@ -35,9 +37,8 @@ const Trening: React.FC<TreningPropsType> = (props) => {
             // @ts-ignore
             callback: (  { resetTranscript }  ) => {
                 console.log('next go to props')
-                onNext(1)
-                setAnswer(false)
-                resetTranscript()
+                setAnswer(!answer) // скрыл показал answer
+                resetTranscript() // очистил кэш
             },
             
         }
