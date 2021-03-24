@@ -14,7 +14,16 @@ const Trening: React.FC<TreningPropsType> = (props) => {
             callback: (  resetTranscript:()=>void  ) => {
                 console.log('clear')
                 resetTranscript()
-            }
+            },
+            
+        },
+        {
+            command: 'next',
+            callback: (  resetTranscript:()=>void  ) => {
+                console.log('next -> go to props')
+                resetTranscript()
+            },
+            
         }
     ]
 
