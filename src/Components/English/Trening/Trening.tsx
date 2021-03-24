@@ -85,11 +85,12 @@ const Trening: React.FC<TreningPropsType> = (props) => {
 
     return (
         <div>
+            <div>v1.3</div>
             <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
             <Button className="m-2" type="primary" onClick={onStart}>StartEng</Button>
             <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
             <Button className="m-2" type="primary" onClick={resetTranscript}>Reset</Button>
-            <p>{transcript}</p>
+            <h1>{transcript}</h1>
 
             <h1>{props.toLern.length >= targetIndex-1 ? props.toLern[targetIndex].rus_value : null}</h1>
             <Button className="m-2" type="primary" onClick={()=>{onNext(-1)}}>Prev</Button>
