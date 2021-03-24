@@ -4,7 +4,7 @@ import { EnglishPropsType } from './EnglishContainer'
 import { VocabularyType } from './../../api/vocabularyAPI'
 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import Trening from './Trening/Trening'
+import Trening from './Trening/TreningContainer'
 
 // import {speechSynthesis} from 'speech-synthesis'
 
@@ -38,6 +38,12 @@ const English: React.FC<EnglishPropsType> = (props) => {
         props.getVocabularyList(pageNumber)
     }
 
+    const onStatusChange = (id: number, status: string) => {
+        props.updateVocabulary({
+            status: status//'inProcess'
+        }, id)
+    }
+
     // console.log(props.part)
 
     return (
@@ -66,7 +72,8 @@ const English: React.FC<EnglishPropsType> = (props) => {
                             <div className="row w-100">
                                 <div className="col-1 text-right">{item.id}</div>
                                 <div className="col-2 text-right">
-                                    {item.eng_value}
+                                    {item.status === 'learned' ? <b>{item.eng_value}</b> : item.eng_value}
+                                    
                                 </div>
                                 <div className="col-3 text-right">
                                     {item.rus_value + ' ' + item.part_of_speech}
@@ -80,8 +87,9 @@ const English: React.FC<EnglishPropsType> = (props) => {
                                         }}
                                     >Eng</Button>
                                     <Button onClick={() => { onPlayRus(item.rus_value) }} className="ml-1" type="primary" size="small">Rus</Button>
-                                    <Button className="ml-3" type="primary" size="small">Lern</Button>
-                                    <Button className="ml-1" type="primary" size="small">Know it</Button>
+                                    <Button className="ml-3" type="primary" size="small" onClick={ ()=>{ onStatusChange(item.id, 'inProcess') } }>Lern</Button>
+                                    <Button className="ml-1" type="primary" size="small" onClick={ ()=>{ onStatusChange(item.id, 'learned') } }>Know it</Button>
+                                    <Button className="ml-3" type="primary" size="small">Edit</Button>
                                 </div>
                             </div>
                         </List.Item>
