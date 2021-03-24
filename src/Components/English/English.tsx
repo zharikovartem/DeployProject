@@ -4,6 +4,7 @@ import { EnglishPropsType } from './EnglishContainer'
 import { VocabularyType } from './../../api/vocabularyAPI'
 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import Trening from './Trening/Trening'
 
 // import {speechSynthesis} from 'speech-synthesis'
 
@@ -64,14 +65,6 @@ const English: React.FC<EnglishPropsType> = (props) => {
     return (
         <Tabs defaultActiveKey="1" >
 
-            <div>
-                <button onClick={onStartRus}>StartRus</button>
-                <button onClick={onStart}>StartEng</button>
-                <button onClick={onStop}>Stop</button>
-                <button onClick={resetTranscript}>Reset</button>
-                <p>{transcript}</p>
-            </div>
-
             <TabPane tab="Vocabulary List" key="1">
                 <Pagination
                     showQuickJumper
@@ -120,7 +113,9 @@ const English: React.FC<EnglishPropsType> = (props) => {
 
             <TabPane tab="to Lern" key="2"></TabPane>
             <TabPane tab="Active Vocabulary" key="3"></TabPane>
-            <TabPane tab="Trening" key="4"></TabPane>
+            <TabPane tab="Trening" key="4">
+                <Trening />
+            </TabPane>
         </Tabs>
     )
 }
