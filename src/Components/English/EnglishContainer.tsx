@@ -19,7 +19,8 @@ export type EnglishPropsType = MapPropsType & MapDispatchPropsType & OwnEnglishT
 let mapStateToProps = (state:AppStateType) => {
     return {
         vocabularyList: state.vocabulary.vocabularyList,
-        part: state.vocabulary.part
+        part: state.vocabulary.part,
+        count: state.vocabulary.count,
     }
 }
 

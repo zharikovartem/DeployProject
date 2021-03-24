@@ -5,12 +5,15 @@ export type VocabularyType = {
     eng_value: string,
     eng_sound: string | null,
     rus_value: string,
+    part_of_speech: string,
+    id: number,
 
 }
 
 type GetVocabularyPartType = {
     vocabularyList: Array<VocabularyType>,
     part: string,
+    count: number,
 }
 
 export const vocabularyAPI = {
