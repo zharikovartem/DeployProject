@@ -25,8 +25,9 @@ const Trening: React.FC<TreningPropsType> = (props) => {
             // @ts-ignore
             callback: (  { resetTranscript }  ) => {
                 console.log('next go to props')
-                setAnswer(false) // скрыл подсказку
-                onNext(1) // шаг вперед
+                setAnswer(false)
+                setIsSpeaking(false)
+                setTargetIndex(targetIndex+1)
                 
                 resetTranscript()
             },
@@ -85,7 +86,7 @@ const Trening: React.FC<TreningPropsType> = (props) => {
 
     return (
         <div>
-            <div>v1.3</div>
+            <div>v1.4</div>
             <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
             <Button className="m-2" type="primary" onClick={onStart}>StartEng</Button>
             <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
