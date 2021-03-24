@@ -11,9 +11,8 @@ const Trening: React.FC<TreningPropsType> = (props) => {
     const commands = [
         {
             command: 'clear',
-            // @ts-ignore
-            callback: (  {resetTranscript}  ) => {
-                console.log('!!!!!!!!!!!!')
+            callback: (  resetTranscript:()=>void  ) => {
+                console.log('clear')
                 resetTranscript()
             }
         }
