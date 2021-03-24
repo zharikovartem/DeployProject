@@ -8,7 +8,7 @@ const Trening: React.FC<TreningPropsType> = (props) => {
 
     const [targetIndex, setTargetIndex] = useState(0)
     const [answer, setAnswer] = useState(false)
-    const [isSpeaking, setIsSpeaking] = useState(0)
+    const [isSpeaking, setIsSpeaking] = useState<number| null>(null)
 
     const commands = [
         {
@@ -76,7 +76,7 @@ const Trening: React.FC<TreningPropsType> = (props) => {
     console.log(props)
     console.log(targetIndex)
 
-    if (isSpeaking === targetIndex) {
+    if (isSpeaking !== targetIndex) {
         speechSynthesis(props.toLern[targetIndex].rus_value, 'ru-RU')
         setIsSpeaking(targetIndex)
     }
