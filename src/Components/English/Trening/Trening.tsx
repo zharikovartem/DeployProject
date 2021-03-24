@@ -8,7 +8,7 @@ const Trening: React.FC<TreningPropsType> = (props) => {
 
     const [targetIndex, setTargetIndex] = useState(0)
     const [answer, setAnswer] = useState(false)
-    const [isSpeaking, setIsSpeaking] = useState(false)
+    const [isSpeaking, setIsSpeaking] = useState(0)
 
     const commands = [
         {
@@ -26,7 +26,6 @@ const Trening: React.FC<TreningPropsType> = (props) => {
             callback: (  { resetTranscript }  ) => {
                 console.log('next go to props')
                 setAnswer(false)
-                setIsSpeaking(false)
                 setTargetIndex(targetIndex+1)
                 
                 resetTranscript()
@@ -72,21 +71,20 @@ const Trening: React.FC<TreningPropsType> = (props) => {
         setAnswer(false)
         setTargetIndex(targetIndex+step)
         resetTranscript()
-        setIsSpeaking(false)
     }
 
     console.log(props)
     console.log(targetIndex)
 
-    if (!isSpeaking) {
+    if (isSpeaking === targetIndex) {
         speechSynthesis(props.toLern[targetIndex].rus_value, 'ru-RU')
-        setIsSpeaking(true)
+        setIsSpeaking(targetIndex)
     }
      
 
     return (
         <div>
-            <div>v1.5</div>
+            <div>v1.6</div>
             <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
             <Button className="m-2" type="primary" onClick={onStart}>StartEng</Button>
             <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
