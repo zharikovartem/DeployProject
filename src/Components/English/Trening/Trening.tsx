@@ -12,7 +12,10 @@ const Trening: React.FC<TreningPropsType> = (props) => {
         {
             command: 'clear',
             // @ts-ignore
-            callback: (  {resetTranscript}  ) => resetTranscript()
+            callback: (  {resetTranscript}  ) => {
+                console.log('!!!!!!!!!!!!')
+                resetTranscript()
+            }
         }
     ]
 
