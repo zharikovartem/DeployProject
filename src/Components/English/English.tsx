@@ -22,17 +22,7 @@ const English: React.FC<EnglishPropsType> = (props) => {
         // props.getVocabularyList(1)
     }, [props.vocabularyList, props.count, props.part])
 
-    const { transcript, resetTranscript } = useSpeechRecognition()
-    if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
-        return null
-    }
-
     const onPlayEng = (url: string | null) => {
-        // console.log(url)
-        // if (url) {
-        //     const audio = new Audio(url)
-        //     audio.play()
-        // }
         speechSynthesis(url, 'en-US')
     }
 
@@ -48,19 +38,7 @@ const English: React.FC<EnglishPropsType> = (props) => {
         props.getVocabularyList(pageNumber)
     }
 
-    const onStartRus = () => {
-        SpeechRecognition.startListening({ language: 'ru-RU', continuous: true })
-    }
-    const onStart = () => {
-        SpeechRecognition.startListening({ language: 'en-US', continuous: true })
-    }
-
-    const onStop = () => {
-        SpeechRecognition.stopListening()
-    }
-
     // console.log(props.part)
-    console.log(transcript)
 
     return (
         <Tabs defaultActiveKey="1" >
