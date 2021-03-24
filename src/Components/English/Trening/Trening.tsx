@@ -70,9 +70,9 @@ const Trening: React.FC<TreningPropsType> = (props) => {
 
     const onNext = (step:number) => {
         setAnswer(false)
-        setIsSpeaking(false)
         setTargetIndex(targetIndex+step)
         resetTranscript()
+        setIsSpeaking(false)
     }
 
     console.log(props)
@@ -86,7 +86,7 @@ const Trening: React.FC<TreningPropsType> = (props) => {
 
     return (
         <div>
-            <div>v1.4</div>
+            <div>v1.5</div>
             <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
             <Button className="m-2" type="primary" onClick={onStart}>StartEng</Button>
             <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
