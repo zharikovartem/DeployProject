@@ -25,7 +25,18 @@ const Trening: React.FC<TreningPropsType> = (props) => {
             // @ts-ignore
             callback: (  { resetTranscript }  ) => {
                 console.log('next go to props')
-                setAnswer(true)
+                setAnswer(!answer)
+                resetTranscript()
+            },
+            
+        },
+        {
+            command: 'show',
+            // @ts-ignore
+            callback: (  { resetTranscript }  ) => {
+                console.log('next go to props')
+                onNext(1)
+                setAnswer(false)
                 resetTranscript()
             },
             
@@ -59,6 +70,7 @@ const Trening: React.FC<TreningPropsType> = (props) => {
         setAnswer(false)
         setIsSpeaking(false)
         setTargetIndex(targetIndex+step)
+        resetTranscript()
     }
 
     console.log(props)
