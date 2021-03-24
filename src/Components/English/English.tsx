@@ -47,8 +47,16 @@ const English: React.FC<EnglishPropsType> = (props) => {
         props.getVocabularyList(pageNumber)
     }
 
+    const onStartRus = () => {
+        SpeechRecognition.startListening({ language: 'ru-RU' })
+    }
     const onStart = () => {
-        SpeechRecognition.startListening()
+        SpeechRecognition.startListening({ language: 'en-US' })
+    }
+
+    const onStop = () => {
+        console.log('onStop')
+        SpeechRecognition.startListening({ language: 'en-US' })
     }
 
     // console.log(props.part)
@@ -58,8 +66,9 @@ const English: React.FC<EnglishPropsType> = (props) => {
         <Tabs defaultActiveKey="1" >
 
             <div>
-                <button onClick={onStart}>Start</button>
-                <button onClick={SpeechRecognition.stopListening}>Stop</button>
+                <button onClick={onStartRus}>StartRus</button>
+                <button onClick={onStart}>StartEng</button>
+                <button onClick={onStop}>Stop</button>
                 <button onClick={resetTranscript}>Reset</button>
                 <p>{transcript}</p>
             </div>
