@@ -6,7 +6,7 @@ type TreningPropsType = {
 
 }
 const Trening: React.FC<TreningPropsType> = (props) => {
-    const { transcript, resetTranscript } = useSpeechRecognition()
+    
 
     const commands = [
         {
@@ -14,6 +14,9 @@ const Trening: React.FC<TreningPropsType> = (props) => {
             callback: (  resetTranscript:()=>void  ) => resetTranscript()
         }
     ]
+
+    const { transcript, resetTranscript } = useSpeechRecognition({commands})
+
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
         return null
     }
