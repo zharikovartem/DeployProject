@@ -48,15 +48,14 @@ const English: React.FC<EnglishPropsType> = (props) => {
     }
 
     const onStartRus = () => {
-        SpeechRecognition.startListening({ language: 'ru-RU' })
+        SpeechRecognition.startListening({ language: 'ru-RU', continuous: true })
     }
     const onStart = () => {
-        SpeechRecognition.startListening({ language: 'en-US' })
+        SpeechRecognition.startListening({ language: 'en-US', continuous: true })
     }
 
     const onStop = () => {
-        console.log('onStop')
-        SpeechRecognition.startListening({ language: 'en-US' })
+        SpeechRecognition.stopListening()
     }
 
     // console.log(props.part)
