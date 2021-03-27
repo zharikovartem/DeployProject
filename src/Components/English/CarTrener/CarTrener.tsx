@@ -114,7 +114,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
             </div>
 
             {isLern ?
-            <LerningWords englishWords={props.englishWords} wordsCount={initialSettingsValues.wordsCount}/>
+            <LerningWords next={onMove} englishWords={props.englishWords} wordsCount={initialSettingsValues.wordsCount}/>
             : null }
             
         </div>

@@ -9,7 +9,8 @@ type MapPropsType = ReturnType<typeof mapStateToProps>
 
 type OwnLerningWordsPropsType = {
     englishWords: Array<WordType>,
-    wordsCount: number
+    wordsCount: number,
+    next: (num: number)=>void
 }
 
 type MapDispatchPropsType = {

@@ -1,12 +1,15 @@
-import { List } from 'antd'
+import { Checkbox, List } from 'antd'
 import { Button } from 'antd'
+import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import React, { useState, useEffect } from 'react'
 import { WordType } from '../../../api/vocabularyAPI'
 import { LerningWordsPropsType } from './LerningWordsContainer'
 
 
 type ParentIdType = {
-    parentId: number
+    parentId: number,
+    styles?: string,
+    checked: boolean
 }
 type RelationsType = WordType & ParentIdType
 
@@ -14,30 +17,67 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
     const [selectedWordsIds, setselectedWordsIds] = useState<Array<number>>([])
     const [wordsToCompare, setWordsToCompare] = useState<Array<RelationsType>>([])
 
+    const error = 'bg-danger text-white'
+    const success = 'bg-success text-white'
+
     useEffect( () => {
         setWordsToCompare( getWordsToCompare(props.wordsArray, props.wordsCount, props.target) )
         setselectedWordsIds([])
     },[props.target])
 
-    const choiseValues = (id: number) => {
-        let newNelectedWordsIds: Array<number> = [...selectedWordsIds]
-        newNelectedWordsIds.push(id)
+    const choiseValues = (parentId: number, id: number, checked: boolean) => {
+        let wordsToCompareCopy = [...wordsToCompare].map( (i, index) => {
+            if (i.id == id) {
+                console.log()
+                return({ ...i, checked: !wordsToCompare[index].checked, styles: '' })
+            } else { return i }
+        })
+        setWordsToCompare(wordsToCompareCopy)
+
+        let newNelectedWordsIds: Array<number> = []
+
+        if (checked) {
+            newNelectedWordsIds = [...selectedWordsIds]
+            newNelectedWordsIds.push(parentId)
+        } else {
+            newNelectedWordsIds = selectedWordsIds.filter( i => i !== parentId)
+        }
         setselectedWordsIds(newNelectedWordsIds)
     }
 
     const onCheck = () => {
         console.log(selectedWordsIds)
+        console.log(wordsToCompare)
+
         const check = selectedWordsIds.filter(i => i !== props.target?.id)
         if (selectedWordsIds.length !== 0) {
             if (check.length !== 0) {
-                alert('false')
+                // console.log(check)
+                const hits = selectedWordsIds.filter(i => i === props.target?.id)
+                onError(check, hits)
+                
             } else {
-                alert('OK')
+                // alert('OK')
+                props.next(1)
             }
         } else {
             alert('Please choise!')
         }
         
+    }
+
+    const onError = (errors: Array<number>, hits:Array<number>) => {
+        let wordsToCompareCopy = [...wordsToCompare]
+        for (let index = 0; index < wordsToCompare.length; index++) {
+            if (errors.includes(wordsToCompareCopy[index].parentId)) {
+                wordsToCompareCopy[index].styles = error
+            }
+            if (hits.includes(wordsToCompareCopy[index].parentId)) {
+                wordsToCompareCopy[index].styles = success
+            }
+        }
+        console.log(wordsToCompareCopy)
+        setWordsToCompare(wordsToCompareCopy)
     }
 
     return (
@@ -49,11 +89,16 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
                 bordered
                 dataSource={wordsToCompare}
                 renderItem={ item => (
-                    <List.Item>
-                        <Button className="my-0" type="link" block onClick={()=>{choiseValues(item.parentId)}}>
-                            {item.name}
-                        </Button>
-                    </List.Item>
+
+                        <h3 className={'my-1 '+item.styles}>
+                            <Checkbox 
+                                onChange={(e: CheckboxChangeEvent)=>{ choiseValues(item.parentId, item.id, e.target.checked) }}
+                                checked={item.checked}
+                            >
+                                {item.name}
+                            </Checkbox>
+                        </h3>
+
                 )}
                 />
                 <Button className="mt-3" onClick={onCheck} type="primary">Check</Button>
@@ -98,7 +143,8 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
             const relations: Array<RelationsType> = words[index].relations.map((item) => {
                 return ({
                     ...item,
-                    parentId: words[index].id
+                    parentId: words[index].id,
+                    checked: false
                 })
             })
 
@@ -110,7 +156,8 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
         const targetRelations: Array<RelationsType> = target.relations.map((item) => {
             return ({
                 ...item,
-                parentId: target.id
+                parentId: target.id,
+                checked: false
             })
         })
 
