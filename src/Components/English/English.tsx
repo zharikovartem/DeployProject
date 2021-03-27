@@ -1,10 +1,11 @@
 import { Button, List, Pagination, Tabs } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { EnglishPropsType } from './EnglishContainer'
-import { VocabularyType } from './../../api/vocabularyAPI'
+import { VocabularyType, WordType } from './../../api/vocabularyAPI'
 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import Trening from './Trening/TreningContainer'
+import CarTrener from './CarTrener/CarTrenerContainer'
 
 // import {speechSynthesis} from 'speech-synthesis'
 
@@ -47,8 +48,15 @@ const English: React.FC<EnglishPropsType> = (props) => {
     // console.log(props.part)
 
     return (
-        <Tabs defaultActiveKey="1" >
-
+        <Tabs defaultActiveKey="0" >
+            <TabPane tab="Car Trener" key="0">
+                {props.vocabularyList.length !== 0 ?
+                <CarTrener 
+                    englishWords={props.vocabularyList}
+                />
+                : null}
+                
+            </TabPane>
             <TabPane tab="Vocabulary List" key="1">
                 <Pagination
                     showQuickJumper
@@ -65,28 +73,28 @@ const English: React.FC<EnglishPropsType> = (props) => {
                     footer={<div>Footer</div>}
                     bordered
                     dataSource={props.vocabularyList}
-                    renderItem={(item: VocabularyType) =>
+                    renderItem={(item: WordType) =>
                         <List.Item
                         // actions={item.eng_sound ? [<a key={item.eng_sound} onClick={()=>{onPlay(item.eng_sound)}}>sound</a>] : []}
                         >
                             <div className="row w-100">
                                 <div className="col-1 text-right">{item.id}</div>
                                 <div className="col-2 text-right">
-                                    {item.status === 'learned' ? <b>{item.eng_value}</b> : item.eng_value}
+                                    {item.languige === 'eng' ? <b>{item.name}</b> : item.name}
                                     
                                 </div>
                                 <div className="col-3 text-right">
-                                    {item.rus_value + ' ' + item.part_of_speech}
+                                    {item.name + ' ' + item.part_of_speech}
                                 </div>
                                 <div className="col-6">
                                     <Button
                                         type="primary" size="small"
                                         onClick={() => {
                                             // onPlayEng(item.eng_sound) 
-                                            onPlayEng(item.eng_value)
+                                            onPlayEng(item.name)
                                         }}
                                     >Eng</Button>
-                                    <Button onClick={() => { onPlayRus(item.rus_value) }} className="ml-1" type="primary" size="small">Rus</Button>
+                                    <Button onClick={() => { onPlayRus(item.name) }} className="ml-1" type="primary" size="small">Rus</Button>
                                     <Button className="ml-3" type="primary" size="small" onClick={ ()=>{ onStatusChange(item.id, 'inProcess') } }>Lern</Button>
                                     <Button className="ml-1" type="primary" size="small" onClick={ ()=>{ onStatusChange(item.id, 'learned') } }>Know it</Button>
                                     <Button className="ml-3" type="primary" size="small">Edit</Button>

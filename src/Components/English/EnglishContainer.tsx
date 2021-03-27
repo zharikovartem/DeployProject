@@ -22,6 +22,7 @@ let mapStateToProps = (state:AppStateType) => {
         vocabularyList: state.vocabulary.vocabularyList,
         part: state.vocabulary.part,
         count: state.vocabulary.count,
+        // isAuth: state.auth.isAuth,
     }
 }
 

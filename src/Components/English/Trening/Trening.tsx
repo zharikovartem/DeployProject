@@ -76,29 +76,34 @@ const Trening: React.FC<TreningPropsType> = (props) => {
     console.log(props)
     console.log(targetIndex)
 
-    if (isSpeaking !== targetIndex) {
+    if (isSpeaking !== targetIndex && props.toLern.length !== 0) {
         speechSynthesis(props.toLern[targetIndex].rus_value, 'ru-RU')
         setIsSpeaking(targetIndex)
     }
      
 
-    return (
-        <div>
-            <div>v1.6</div>
-            <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
-            <Button className="m-2" type="primary" onClick={onStart}>StartEng</Button>
-            <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
-            <Button className="m-2" type="primary" onClick={resetTranscript}>Reset</Button>
-            <h1>{transcript}</h1>
-
-            <h1>{props.toLern.length >= targetIndex-1 ? props.toLern[targetIndex].rus_value : null}</h1>
-            <Button className="m-2" type="primary" onClick={()=>{onNext(-1)}}>Prev</Button>
-            <Button className="m-2" type="primary" onClick={showAnswer}>Show</Button>
-            <Button className="m-2" type="primary" onClick={()=>{onNext(1)}}>Next</Button>
-
-            <h1>{answer ? props.toLern[targetIndex].eng_value : null}</h1>
-        </div>
-    )
+    if (props.toLern.length !== 0) {
+        return (
+            <div>
+                <div>v1.6</div>
+                <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
+                <Button className="m-2" type="primary" onClick={onStart}>StartEng</Button>
+                <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
+                <Button className="m-2" type="primary" onClick={resetTranscript}>Reset</Button>
+                <h1>{transcript}</h1>
+    
+                <h1>{props.toLern.length >= targetIndex-1 ? props.toLern[targetIndex].rus_value : null}</h1>
+                <Button className="m-2" type="primary" onClick={()=>{onNext(-1)}}>Prev</Button>
+                <Button className="m-2" type="primary" onClick={showAnswer}>Show</Button>
+                <Button className="m-2" type="primary" onClick={()=>{onNext(1)}}>Next</Button>
+    
+                <h1>{answer ? props.toLern[targetIndex].eng_value : null}</h1>
+            </div>
+        )
+    } else {
+        return <div>spin</div>
+    }
+    
 }
 
 export default Trening

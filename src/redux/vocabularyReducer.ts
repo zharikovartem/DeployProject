@@ -1,14 +1,15 @@
 
 import { Dispatch } from 'redux'
-import { vocabularyAPI, VocabularyType } from './../api/vocabularyAPI'
+import { vocabularyAPI, VocabularyType, WordType } from './../api/vocabularyAPI'
 import { UserType } from './authReducer'
 import { BaseThunkType, InferActionsTypes } from './store'
 
 export type InitialStateType = {
-    vocabularyList: Array<VocabularyType>,
+    vocabularyList: Array<WordType>,
     part: number,
     count: number,
     toLern: Array<VocabularyType>,
+    learningTarget?: WordType
 }
 
 let initialState: InitialStateType = {
@@ -20,13 +21,22 @@ let initialState: InitialStateType = {
 
 const vocabularyReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-        case 'SN/USERS/SET_VOCABULARY_LIST':
+        case 'SN/VOCABULARY/SET_VOCABULARY_LIST':
+            // console.log(action.vocabularyList[0])
             return { 
                 ...state, 
                 vocabularyList: action.vocabularyList, 
                 part: action.part, 
                 count: action.count,
-                toLern: action.toLern
+                toLern: action.toLern,
+                learningTarget: action.vocabularyList[0]
+            }
+
+        case 'SN/VOCABULARY/SET_LEARNING_TARGET':
+            // console.log(action.learningTarget ? action.learningTarget.id : null)
+            return{
+                ...state,
+                learningTarget: action.learningTarget
             }
 
         default:
@@ -35,14 +45,15 @@ const vocabularyReducer = (state = initialState, action: ActionsTypes): InitialS
 }
 
 export const actions = {
-    setVocabularyList: (vocabularyList: Array<VocabularyType>, part: number, count: number, toLern: Array<VocabularyType>) => 
-    ({ type: 'SN/USERS/SET_VOCABULARY_LIST', vocabularyList, part, count, toLern } as const),
+    setVocabularyList: (vocabularyList: Array<WordType>, part: number, count: number, toLern: Array<VocabularyType>) => 
+    ({ type: 'SN/VOCABULARY/SET_VOCABULARY_LIST', vocabularyList, part, count, toLern } as const),
+    setLerningTarget: (learningTarget: WordType) => ({type: 'SN/VOCABULARY/SET_LEARNING_TARGET', learningTarget} as const),
 }
 
 export const getVocabularyList = (part: number): ThunkType => {
     return async (dispatch, getState) => {
         let response = await vocabularyAPI.getVocabularyPart(part)
-        dispatch( actions.setVocabularyList(response.data.vocabularyList, Number(response.data.part), Number(response.data.count), response.data.toLern) )
+        dispatch( actions.setVocabularyList(response.data.englishWords, Number(response.data.part), Number(response.data.count), response.data.toLern) )
     }
 }
 
