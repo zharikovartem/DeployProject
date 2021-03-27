@@ -19,9 +19,17 @@ const CarTrenerSettingsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
             /> */}
             <Field
                 component={AntInput}
-                name="wordsCount"
+                name="compareCount"
                 type="number"
                 label="Words compare count"
+                validate={validateRequired}
+                hasFeedback
+            />
+            <Field
+                component={AntInput}
+                name="learnCount"
+                type="number"
+                label="Words learn count"
                 validate={validateRequired}
                 hasFeedback
             />

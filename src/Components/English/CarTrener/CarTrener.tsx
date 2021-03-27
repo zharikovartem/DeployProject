@@ -22,11 +22,13 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     }, [target])
 
     type InitialSettingsValuesType = {
-        wordsCount: number
+        compareCount: number,
+        learnCount: number,
     }
 
     const initialSettingsValues: InitialSettingsValuesType = {
-        wordsCount: 5
+        compareCount: 5,
+        learnCount: 27
     }
 
     const onMove = (step: number) => {
@@ -114,7 +116,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
             </div>
 
             {isLern ?
-            <LerningWords next={onMove} englishWords={props.englishWords} wordsCount={initialSettingsValues.wordsCount}/>
+            <LerningWords next={onMove} englishWords={props.englishWords} wordsCount={initialSettingsValues.compareCount}/>
             : null }
             
         </div>

@@ -57,7 +57,11 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
                 onError(check, hits)
                 
             } else {
-                // alert('OK')
+                // сохраняем результат в БД
+                console.groupCollapsed('Данные для отправки на сервер');
+                    console.log('target: ', props.target)
+                console.groupEnd();
+                // Перешагиваем на другое слово
                 props.next(1)
             }
         } else {
