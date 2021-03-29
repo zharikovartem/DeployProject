@@ -64,6 +64,12 @@ export const updateVocabulary = (values: any, vocabularyId: number): ThunkType =
     }
 }
 
+export const checkTestResult = (values: any, wordId: number): ThunkType => {
+    return async (dispatch, getState) => {
+        let response = await vocabularyAPI.checkTestResult(values, wordId)
+    }
+}
+
 export default vocabularyReducer
 
 type ActionsTypes = InferActionsTypes<typeof actions>

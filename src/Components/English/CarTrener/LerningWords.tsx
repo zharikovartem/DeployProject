@@ -58,6 +58,12 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
                 
             } else {
                 // сохраняем результат в БД
+                if (props.target) {
+                    props.checkTestResult({
+                        result: 'success'
+                    }, props.target.id)
+                }
+                
                 console.groupCollapsed('Данные для отправки на сервер');
                     console.log('target: ', props.target)
                 console.groupEnd();
@@ -144,26 +150,33 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
         while (wordsToCompareLength != wordsCount) {
             // console.log(wordsToCompare.length)
             let index = getRandomInt(words.length)
-            const relations: Array<RelationsType> = words[index].relations.map((item) => {
-                return ({
-                    ...item,
-                    parentId: words[index].id,
-                    checked: false
+            let relations: Array<RelationsType> = []
+            if( words[index].relations) {
+                 relations = words[index].relations.map((item) => {
+                    return ({
+                        ...item,
+                        parentId: words[index].id,
+                        checked: false
+                    })
                 })
-            })
+            }
+            
 
             wordsToCompare = wordsToCompare.concat(relations)
             wordsToCompare = wordsToCompare.filter((v, i, arr) => arr.indexOf(v) == i)
             wordsToCompareLength++
         }
-
-        const targetRelations: Array<RelationsType> = target.relations.map((item) => {
-            return ({
-                ...item,
-                parentId: target.id,
-                checked: false
+        let targetRelations: Array<RelationsType> = []
+        if (target.relations) {
+            targetRelations = target.relations.map((item) => {
+                return ({
+                    ...item,
+                    parentId: target.id,
+                    checked: false
+                })
             })
-        })
+        }
+        
 
         wordsToCompare = wordsToCompare.concat(targetRelations)
         wordsToCompare = shuffle(wordsToCompare)

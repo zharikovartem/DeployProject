@@ -48,6 +48,7 @@ export const vocabularyAPI = {
         })
         .catch(err => {
             if (err.response) {
+                console.log(err.response)
                 return err.response
             } else if (err.request) {
             } else {
@@ -58,6 +59,24 @@ export const vocabularyAPI = {
     updateVocabulary(values: any, vocabularyId: number) {
         getToken()
         return instance.put<UpdateVocabularyType>(`vocabulary/${vocabularyId}`, values)
+        .then(response => {
+            console.log(response)
+            return response.status === 200 ? response : null
+        })
+        .catch(err => {
+            if (err.response) {
+                console.log(err.response)
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
+    },
+    checkTestResult(values: any, wordId: number) {
+        console.log('wordId: ', wordId)
+        getToken()
+        return instance.post<any>(`checkTestResult/${wordId}`, values)
         .then(response => {
             console.log(response)
             return response.status === 200 ? response : null
