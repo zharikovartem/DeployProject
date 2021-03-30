@@ -23,6 +23,8 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
     useEffect( () => {
         setWordsToCompare( getWordsToCompare(props.wordsArray, props.wordsCount, props.target) )
         setselectedWordsIds([])
+
+        props.getWordsToLern()
     },[props.target])
 
     const choiseValues = (parentId: number, id: number, checked: boolean) => {

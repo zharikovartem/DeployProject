@@ -22,6 +22,7 @@ import CurrentUser from './Components/Users/CurrentUser/CurrentUserContainer'
 import Projects from './Components/Development/Projects/ProjectsContainer'
 import CurrentProject from './Components/Development/Projects/CurrentProject/CurrentProjectContainer'
 import English from './Components/English/EnglishContainer'
+import ProvidersContainer from './Components/Providers/ProvidersContainer'
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
@@ -85,6 +86,9 @@ const App = (props: MapPropsType & DispatchPropsType) => {
 
                 <Route path={props.appLocation + 'orders'}
                     render={() => <Orders />} />
+
+                <Route path={props.appLocation + 'providers'}
+                    render={() => <ProvidersContainer />} />
 
                 <Route path={props.appLocation + 'vocabulary'}
                     render={() => <English />} />

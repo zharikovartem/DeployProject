@@ -39,6 +39,12 @@ const vocabularyReducer = (state = initialState, action: ActionsTypes): InitialS
                 learningTarget: action.learningTarget
             }
 
+        case 'SN/VOCABULARY/SET_VOCABULARY_LIST2':
+            return{
+                ...state,
+                vocabularyList: action.vocabularyList, 
+            }
+
         default:
             return state
     }
@@ -48,6 +54,8 @@ export const actions = {
     setVocabularyList: (vocabularyList: Array<WordType>, part: number, count: number, toLern: Array<VocabularyType>) => 
     ({ type: 'SN/VOCABULARY/SET_VOCABULARY_LIST', vocabularyList, part, count, toLern } as const),
     setLerningTarget: (learningTarget: WordType) => ({type: 'SN/VOCABULARY/SET_LEARNING_TARGET', learningTarget} as const),
+    setVocabularyList2: (vocabularyList: Array<WordType>) => 
+    ({ type: 'SN/VOCABULARY/SET_VOCABULARY_LIST2', vocabularyList } as const),
 }
 
 export const getVocabularyList = (part: number): ThunkType => {
@@ -67,6 +75,13 @@ export const updateVocabulary = (values: any, vocabularyId: number): ThunkType =
 export const checkTestResult = (values: any, wordId: number): ThunkType => {
     return async (dispatch, getState) => {
         let response = await vocabularyAPI.checkTestResult(values, wordId)
+    }
+}
+
+export const getWordsToLern = ():ThunkType => {
+    return async (dispatch, getState) => {
+        let response = await vocabularyAPI.getWordsToLern()
+        // dispatch(actions.setVocabularyList2(response.data.toLearn))
     }
 }
 

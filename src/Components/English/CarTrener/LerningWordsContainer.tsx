@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import LerningWords from './LerningWords'
-import {actions, checkTestResult} from '../../../redux/vocabularyReducer'
+import {actions, checkTestResult, getWordsToLern} from '../../../redux/vocabularyReducer'
 import { AppStateType } from '../../../redux/store'
 import {updateVocabulary} from './../../../redux/vocabularyReducer'
 import { WordType } from '../../../api/vocabularyAPI'
@@ -17,6 +17,7 @@ type MapDispatchPropsType = {
     updateVocabulary: (values: any, vocabularyId: number)=>void,
     setLerningTarget: (learningTarget: WordType) => void,
     checkTestResult: (values: any, wordId: number)=>void,
+    getWordsToLern: ()=>void,
 }
 
 export type LerningWordsPropsType = MapPropsType & MapDispatchPropsType & OwnLerningWordsPropsType
@@ -31,7 +32,7 @@ let mapStateToProps = (state:AppStateType) => {
 }
 
 export default connect<MapPropsType, MapDispatchPropsType, OwnLerningWordsPropsType, AppStateType>(mapStateToProps, 
-    {updateVocabulary, setLerningTarget: actions.setLerningTarget, checkTestResult}) 
+    {updateVocabulary, setLerningTarget: actions.setLerningTarget, checkTestResult, getWordsToLern}) 
     (LerningWords)
     
 

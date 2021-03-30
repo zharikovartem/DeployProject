@@ -90,5 +90,23 @@ export const vocabularyAPI = {
             }
             return null
         })
-    }
+    },
+    //
+    getWordsToLern() {
+        getToken()
+        return instance.get<GetVocabularyPartType>(`vocabulary`)
+        .then(response => {
+            console.log('getWordsToLern: ', response)
+            return response.status === 200 ? response : null
+        })
+        .catch(err => {
+            if (err.response) {
+                console.log(err.response)
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
+    },
 }
