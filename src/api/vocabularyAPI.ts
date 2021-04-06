@@ -7,7 +7,13 @@ export type VocabularyType = {
     rus_value: string,
     part_of_speech: string,
     id: number,
-    status: string | null
+    status: string | null,
+    pivot: {
+        english_word_id: number,
+        progress: string,
+        status: "toLearn" | "learned",
+        user_id: number,
+    }
 }
 
 export type WordType = {

@@ -15,11 +15,17 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     const [isShowAudio, setIsShowAudio] = useState(false)
     const [isLern, setIsLern] = useState(false)
 
-    useEffect( () => {
-        // console.log(target)
-        // props.setLerningTarget(props.englishWords.find( item => item.id === target))
-        props.setLerningTarget(props.englishWords[target])
-    }, [target])
+    // useEffect( () => {
+    //     // console.log(target)
+    //     // props.setLerningTarget(props.englishWords.find( item => item.id === target))
+    //     props.setLerningTarget(props.englishWords[target])
+    // }, [target])
+
+    useEffect( ()=> {
+        if (props.toLern.length === 0) {
+            props.getWordsToLern()
+        }
+    },[props.toLern])
 
     type InitialSettingsValuesType = {
         compareCount: number,
@@ -43,7 +49,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
         console.log(values)
     }
 
-    // console.log(props.englishWords[target])
+    console.log(props)
 
     return (
         <div>

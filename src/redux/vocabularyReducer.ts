@@ -21,6 +21,11 @@ let initialState: InitialStateType = {
 
 const vocabularyReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
+        case 'VOCABULARY/SET_TO_LERN':
+            return{
+                ...state,
+                toLern: action.toLern
+            }
         case 'SN/VOCABULARY/SET_VOCABULARY_LIST':
             // console.log(action.vocabularyList[0])
             return { 
@@ -28,7 +33,7 @@ const vocabularyReducer = (state = initialState, action: ActionsTypes): InitialS
                 vocabularyList: action.vocabularyList, 
                 part: action.part, 
                 count: action.count,
-                toLern: action.toLern,
+                // toLern: action.toLern,
                 learningTarget: action.vocabularyList[0]
             }
 
@@ -56,6 +61,7 @@ export const actions = {
     setLerningTarget: (learningTarget: WordType) => ({type: 'SN/VOCABULARY/SET_LEARNING_TARGET', learningTarget} as const),
     setVocabularyList2: (vocabularyList: Array<WordType>) => 
     ({ type: 'SN/VOCABULARY/SET_VOCABULARY_LIST2', vocabularyList } as const),
+    setToLern: (toLern: Array<VocabularyType>) =>({type: 'VOCABULARY/SET_TO_LERN', toLern} as const),
 }
 
 export const getVocabularyList = (part: number): ThunkType => {
@@ -81,7 +87,7 @@ export const checkTestResult = (values: any, wordId: number): ThunkType => {
 export const getWordsToLern = ():ThunkType => {
     return async (dispatch, getState) => {
         let response = await vocabularyAPI.getWordsToLern()
-        // dispatch(actions.setVocabularyList2(response.data.toLearn))
+        dispatch(actions.setToLern(response.data.toLearn))
     }
 }
 
