@@ -11,6 +11,7 @@ type OwnLerningWordsPropsType = {
     englishWords: Array<WordType>,
     wordsCount: number,
     next: (num: number)=>void
+    target: WordType
 }
 
 type MapDispatchPropsType = {
@@ -24,8 +25,8 @@ export type LerningWordsPropsType = MapPropsType & MapDispatchPropsType & OwnLer
 
 let mapStateToProps = (state:AppStateType) => {
     return {
-        target: state.vocabulary.learningTarget,
-        wordsArray: state.vocabulary.vocabularyList,
+        // target: state.vocabulary.learningTarget,
+        wordsArray: state.vocabulary.toLern,
         // wordsCount: state.vocabulary.count,
         // toLern: state.vocabulary.toLern,
     }

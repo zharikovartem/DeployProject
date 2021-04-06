@@ -1,4 +1,4 @@
-import { Button, Collapse, Switch } from 'antd'
+import { Button, Collapse, Spin, Switch } from 'antd'
 import React, { useState, useEffect } from 'react'
 import { NotificationOutlined } from '@ant-design/icons'
 import { Formik } from 'formik'
@@ -6,6 +6,9 @@ import CarTrenerSettingsForm from './CarTrenerSettings'
 import LerningWords from './LerningWordsContainer'
 import { WordType } from '../../../api/vocabularyAPI'
 import { CarTrenerPropsType } from './CarTrenerContainer'
+// import {speechSynthesis} from 'speech-synthesis'
+
+const speechSynthesis = require('speech-synthesis')
 
 const { Panel } = Collapse
 
@@ -24,6 +27,8 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     useEffect( ()=> {
         if (props.toLern.length === 0) {
             props.getWordsToLern()
+        } else {
+            console.log('toLern: ', props.toLern[target])
         }
     },[props.toLern])
 
@@ -49,7 +54,9 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
         console.log(values)
     }
 
-    console.log(props)
+    if (isShowAudio) {
+        speechSynthesis(props.toLern[target].name, 'en-US')
+    }
 
     return (
         <div>
@@ -88,6 +95,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
             </Collapse>
             <div className="d-flex justify-content-center">
                 <Button className="mr-5" type="primary" onClick={() => { onMove(-1) }}>prev</Button>
+                <Button className="mx-0" type="ghost" onClick={() => {}}>Know it</Button>
                 <Button className="ml-5" type="primary" onClick={() => { onMove(1) }}>next</Button>
             </div>
 
@@ -109,12 +117,17 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                         />
                         : null}
 
-                        <h1>{props.englishWords[target].name}</h1>
+                        {props.toLern.length === 0 ? 
+                            <Spin size="large" />
+                        :
+                            <h1>{props.toLern[target].name}</h1>
+                        }
+                        
                 </div>
 
             <div>
                 {isShowRelations ?
-                    props.englishWords[target].relations.map((item: any) => {
+                    props.toLern[target].relations.map((item: any) => {
                         return <li>{item.name}</li>
                     })
                     : null
@@ -122,7 +135,13 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
             </div>
 
             {isLern ?
-            <LerningWords next={onMove} englishWords={props.englishWords} wordsCount={initialSettingsValues.compareCount}/>
+            <LerningWords 
+                next={onMove} 
+                englishWords={props.toLern} 
+                wordsCount={initialSettingsValues.compareCount}
+                target={props.toLern[target]}
+            />
+
             : null }
             
         </div>

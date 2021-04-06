@@ -77,7 +77,7 @@ const Trening: React.FC<TreningPropsType> = (props) => {
     console.log(targetIndex)
 
     if (isSpeaking !== targetIndex && props.toLern.length !== 0) {
-        speechSynthesis(props.toLern[targetIndex].rus_value, 'ru-RU')
+        speechSynthesis(props.toLern[targetIndex].name, 'ru-RU')
         setIsSpeaking(targetIndex)
     }
      
@@ -92,12 +92,12 @@ const Trening: React.FC<TreningPropsType> = (props) => {
                 <Button className="m-2" type="primary" onClick={resetTranscript}>Reset</Button>
                 <h1>{transcript}</h1>
     
-                <h1>{props.toLern.length >= targetIndex-1 ? props.toLern[targetIndex].rus_value : null}</h1>
+                <h1>{props.toLern.length >= targetIndex-1 ? props.toLern[targetIndex].name : null}</h1>
                 <Button className="m-2" type="primary" onClick={()=>{onNext(-1)}}>Prev</Button>
                 <Button className="m-2" type="primary" onClick={showAnswer}>Show</Button>
                 <Button className="m-2" type="primary" onClick={()=>{onNext(1)}}>Next</Button>
     
-                <h1>{answer ? props.toLern[targetIndex].eng_value : null}</h1>
+                <h1>{answer ? props.toLern[targetIndex].name : null}</h1>
             </div>
         )
     } else {

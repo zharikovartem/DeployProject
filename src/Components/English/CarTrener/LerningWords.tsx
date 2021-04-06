@@ -14,6 +14,7 @@ type ParentIdType = {
 type RelationsType = WordType & ParentIdType
 
 const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
+    console.log('LerningWords props: ', props)
     const [selectedWordsIds, setselectedWordsIds] = useState<Array<number>>([])
     const [wordsToCompare, setWordsToCompare] = useState<Array<RelationsType>>([])
 
@@ -24,7 +25,7 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
         setWordsToCompare( getWordsToCompare(props.wordsArray, props.wordsCount, props.target) )
         setselectedWordsIds([])
 
-        props.getWordsToLern()
+        // props.getWordsToLern()
     },[props.target])
 
     const choiseValues = (parentId: number, id: number, checked: boolean) => {
@@ -142,15 +143,15 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
     let wordsToCompareLength = 0
 
     // console.group('getWordsToCompare')
-    // console.log(words)
-    // console.log(wordsCount)
+    console.log('words: ', words)
+    console.log('wordsCount: ', wordsCount)
     // console.log(target)
 
     if (target) {
         const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
 
         while (wordsToCompareLength != wordsCount) {
-            // console.log(wordsToCompare.length)
+            console.log(wordsToCompare.length)
             let index = getRandomInt(words.length)
             let relations: Array<RelationsType> = []
             if( words[index].relations) {
@@ -178,13 +179,13 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
                 })
             })
         }
-        
+        console.log('targetRelations: ', targetRelations)
 
         wordsToCompare = wordsToCompare.concat(targetRelations)
         wordsToCompare = shuffle(wordsToCompare)
     } 
 
-    // console.log('wordsToCompare: ', wordsToCompare)
+    console.log('wordsToCompare: ', wordsToCompare)
 
     // console.groupEnd();
     return wordsToCompare

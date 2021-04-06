@@ -8,12 +8,6 @@ export type VocabularyType = {
     part_of_speech: string,
     id: number,
     status: string | null,
-    pivot: {
-        english_word_id: number,
-        progress: string,
-        status: "toLearn" | "learned",
-        user_id: number,
-    }
 }
 
 export type WordType = {
@@ -29,7 +23,13 @@ export type WordType = {
     occurrence: number,
     part_of_speech: string | null
     relations: Array<WordType>
-    word_number: string
+    word_number: string,
+    pivot: {
+        english_word_id: number,
+        progress: string,
+        status: "toLearn" | "learned",
+        user_id: number,
+    }
 }
 
 type GetVocabularyPartType = {
@@ -49,7 +49,7 @@ export const vocabularyAPI = {
         getToken()
         return instance.get<GetVocabularyPartType>(`getVocabularyPart/`+part)
         .then(response => {
-            console.log('getVocabularyPart: ', response)
+            // console.log('getVocabularyPart: ', response)
             return response.status === 200 ? response : null
         })
         .catch(err => {

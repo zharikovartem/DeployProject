@@ -8,7 +8,7 @@ export type InitialStateType = {
     vocabularyList: Array<WordType>,
     part: number,
     count: number,
-    toLern: Array<VocabularyType>,
+    toLern: Array<WordType>,
     learningTarget?: WordType
 }
 
@@ -61,7 +61,7 @@ export const actions = {
     setLerningTarget: (learningTarget: WordType) => ({type: 'SN/VOCABULARY/SET_LEARNING_TARGET', learningTarget} as const),
     setVocabularyList2: (vocabularyList: Array<WordType>) => 
     ({ type: 'SN/VOCABULARY/SET_VOCABULARY_LIST2', vocabularyList } as const),
-    setToLern: (toLern: Array<VocabularyType>) =>({type: 'VOCABULARY/SET_TO_LERN', toLern} as const),
+    setToLern: (toLern: Array<WordType>) =>({type: 'VOCABULARY/SET_TO_LERN', toLern} as const),
 }
 
 export const getVocabularyList = (part: number): ThunkType => {
