@@ -21,6 +21,15 @@ export const authAPI = {
         return instance.get(`authMe/`+remember_token).then( (response) => {
             return response
         })
+        .catch(err => {
+            if (err.response) {
+                console.log('authMe ERROR: ', err.response)
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
     },
 
     login(data: credsType) {
