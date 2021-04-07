@@ -16,7 +16,9 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     const [target, settarget] = useState<number>(0)
     const [isShowRelations, setIsShowRelations] = useState(false)
     const [isShowAudio, setIsShowAudio] = useState(false)
-    const [isLern, setIsLern] = useState(false)
+    const [isLern, setIsLern] = useState(true)
+
+    console.log('!!!!!!!!!target: ',target, ': ', props.toLern.length)
 
     // useEffect( () => {
     //     // console.log(target)
@@ -44,9 +46,13 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
 
     const onMove = (step: number) => {
         if (target!==undefined) {
-        if ( target + step >= 0 && target + step <= props.englishWords.length - 1) {
-            settarget(target + step)
-        }
+            if ( target + step >= 0 && target + step <= props.englishWords.length - 1) {
+                if (props.toLern.length > target+1) {
+                    settarget(target + step)
+                } else {
+                    settarget(0)
+                }
+            }
         }
     }
 
@@ -54,10 +60,19 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
         console.log(values)
     }
 
+    const skipWord = (val:any) => {
+        // console.log(val)
+        props.skipWord(val)
+        onMove(1)
+    }
+
     if (isShowAudio) {
         speechSynthesis(props.toLern[target].name, 'en-US')
     }
 
+    if (props.toLern.length === 0) {
+        return <Spin size="large" />
+    }
     return (
         <div>
             <Collapse className="my-3" defaultActiveKey={[]}>
@@ -75,6 +90,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                         }}
                     />,
                     <Switch key="3" className="mx-1" checkedChildren="lern" unCheckedChildren="lern"
+                        checked = {isLern}
                         onClick={(checked: boolean, event: Event) => {
                             if (checked) {
                                 setIsShowRelations(false)
@@ -95,7 +111,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
             </Collapse>
             <div className="d-flex justify-content-center">
                 <Button className="mr-5" type="primary" onClick={() => { onMove(-1) }}>prev</Button>
-                <Button className="mx-0" type="ghost" onClick={() => {}}>Know it</Button>
+                <Button className="mx-0" type="ghost" onClick={() => {skipWord(props.toLern[target].id)}}>Know it</Button>
                 <Button className="ml-5" type="primary" onClick={() => { onMove(1) }}>next</Button>
             </div>
 
@@ -120,7 +136,11 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                         {props.toLern.length === 0 ? 
                             <Spin size="large" />
                         :
+                        <>
+                        <span>{props.toLern[target].id}</span>
                             <h1>{props.toLern[target].name}</h1>
+                            
+                        </>
                         }
                         
                 </div>

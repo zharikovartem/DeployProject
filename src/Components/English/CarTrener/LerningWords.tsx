@@ -35,6 +35,7 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
                 return({ ...i, checked: !wordsToCompare[index].checked, styles: '' })
             } else { return i }
         })
+        console.log('wordsToCompareCopy: ', wordsToCompareCopy)
         setWordsToCompare(wordsToCompareCopy)
 
         let newNelectedWordsIds: Array<number> = []
@@ -58,7 +59,9 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
                 // console.log(check)
                 const hits = selectedWordsIds.filter(i => i === props.target?.id)
                 onError(check, hits)
-                
+                props.checkTestResult({
+                    result: 'error'
+                }, props.target.id)
             } else {
                 // сохраняем результат в БД
                 if (props.target) {
@@ -142,36 +145,46 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
     let wordsToCompare: Array<RelationsType> = []
     let wordsToCompareLength = 0
 
+    words = [...words]
+    
+
     // console.group('getWordsToCompare')
     console.log('words: ', words)
     console.log('wordsCount: ', wordsCount)
-    // console.log(target)
+    console.log('target: ', target)
 
     if (target) {
         const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
 
         while (wordsToCompareLength != wordsCount) {
-            console.log(wordsToCompare.length)
+            // console.log(wordsToCompare.length)
+            // console.log(words.length)
             let index = getRandomInt(words.length)
             let relations: Array<RelationsType> = []
-            if( words[index].relations) {
-                 relations = words[index].relations.map((item) => {
-                    return ({
-                        ...item,
-                        parentId: words[index].id,
-                        checked: false
-                    })
-                })
+            if (words[index].id !== target.id) {
+                // console.log(words[index].id,' !== ',target.id)
+                if( words[index].relations) {
+                    relations = words[index].relations.map((item) => {
+                        console.log(item.id,'=>',item.name, '(',target.id,')|', index,'-',words)
+                        return ({
+                            ...item,
+                            parentId: words[index].id,
+                            checked: false
+                        })
+                   })
+                   // Удаляем элемент
+                   words.splice(index, 1);
+               } 
+   
+               wordsToCompare = wordsToCompare.concat(relations)
+               wordsToCompare = wordsToCompare.filter((v, i, arr) => arr.indexOf(v) == i)
+               wordsToCompareLength++
             }
-            
-
-            wordsToCompare = wordsToCompare.concat(relations)
-            wordsToCompare = wordsToCompare.filter((v, i, arr) => arr.indexOf(v) == i)
-            wordsToCompareLength++
         }
         let targetRelations: Array<RelationsType> = []
         if (target.relations) {
             targetRelations = target.relations.map((item) => {
+                // console.log('!!!!!!!!!!!',item.id,'=>',item.name)
                 return ({
                     ...item,
                     parentId: target.id,

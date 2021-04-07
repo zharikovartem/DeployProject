@@ -84,7 +84,25 @@ export const vocabularyAPI = {
         getToken()
         return instance.post<any>(`checkTestResult/${wordId}`, values)
         .then(response => {
-            console.log(response)
+            console.log('checkTestResult: ', response)
+            return response.status === 200 ? response : null
+        })
+        .catch(err => {
+            if (err.response) {
+                console.log('checkTestResult ERROR: ', err.response)
+                return err.response
+            } else if (err.request) {
+            } else {
+            }
+            return null
+        })
+    },
+    //
+    getWordsToLern() {
+        getToken()
+        return instance.get<GetVocabularyPartType>(`vocabulary`)
+        .then(response => {
+            console.log('getWordsToLern: ', response)
             return response.status === 200 ? response : null
         })
         .catch(err => {
@@ -97,10 +115,9 @@ export const vocabularyAPI = {
             return null
         })
     },
-    //
-    getWordsToLern() {
+    skipWord(wordId: number) {
         getToken()
-        return instance.get<GetVocabularyPartType>(`vocabulary`)
+        return instance.get<GetVocabularyPartType>(`skipWord/`+wordId)
         .then(response => {
             console.log('getWordsToLern: ', response)
             return response.status === 200 ? response : null

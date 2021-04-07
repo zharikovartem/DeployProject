@@ -91,6 +91,13 @@ export const getWordsToLern = ():ThunkType => {
     }
 }
 
+export const skipWord = (wordId: number):ThunkType => {
+    return async (dispatch, getState) => {
+        let response = await vocabularyAPI.skipWord(wordId)
+        console.log(response)
+    }
+}
+
 export default vocabularyReducer
 
 type ActionsTypes = InferActionsTypes<typeof actions>
