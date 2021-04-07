@@ -67,7 +67,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     }
 
     if (isShowAudio) {
-        console.log('speechSynthesis', isShowAudio)
+        console.log('try to speak with speechSynthesis', isShowAudio)
         speechSynthesis( 'try to speak with ', props.toLern[target].name, 'en-GB')
     }
 
