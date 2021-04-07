@@ -66,10 +66,11 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
         onMove(1)
     }
 
+    const voices = window.speechSynthesis.getVoices();
     console.log(window.speechSynthesis.getVoices())
     if (isShowAudio) {
         console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', props.toLern[target].name)
-        const voices = window.speechSynthesis.getVoices();
+        
         const utterThis = new SpeechSynthesisUtterance(props.toLern[target].name)
         utterThis.voice = voices.filter(item => item.lang === "en-US")[0]
         console.log('??????????????????????', utterThis.voice)
@@ -113,6 +114,9 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                     >
                         {CarTrenerSettingsForm}
                     </Formik>
+                    {voices.map(item=> {
+                        return <p>{item.lang}</p>
+                    } )}
                 </Panel>
             </Collapse>
             <div className="d-flex justify-content-center">
