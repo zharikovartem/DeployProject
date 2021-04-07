@@ -67,8 +67,19 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     }
 
     if (isShowAudio) {
-        console.log('try to speak with speechSynthesis', isShowAudio)
-        speechSynthesis( 'try to speak with ', props.toLern[target].name, 'en-GB')
+        console.log('!!!try to speak with speechSynthesis', isShowAudio)
+        // speechSynthesis( 'try to speak with ', props.toLern[target].name, 'en-GB')
+        var msg = new SpeechSynthesisUtterance();
+        var voices = window.speechSynthesis.getVoices();
+        msg.voice = voices[10]; // Note: some voices don't support altering params
+        // msg.voiceURI = 'native';
+        msg.volume = 1; // 0 to 1
+        msg.rate = 1; // 0.1 to 10
+        msg.pitch = 2; //0 to 2
+        msg.text = props.toLern[target].name;
+        msg.lang = 'en-US';
+
+        speechSynthesis.speak(msg)
     }
 
     if (props.toLern.length === 0) {
