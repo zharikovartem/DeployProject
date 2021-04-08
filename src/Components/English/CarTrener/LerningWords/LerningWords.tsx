@@ -2,7 +2,8 @@ import { Checkbox, List, Spin } from 'antd'
 import { Button } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import React, { useState, useEffect } from 'react'
-import { WordType } from '../../../api/vocabularyAPI'
+import { WordType } from '../../../../api/vocabularyAPI'
+import SayingWords from '../SayingWords/SayingWords'
 import { LerningWordsPropsType } from './LerningWordsContainer'
 
 
@@ -14,22 +15,33 @@ type ParentIdType = {
 type RelationsType = WordType & ParentIdType
 
 const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
-    console.log('LerningWords props: ', props)
+    // console.log('LerningWords props: ', props)
     const [selectedWordsIds, setselectedWordsIds] = useState<Array<number>>([])
     const [wordsToCompare, setWordsToCompare] = useState<Array<RelationsType>>([])
 
     const error = 'bg-danger text-white'
     const success = 'bg-success text-white'
 
+    useEffect( () => {},[wordsToCompare])
+
     useEffect( () => {
-        setWordsToCompare( getWordsToCompare(props.wordsArray, props.wordsCount, props.target) )
-        setselectedWordsIds([])
+        // const rand = getRandomInt(2)
+        // const rand = 0
+        // console.log('!!!!!!!!!!!!', props.rand)
+        if (props.rand) {
+            setWordsToCompare( getWordsToCompare(props.wordsArray, props.wordsCount, props.target) )
+            setselectedWordsIds([])
+        } else {
+            const rus = reverseWordsArray(props.wordsArray, props.target)
+            setWordsToCompare( getWordsToCompare(rus.wordsRus, props.wordsCount, rus.targetRus) )
+            setselectedWordsIds([])
+        }
+        
     },[props, props.target])
 
     const choiseValues = (parentId: number, id: number, checked: boolean) => {
         let wordsToCompareCopy = [...wordsToCompare].map( (i, index) => {
             if ( i.id === id) {
-                console.log()
                 return({ ...i, checked: !wordsToCompare[index].checked, styles: '' })
             } else { return i }
         })
@@ -47,15 +59,27 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
         setselectedWordsIds(newNelectedWordsIds)
     }
 
-    const onCheck = () => {
-        console.log(selectedWordsIds)
-        console.log(wordsToCompare)
+    const onCheckEng = (lang: number) => {
+        console.log('selectedWordsIds: ', selectedWordsIds)
+        console.log('wordsToCompare: ', wordsToCompare)
+        const thisTarget = lang ? props.target : {...props.target.relations[0], relations: [props.target]}
+        console.log('thisTarget: ', thisTarget)
 
-        const check = selectedWordsIds.filter(i => i !== props.target?.id)
+        const check = selectedWordsIds.filter(i =>  i !== thisTarget.id)
+            // if (lang) {
+            //     console.log(i,'-1')
+            //     return i !== thisTarget.id
+            // } else {
+            //     console.log(i,'-0: ', thisTarget.relations[0].id, '-', thisTarget.id)
+            //     return i !== thisTarget.relations[0].id
+            // }
+        // })
+        console.log('check: ', check)
+
         if (selectedWordsIds.length !== 0) {
             if (check.length !== 0) {
                 // console.log(check)
-                const hits = selectedWordsIds.filter(i => i === props.target?.id)
+                const hits = selectedWordsIds.filter(i => i === thisTarget.id)
                 onError(check, hits)
                 props.checkTestResult({
                     result: 'error'
@@ -95,10 +119,11 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
     }
 
     if (wordsToCompare.length === 0) {
+        console.log('wordsToCompare: ', wordsToCompare)
         return <Spin size="large" />
     }
-
-    return (
+    if (props.checkType === 'check') {
+        return (
             <div>
                 <List
                 header={<span>Выберите правельные значения:</span>}
@@ -119,10 +144,18 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
 
                 )}
                 />
-                <Button className="mt-3" onClick={onCheck} type="primary">Check</Button>
+                <Button className="mt-3" onClick={()=>{onCheckEng(props.rand)}} type="primary">Check</Button>
             </div>
-        // <div>123</div>
     )
+    }
+    if (props.checkType === 'say') {
+        return <SayingWords {...props} />
+    }
+    if (props.checkType === 'write') {
+        return <div>write</div>
+    }
+
+    return <div>???</div>
 }
 
 export default LerningWords
@@ -151,12 +184,12 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
     
 
     // console.group('getWordsToCompare')
-    console.log('words: ', words)
-    console.log('wordsCount: ', wordsCount)
-    console.log('target: ', target)
+    // console.log('words: ', words)
+    // console.log('wordsCount: ', wordsCount)
+    // console.log('target: ', target)
 
     if (target) {
-        const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
+        
 
         while (wordsToCompareLength !== wordsCount) {
             // console.log(wordsToCompare.length)
@@ -167,7 +200,7 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
                 // console.log(words[index].id,' !== ',target.id)
                 if( words[index].relations) {
                     relations = words[index].relations.map((item) => {
-                        console.log(item.id,'=>',item.name, '(',target.id,')|', index,'-',words)
+                        // console.log(item.id,'=>',item.name, '(',target.id,')|', index,'-',words)
                         return ({
                             ...item,
                             parentId: words[index].id,
@@ -194,14 +227,37 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
                 })
             })
         }
-        console.log('targetRelations: ', targetRelations)
+        // console.log('targetRelations: ', targetRelations)
 
         wordsToCompare = wordsToCompare.concat(targetRelations)
         wordsToCompare = shuffle(wordsToCompare)
     } 
 
-    console.log('wordsToCompare: ', wordsToCompare)
-
+    // console.log('wordsToCompare: ', wordsToCompare)
     // console.groupEnd();
+
     return wordsToCompare
+}
+
+const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
+
+const reverseWordsArray = (words: Array<WordType>, target: WordType) => {
+    console.log('target', target)
+    const targetRus = {
+        ...target.relations[0],
+        relations: [target]
+    }
+
+    let wordsRus: Array<WordType> = []
+    words.map( word => {
+        const itemRelations = word.relations.map( item => {
+            return {
+                ...item,
+                relations: [word]
+            }
+        })
+        wordsRus = wordsRus.concat(itemRelations)
+    })
+
+    return {targetRus, wordsRus}
 }

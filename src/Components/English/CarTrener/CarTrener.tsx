@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react'
 import { NotificationOutlined } from '@ant-design/icons'
 import { Formik } from 'formik'
 import CarTrenerSettingsForm from './CarTrenerSettings'
-import LerningWords from './LerningWordsContainer'
+import LerningWords from './LerningWords/LerningWordsContainer'
 // import { WordType } from '../../../api/vocabularyAPI'
 import { CarTrenerPropsType } from './CarTrenerContainer'
 
 // const speechSynthesis = require('speech-synthesis')
 
 const { Panel } = Collapse
+const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
 
 const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     const [target, settarget] = useState<number>(0)
@@ -17,20 +18,13 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     const [isShowAudio, setIsShowAudio] = useState(false)
     const [isLern, setIsLern] = useState(true)
 
-    console.log('!!!!!!!!!target: ',target, ': ', props.toLern.length)
-
-    // useEffect( () => {
-    //     // console.log(target)
-    //     // props.setLerningTarget(props.englishWords.find( item => item.id === target))
-    //     props.setLerningTarget(props.englishWords[target])
-    // }, [target])
+    
+    const rand = getRandomInt(2)
 
     useEffect( ()=> {
         if (props.toLern.length === 0) {
             props.getWordsToLern()
-        } else {
-            console.log('toLern: ', props.toLern[target])
-        }
+        } 
     },[props, props.toLern])
 
     type InitialSettingsValuesType = {
@@ -49,6 +43,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                 if (props.toLern.length > target+1) {
                     settarget(target + step)
                 } else {
+                    props.getWordsToLern()
                     settarget(0)
                 }
             }
@@ -56,7 +51,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     }
 
     const handleSubmit = (values: any) => {
-        console.log(values)
+        // console.log(values)
     }
 
     const skipWord = (val:any) => {
@@ -69,12 +64,13 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     
     let utterThis: any
 
-    console.log(window.speechSynthesis.getVoices())
+    // console.log(window.speechSynthesis.getVoices())
     if (isShowAudio) {
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', props.toLern[target].name)
-        utterThis = new SpeechSynthesisUtterance(props.toLern[target].name)
-        utterThis.voice = voices.filter(item => item.lang === "en-US")[0]
-        console.log('??????????????????????', utterThis.voice)
+        const data = rand ? props.toLern[target].name : props.toLern[target].relations[0].name
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', data)
+        utterThis = new SpeechSynthesisUtterance(data)
+        const lang = rand ? "en-US" : "ru-RU"
+        utterThis.voice = voices.filter(item => item.lang === lang)[0]
         window.speechSynthesis.speak(utterThis)
     }
 
@@ -83,7 +79,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     }
     return (
         <div>
-            <Collapse className="my-3" defaultActiveKey={[]}>
+            <Collapse className="my-0" defaultActiveKey={[]}>
                 <Panel header="Settings" key="1" extra={[
                     <Switch key="1" className="mx-1" checkedChildren="show" unCheckedChildren="show" checked={isShowRelations}
                         onClick={(checked: boolean, event: Event) => {
@@ -142,7 +138,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                             icon={
                                 <div className="d-flex flex-wrap align-content-start">
                                     <NotificationOutlined style={{ fontSize: '18px' }} />
-                                    <span className="ml-1" style={{ fontSize: '14px' }}></span>
+                                    <span className="my-1" style={{ fontSize: '14px' }}></span>
                                 </div>}
                         />
                         : null}
@@ -151,8 +147,9 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                             <Spin size="large" />
                         :
                         <>
-                        <span>{props.toLern[target].id}</span>
-                            <h1>{props.toLern[target].name} - {props.toLern[target].part_of_speech}</h1>
+                        <span className="mt-3 mr-3">{props.toLern[target].id}</span>
+                        <h1 className="my-0 mt-1">{rand ? props.toLern[target].name : props.toLern[target].relations[0].name}</h1>
+                        <span className="mt-3 ml-3" > - {props.toLern[target].description}</span>
                             
                         </>
                         }
@@ -162,19 +159,24 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
             <div>
                 {isShowRelations ?
                     props.toLern[target].relations.map((item: any) => {
-                        return <li>{item.name}</li>
+                        return <h4>- {item.name}</h4>
                     })
                     : null
                 }
             </div>
 
             {isLern && props.toLern.length !== 0 ?
+
             <LerningWords 
+                rand = {rand}
                 next={onMove} 
                 englishWords={props.toLern} 
                 wordsCount={initialSettingsValues.compareCount}
                 target={props.toLern[target]}
+                checkType = 'say'
             />
+
+            // <SayingWords />
 
             : null }
             

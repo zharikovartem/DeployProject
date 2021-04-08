@@ -1,9 +1,9 @@
 import {connect} from 'react-redux'
 import LerningWords from './LerningWords'
-import {actions, checkTestResult, getWordsToLern} from '../../../redux/vocabularyReducer'
-import { AppStateType } from '../../../redux/store'
-import {updateVocabulary} from './../../../redux/vocabularyReducer'
-import { WordType } from '../../../api/vocabularyAPI'
+import {actions, checkTestResult, getWordsToLern} from '../../../../redux/vocabularyReducer'
+import { AppStateType } from '../../../../redux/store'
+import {updateVocabulary} from '../../../../redux/vocabularyReducer'
+import { WordType } from '../../../../api/vocabularyAPI'
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 
@@ -11,7 +11,9 @@ type OwnLerningWordsPropsType = {
     englishWords: Array<WordType>,
     wordsCount: number,
     next: (num: number)=>void
-    target: WordType
+    target: WordType,
+    rand: number,
+    checkType?: 'check' | 'say' | 'write'
 }
 
 type MapDispatchPropsType = {

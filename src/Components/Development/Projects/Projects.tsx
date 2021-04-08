@@ -1,5 +1,5 @@
-import { List, Typography } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { List } from 'antd'
+import React, { useEffect } from 'react'
 import { Link, useRouteMatch } from 'react-router-dom'
 import { ProjectsPropsType } from './ProjectsContainer'
 
@@ -10,9 +10,9 @@ const Projects: React.FC<ProjectsPropsType> = (props) => {
         if (!props.isProjectListLoaded) {
             props.getProjectList()
         }
-    }, [props.isProjectListLoaded, props.projectList])
+    }, [props, props.isProjectListLoaded, props.projectList])
 
-    const [projectList, setProjectList] = useState<Array<any>>()
+    // const [projectList, setProjectList] = useState<Array<any>>()
 
     let { url } = useRouteMatch();
     
@@ -29,7 +29,7 @@ const Projects: React.FC<ProjectsPropsType> = (props) => {
                 dataSource={props.projectList}
                 renderItem={item => (
                     <List.Item
-                        actions={[<a key="list-loadmore-edit">show</a>,]}
+                        // actions={[<a href="#" key="list-loadmore-edit">show</a>,]}
                     >
                          <Link to={url+'/'+item.id}>{item.name}</Link>
                     </List.Item>
