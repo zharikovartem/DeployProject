@@ -1,4 +1,4 @@
-import { Button, Card, List, Modal } from 'antd'
+import { Button, List, Modal } from 'antd'
 import { Formik } from 'formik'
 import React, { useState, useEffect } from 'react'
 import ProviderForm from './ProviderForm/ProviderForm'
@@ -18,7 +18,7 @@ const Providers: React.FC<ProvidersPropsType> = (props) => {
         if (props.providorsList.length === 0) {
             props.getProvidersList()
         }
-    },[])
+    },[props])
 
     const showModal = () => {
         setInitialvalues(emptyInitialvalues)

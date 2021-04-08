@@ -1,10 +1,8 @@
 import { Form, Field, FormikProps } from 'formik'
-import React, { ReactNode, useState, useEffect } from 'react'
+import React, { ReactNode } from 'react'
 import Contact from '../../../utils/components/Contact/Contact'
-import { AntCheckbox, AntInput, AntSelect, AntTextArea } from '../../../utils/Formik/CreateAntField'
+import { AntInput, AntTextArea } from '../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../utils/Formik/ValidateFields'
-// import { validateRequired } from '../../../../../../utils/Formik/ValidateFields'
-// import {SelectOptionType} from '../../../../../../Types/types'
 
 export type initialvaluesType = {
     name: string,

@@ -1,7 +1,6 @@
 
 import { Dispatch } from 'redux'
 import { vocabularyAPI, VocabularyType, WordType } from './../api/vocabularyAPI'
-import { UserType } from './authReducer'
 import { BaseThunkType, InferActionsTypes } from './store'
 
 export type InitialStateType = {
@@ -21,6 +20,11 @@ let initialState: InitialStateType = {
 
 const vocabularyReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
+        case 'VOCABULARY/SET_RESULT':
+            console.log('VOCABULARY/SET_RESULT: ', action.result)
+            return{
+                ...state
+            }
         case 'VOCABULARY/SET_TO_LERN':
             return{
                 ...state,
@@ -62,6 +66,7 @@ export const actions = {
     setVocabularyList2: (vocabularyList: Array<WordType>) => 
     ({ type: 'SN/VOCABULARY/SET_VOCABULARY_LIST2', vocabularyList } as const),
     setToLern: (toLern: Array<WordType>) =>({type: 'VOCABULARY/SET_TO_LERN', toLern} as const),
+    setResults: (result: any) => ({type: 'VOCABULARY/SET_RESULT', result} as const),
 }
 
 export const getVocabularyList = (part: number): ThunkType => {
@@ -81,6 +86,7 @@ export const updateVocabulary = (values: any, vocabularyId: number): ThunkType =
 export const checkTestResult = (values: any, wordId: number): ThunkType => {
     return async (dispatch, getState) => {
         let response = await vocabularyAPI.checkTestResult(values, wordId)
+        dispatch(actions.setResults(response.data))
     }
 }
 

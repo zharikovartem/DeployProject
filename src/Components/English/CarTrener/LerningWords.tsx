@@ -1,4 +1,4 @@
-import { Checkbox, List } from 'antd'
+import { Checkbox, List, Spin } from 'antd'
 import { Button } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import React, { useState, useEffect } from 'react'
@@ -24,13 +24,11 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
     useEffect( () => {
         setWordsToCompare( getWordsToCompare(props.wordsArray, props.wordsCount, props.target) )
         setselectedWordsIds([])
-
-        // props.getWordsToLern()
-    },[props.target])
+    },[props, props.target])
 
     const choiseValues = (parentId: number, id: number, checked: boolean) => {
         let wordsToCompareCopy = [...wordsToCompare].map( (i, index) => {
-            if (i.id == id) {
+            if ( i.id === id) {
                 console.log()
                 return({ ...i, checked: !wordsToCompare[index].checked, styles: '' })
             } else { return i }
@@ -96,6 +94,10 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
         setWordsToCompare(wordsToCompareCopy)
     }
 
+    if (wordsToCompare.length === 0) {
+        return <Spin size="large" />
+    }
+
     return (
             <div>
                 <List
@@ -156,7 +158,7 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
     if (target) {
         const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
 
-        while (wordsToCompareLength != wordsCount) {
+        while (wordsToCompareLength !== wordsCount) {
             // console.log(wordsToCompare.length)
             // console.log(words.length)
             let index = getRandomInt(words.length)
@@ -177,7 +179,7 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
                } 
    
                wordsToCompare = wordsToCompare.concat(relations)
-               wordsToCompare = wordsToCompare.filter((v, i, arr) => arr.indexOf(v) == i)
+               wordsToCompare = wordsToCompare.filter((v, i, arr) => arr.indexOf(v) === i)
                wordsToCompareLength++
             }
         }

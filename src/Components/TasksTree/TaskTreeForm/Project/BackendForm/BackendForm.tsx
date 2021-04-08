@@ -15,7 +15,7 @@ const BackendForm: React.FC<BackendFormPropsType> = (props) => {
         if (!props.isBackendNew && !props.isProjectListLoaded) {
             props.getProjectList()
         }
-    }, [props.isBackendNew, props.isProjectListLoaded])
+    }, [props, props.isBackendNew, props.isProjectListLoaded])
 
     useEffect( ()=> {
         if(props.projectList && props.projectList.length>0) {
@@ -27,12 +27,12 @@ const BackendForm: React.FC<BackendFormPropsType> = (props) => {
         }
     }, [props.projectList])
 
-    const [isBackendNew, setIsBackendNew] = useState(props.isBackendNew)
+    // const [isBackendNew, setIsBackendNew] = useState(props.isBackendNew)
     const [oldProjectsData, setOldProjectsData] = useState<Array<AntdOptionsType>>([])
 
-    const submitBackendIsNew = (val: any) => {
-        setIsBackendNew(val.target.checked)
-    }
+    // const submitBackendIsNew = (val: any) => {
+    //     setIsBackendNew(val.target.checked)
+    // }
 
     const backendTypeOptions = [
         {

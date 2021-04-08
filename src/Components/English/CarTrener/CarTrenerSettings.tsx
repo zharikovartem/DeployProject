@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { Form, Field, FormikProps } from "formik"
-import { AntInput, AntCheckbox, AntInputPassword, AntInputNumber } from '../../../utils/Formik/CreateAntField'
-import { validateEmail, validateRequired } from '../../../utils/Formik/ValidateFields'
+import { AntInput} from '../../../utils/Formik/CreateAntField'
+import { validateRequired } from '../../../utils/Formik/ValidateFields'
 import { Switch } from 'antd'
 
 const CarTrenerSettingsForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {

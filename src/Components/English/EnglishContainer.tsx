@@ -1,6 +1,5 @@
 import {connect} from 'react-redux'
 import English from './English'
-import {actions} from '../../redux/authReducer'
 import { AppStateType } from '../../redux/store'
 import {getVocabularyList, updateVocabulary} from './../../redux/vocabularyReducer'
 

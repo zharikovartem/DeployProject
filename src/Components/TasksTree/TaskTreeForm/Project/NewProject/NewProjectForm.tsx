@@ -1,7 +1,7 @@
 import { Tooltip } from 'antd'
 import { Field } from 'formik'
-import React, { useState, useEffect } from 'react'
-import { AntCheckbox, AntInput, AntSelect } from '../../../../../utils/Formik/CreateAntField'
+import React, { useState } from 'react'
+import { AntCheckbox, AntInput } from '../../../../../utils/Formik/CreateAntField'
 import { validateRequired } from '../../../../../utils/Formik/ValidateFields'
 import BackendForm from '../BackendForm/BackendFormContainer'
 
@@ -29,17 +29,6 @@ const NewProjectForm: React.FC<NewProjectFormPropsType> = (props) => {
     const submitBackendIsNew = (val: any) => {
         setIsBackendNew(val.target.checked)
     }
-
-    const backendTypeOptions = [
-        {
-            name: 'Laravel',
-            value: 'laravel'
-        },
-        {
-            name: 'Other',
-            value: 'other'
-        },
-    ]
 
     return (
         <>

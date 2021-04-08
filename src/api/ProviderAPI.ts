@@ -1,4 +1,3 @@
-import { NewTaskDataType, TaskType } from '../Types/types'
 import {getToken, instance} from './api'
 
 export type ProviderType = {

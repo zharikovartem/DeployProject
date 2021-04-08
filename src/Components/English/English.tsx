@@ -1,9 +1,8 @@
 import { Button, List, Pagination, Tabs } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { EnglishPropsType } from './EnglishContainer'
-import { VocabularyType, WordType } from './../../api/vocabularyAPI'
+import { WordType } from './../../api/vocabularyAPI'
 
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import Trening from './Trening/TreningContainer'
 import CarTrener from './CarTrener/CarTrenerContainer'
 
@@ -12,12 +11,14 @@ import CarTrener from './CarTrener/CarTrenerContainer'
 const { TabPane } = Tabs
 
 const English: React.FC<EnglishPropsType> = (props) => {
-    const [current, setCurrent] = useState(props.part)
+    // const [current, setCurrent] = useState(props.part)
     const speechSynthesis = require('speech-synthesis')
 
     useEffect(() => {
-        props.getVocabularyList(1)
-    }, [])
+        if (props.vocabularyList.length === 0) {
+            props.getVocabularyList(1)
+        }
+    }, [props])
 
     useEffect(() => {
         // props.getVocabularyList(1)
@@ -34,7 +35,7 @@ const English: React.FC<EnglishPropsType> = (props) => {
     }
 
     const onPaginationChange = (pageNumber: number) => {
-        setCurrent(pageNumber)
+        // setCurrent(pageNumber)
         console.log(pageNumber)
         props.getVocabularyList(pageNumber)
     }

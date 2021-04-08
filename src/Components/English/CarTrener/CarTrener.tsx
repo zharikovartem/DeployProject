@@ -4,11 +4,10 @@ import { NotificationOutlined } from '@ant-design/icons'
 import { Formik } from 'formik'
 import CarTrenerSettingsForm from './CarTrenerSettings'
 import LerningWords from './LerningWordsContainer'
-import { WordType } from '../../../api/vocabularyAPI'
+// import { WordType } from '../../../api/vocabularyAPI'
 import { CarTrenerPropsType } from './CarTrenerContainer'
-// import {speechSynthesis} from 'speech-synthesis'
 
-const speechSynthesis = require('speech-synthesis')
+// const speechSynthesis = require('speech-synthesis')
 
 const { Panel } = Collapse
 
@@ -32,7 +31,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
         } else {
             console.log('toLern: ', props.toLern[target])
         }
-    },[props.toLern])
+    },[props, props.toLern])
 
     type InitialSettingsValuesType = {
         compareCount: number,
@@ -153,7 +152,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                         :
                         <>
                         <span>{props.toLern[target].id}</span>
-                            <h1>{props.toLern[target].name}</h1>
+                            <h1>{props.toLern[target].name} - {props.toLern[target].part_of_speech}</h1>
                             
                         </>
                         }
@@ -169,7 +168,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                 }
             </div>
 
-            {isLern ?
+            {isLern && props.toLern.length !== 0 ?
             <LerningWords 
                 next={onMove} 
                 englishWords={props.toLern} 

@@ -2,7 +2,6 @@ import {connect} from 'react-redux'
 import Providers from './Providers'
 import { AppStateType } from '../../redux/store'
 import {getProvidersList, createNewProvider, updateProvider} from './../../redux/ProviderReducer'
-import { RegisterFormType } from '../../api/authAPI'
 
 type OwnProvidersPropsType = {
 

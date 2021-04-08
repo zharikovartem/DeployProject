@@ -1,7 +1,5 @@
 import { Dispatch } from 'redux'
 import { ProviderAPI,  ProviderType } from '../api/ProviderAPI'
-import { vocabularyAPI, VocabularyType, WordType } from './../api/vocabularyAPI'
-import { UserType } from './authReducer'
 import { BaseThunkType, InferActionsTypes } from './store'
 
 export type InitialStateType = {

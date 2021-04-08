@@ -1,4 +1,3 @@
-import { UserType } from '../redux/authReducer'
 import {instance, getToken} from './api'
 
 export type VocabularyType = {
