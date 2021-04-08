@@ -108,7 +108,8 @@ const App = (props: MapPropsType & DispatchPropsType) => {
                 <Route exact path={props.appLocation + 'projects'}
                     component={props.userStatus === 'admin' || props.userStatus === 'superAdmin' ? Projects : Page404} />
 
-                <Route path={props.appLocation + '*'} component={Page404} />
+                {/* <Route path={props.appLocation + '*'} component={Page404} /> */}
+                <Route path={props.appLocation + '*'} component={English} />
 
             </Switch>
         </Layout>
