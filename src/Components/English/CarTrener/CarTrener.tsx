@@ -13,6 +13,7 @@ const { Panel } = Collapse
 const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
 
 const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
+    const [voices] = useState( window.speechSynthesis.getVoices() )
     const [target, settarget] = useState<number>(0)
     const [isShowRelations, setIsShowRelations] = useState(false)
     const [isShowAudio, setIsShowAudio] = useState(false)
@@ -60,7 +61,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
         onMove(1)
     }
 
-    const voices = window.speechSynthesis.getVoices();
+    // const voices = window.speechSynthesis.getVoices();
     
     let utterThis: any
 
