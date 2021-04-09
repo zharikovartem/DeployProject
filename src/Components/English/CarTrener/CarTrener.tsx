@@ -81,7 +81,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     return (
         <div>
             <Collapse className="my-0" defaultActiveKey={[]}>
-                <Panel header="Settings" key="1" extra={[
+                <Panel header="Settings v 1.7" key="1" extra={[
                     <Switch key="1" className="mx-1" checkedChildren="show" unCheckedChildren="show" checked={isShowRelations}
                         onClick={(checked: boolean, event: Event) => {
                             setIsShowRelations(!isShowRelations)
@@ -116,7 +116,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                     <h5>{utterThis ? utterThis.voice.name : null}</h5>
 
                     {voices.map(item=> {
-                        return <p>{item.lang}</p>
+                        return <p key={item.lang}>{item.lang}</p>
                     } )}
                 </Panel>
             </Collapse>
