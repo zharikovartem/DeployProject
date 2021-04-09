@@ -87,7 +87,8 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             callback: ({ resetTranscript }) => {
                 console.log('next go to props')
                 setAnswer(false)
-                setTargetIndex(targetIndex + 1)
+                // setTargetIndex(targetIndex + 1)
+                props.next(1)
 
                 resetTranscript()
             },
