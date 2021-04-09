@@ -73,6 +73,15 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
         },
         {
+            command: 'очистить',
+            // @ts-ignore
+            callback: ({ resetTranscript }) => {
+                console.log('clear')
+                resetTranscript()
+            },
+
+        },
+        {
             command: 'next',
             // @ts-ignore
             callback: ({ resetTranscript }) => {
