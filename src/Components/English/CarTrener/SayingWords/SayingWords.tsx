@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { LerningWordsPropsType } from '../LerningWords/LerningWordsContainer'
 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { Button } from 'antd'
+import { ConsoleView } from 'react-device-detect'
 
 const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     console.log('SayingWords props: ', props)
@@ -13,6 +14,53 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [targetIndex, setTargetIndex] = useState(0)
     const [answer, setAnswer] = useState(false)
     const [isSpeaking, setIsSpeaking] = useState<number | null>(null)
+
+    const [isStarted, setIsStarted] = useState(false)
+    const [selectedLang, setSelectedLang] = useState('')
+
+    useEffect( () => {
+        console.log('USE_EFFECT props.rand: ', props.rand)
+        if (props.rand) {
+            if (selectedLang !== 'StartRus') {
+                if (isStarted) {
+                    SpeechRecognition.stopListening()
+                    console.log('stopListening')
+                    setIsStarted(false)
+                } else {
+                    resetTranscript()
+                    console.log('resetTranscript')
+                }
+                SpeechRecognition.startListening({ language: 'ru-RU', continuous: true })
+                console.log('StartRus')
+                setIsStarted(true)
+                setSelectedLang('StartRus')
+            } else {
+                resetTranscript()
+                console.log('resetTranscript')
+            }
+            
+            
+        } else {
+            if (selectedLang !== 'StartEng') {
+                if (isStarted) {
+                    SpeechRecognition.stopListening()
+                    console.log('stopListening')
+                    setIsStarted(false)
+                } else {
+                    resetTranscript()
+                    console.log('resetTranscript')
+                }
+                // SpeechRecognition.stopListening()
+                SpeechRecognition.startListening({ language: 'en-US', continuous: true })
+                console.log('StartEng')
+                setIsStarted(true)
+                setSelectedLang('StartEng')
+            } else {
+                resetTranscript()
+                console.log('resetTranscript')
+            }
+        }
+    }, [props, props.rand])
 
     const commands = [
         {
@@ -80,15 +128,18 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
 
 
-    if (isSpeaking !== targetIndex) {
+    // if (isSpeaking !== targetIndex) {
         // speechSynthesis(props.target.name, 'ru-RU')
         // setIsSpeaking(targetIndex)
-    }
-
+    // }
 
     
+
+
+
     return (
         <div>
+            {isStarted ? <div>!!!{selectedLang}</div> : <div>???{selectedLang}</div>}
             <h3>{result}</h3>
             <div>v1.6</div>
             <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
