@@ -77,11 +77,16 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         resetTranscript()
     }
 
+
+
+
     if (isSpeaking !== targetIndex) {
-        speechSynthesis(props.target.name, 'ru-RU')
-        setIsSpeaking(targetIndex)
+        // speechSynthesis(props.target.name, 'ru-RU')
+        // setIsSpeaking(targetIndex)
     }
 
+
+    
     return (
         <div>
             <h3>{result}</h3>
