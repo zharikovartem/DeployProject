@@ -113,7 +113,9 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         console.log(transcript,'---', transcriptTarget)
         if (transcript.toLocaleLowerCase().includes(transcriptTarget.toLocaleLowerCase())) {
             // alert(transcript)
-            props.checkTestResult(props.target, props.target.id)
+            props.checkTestResult({
+                result: 'success'
+            }, props.target.id)
         }
         if (transcript.toLocaleLowerCase().includes('следующий')) {
             props.next(1)
@@ -163,7 +165,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         <div>
             {isStarted ? <div>!!!{selectedLang}</div> : <div>???{selectedLang}</div>}
             <h3>{result}</h3>
-            <div>v1.6</div>
+            <div>v1.9</div>
             <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
             <Button className="m-2" type="primary" onClick={onStart}>StartEng</Button>
             <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
