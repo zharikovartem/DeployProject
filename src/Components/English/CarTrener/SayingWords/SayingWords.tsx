@@ -107,6 +107,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     ]
 
     const { transcript, resetTranscript } = useSpeechRecognition({ commands })
+    useEffect( ()=>{
+        console.log(transcript)
+        if (transcript.includes(props.target.relations[0].name)) {
+            alert(transcript)
+        }
+    }, [transcript])
 
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
         return null
