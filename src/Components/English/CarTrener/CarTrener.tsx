@@ -160,7 +160,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
             <div>
                 {isShowRelations ?
                     props.toLern[target].relations.map((item: any) => {
-                        return <h4>- {item.name}</h4>
+                        return <h4 key={item.id}>{props.toLern[target].name}- {item.name}</h4>
                     })
                     : null
                 }

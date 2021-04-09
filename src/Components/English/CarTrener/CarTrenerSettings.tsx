@@ -35,20 +35,20 @@ const CarTrenerSettingsForm: ((props: FormikProps<{}>) => ReactNode) = (props) =
                 hasFeedback
             />
 
-                    <Switch key="1" className="mx-1" checkedChildren="show" unCheckedChildren="show" 
+                    <Switch key="1" className="mx-1" checkedChildren="check" unCheckedChildren="check" 
                         // checked={isShowRelations}
                         // onClick={(checked: boolean, event: Event) => {
                         //     setIsShowRelations(!isShowRelations)
                         //     event.stopPropagation();
                         // }}
                     />,
-                    <Switch key="2" className="mx-1" checkedChildren="audio" unCheckedChildren="audio"
+                    <Switch key="2" className="mx-1" checkedChildren="say" unCheckedChildren="say"
                         // onClick={(checked: boolean, event: Event) => {
                         //     setIsShowAudio(!isShowAudio)
                         //     event.stopPropagation();
                         // }}
                     />,
-                    <Switch key="3" className="mx-1" checkedChildren="lern" unCheckedChildren="lern"
+                    <Switch key="3" className="mx-1" checkedChildren="write" unCheckedChildren="write"
                         // checked = {isLern}
                         // onClick={(checked: boolean, event: Event) => {
                         //     if (checked) {
