@@ -18,7 +18,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     const [isShowRelations, setIsShowRelations] = useState(false)
     const [isShowAudio, setIsShowAudio] = useState(false)
     const [isLern, setIsLern] = useState(true)
-
+    const [checkType, setCheckType] = useState<'say'|'check'|'write'>('check')
     
     const rand = getRandomInt(2)
 
@@ -31,6 +31,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     type InitialSettingsValuesType = {
         compareCount: number,
         learnCount: number,
+        checkType?: 'say'|'check'|'write'
     }
 
     const initialSettingsValues: InitialSettingsValuesType = {
@@ -51,8 +52,11 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
         }
     }
 
-    const handleSubmit = (values: any) => {
-        // console.log(values)
+    const handleSubmit = (values: InitialSettingsValuesType) => {
+        console.log('handleSubmit: ', values)
+        if (values.checkType !== undefined) {
+            setCheckType(values.checkType)
+        }
     }
 
     const skipWord = (val:any) => {
@@ -174,7 +178,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                 englishWords={props.toLern} 
                 wordsCount={initialSettingsValues.compareCount}
                 target={props.toLern[target]}
-                checkType = 'say'
+                checkType = {checkType}
             />
 
             // <SayingWords />
