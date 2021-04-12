@@ -18,7 +18,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     const [isShowRelations, setIsShowRelations] = useState(false)
     const [isShowAudio, setIsShowAudio] = useState(false)
     const [isLern, setIsLern] = useState(true)
-    const [checkType, setCheckType] = useState<'say'|'check'|'write'>('check')
+    const [checkType, setCheckType] = useState<'say'|'check'|'write'>('say')
     
     const rand = getRandomInt(2)
 

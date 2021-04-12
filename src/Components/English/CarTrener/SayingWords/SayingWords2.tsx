@@ -23,10 +23,9 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         recognition.start()
 
         recognition.onaudiostart = function () {
-            // microphoneWrapper.style.visibility = 'hidden';
-            // audioRecordAnimation.style.visibility = 'visible';
             console.log('onaudiostart')
         }
+
         recognition.onaudioend = ()=> {
             console.log('onaudioend')
         }
@@ -34,19 +33,11 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         recognition.onresult = function(event) {
             console.log('onresult: ',event)
             const last = event.results.length - 1;
-            // const colors = getColor(event.results[last][0].transcript);
-            // recognitionTextResult.textContent = 'Результат: ' + colors[0];
-            // speechRecognitionSection.style.backgroundColor = colors[1];
-            // console.log('Confidence: ' + event.results[0][0].confidence);
         }
 
-        recognition.onsoundend = function() {
-            console.log('onsoundend');
-          }
-
-        if (record === undefined) {
-            // alert('1)recognition.start()')
-            // console.log(recognition)
+        recognition.onend = ()=> {
+            console.log('onend')
+            // recognition.start()
         }
 
     }
