@@ -28,17 +28,21 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             console.log('onaudiostart')
         }
         recognition.onaudioend = ()=> {
-            alert('onaudioend')
+            console.log('onaudioend')
         }
 
         recognition.onresult = function(event) {
-            console.log('onresult')
+            console.log('onresult: ',event)
             const last = event.results.length - 1;
             // const colors = getColor(event.results[last][0].transcript);
             // recognitionTextResult.textContent = 'Результат: ' + colors[0];
             // speechRecognitionSection.style.backgroundColor = colors[1];
             // console.log('Confidence: ' + event.results[0][0].confidence);
         }
+
+        recognition.onsoundend = function() {
+            console.log('onsoundend');
+          }
 
         if (record === undefined) {
             // alert('1)recognition.start()')
