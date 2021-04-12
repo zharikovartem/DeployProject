@@ -161,7 +161,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     return (
         <div>
-            {isStarted ? <div>!!!{selectedLang}</div> : <div>???{selectedLang}</div>}
+            {isStarted ? <div>!!!{selectedLang}</div> : <div>?+?+?{selectedLang}</div>}
             <h3>{result}</h3>
             <div>v1.9</div>
             <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
