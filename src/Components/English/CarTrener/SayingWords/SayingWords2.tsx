@@ -14,17 +14,28 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 
 const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [record, setRecord] = useState<string>()
-    const [status, setstatus] = useState(true)  
+    const [status, setStatus] = useState(false)  
     const [recognition] = useState(new SpeechRecognition())
 
-    useEffect( () => {
+    useEffect(()=> {
+        console.log('useEffect', status)
+        if (!status) {
+            setStatus(true)
+            recognition.start()
+        } else {
+            console.log(!status)
+        }
+    },[])
+
+        recognition.lang = 'ru-RU'
+
         recognition.onaudiostart = function () {
-            // setStatus(false)
+            setStatus(true)
             // console.log('onaudiostart')
         }
 
         recognition.onaudioend = ()=> {
-            console.log('onaudioend')
+            // console.log('onaudioend')
             // recognition.start()
         }
 
@@ -39,7 +50,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         recognition.onend = ()=> {
             // console.log('onend', status)
             if (status) {
-                setstatus(false)
+                setStatus(false)
                 // console.log('!!!!!!!!', status)
                 recognition.start()
             }
@@ -58,25 +69,23 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         recognition.onsoundstart = function() {
             // console.log('Some sound is being received');
         }
+        recognition.onsoundend = function() {
+            console.log('Sound has stopped being received');
+        }
 
-        recognition.start()
-        setstatus(true)
-        // console.log('useEffect')
-    },[])
+        
+        // setStatus(true)
 
-    if (props.checkType === 'say') {
+        // console.log(recognition)
+
         
         
-        const recognition = new SpeechRecognition(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // recognition.lang = props.rand ? 'en-US' : 'ru-RU';
-        recognition.lang = 'ru-RU'
+    
 
-    }
-
-    // console.log(recognition)
+    
 
     return (
-        <div>{record}</div>
+        <div>1) {record}</div>
     )
 }
 
