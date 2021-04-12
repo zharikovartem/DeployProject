@@ -82,13 +82,15 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
                 const hits = selectedWordsIds.filter(i => i === thisTarget.id)
                 onError(check, hits)
                 props.checkTestResult({
-                    result: 'error'
+                    result: 'error',
+                    checkMethod: 'en_ru_c'
                 }, props.target.id)
             } else {
                 // сохраняем результат в БД
                 if (props.target) {
                     props.checkTestResult({
-                        result: 'success'
+                        result: 'success',
+                        checkMethod: 'en_ru_c'
                     }, props.target.id)
                 }
                 

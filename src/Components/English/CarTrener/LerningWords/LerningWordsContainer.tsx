@@ -3,7 +3,7 @@ import LerningWords from './LerningWords'
 import {actions, checkTestResult, getWordsToLern} from '../../../../redux/vocabularyReducer'
 import { AppStateType } from '../../../../redux/store'
 import {updateVocabulary} from '../../../../redux/vocabularyReducer'
-import { WordType } from '../../../../api/vocabularyAPI'
+import { CheckTestResultDataType, WordType } from '../../../../api/vocabularyAPI'
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 
@@ -21,7 +21,7 @@ type OwnLerningWordsPropsType = {
 type MapDispatchPropsType = {
     updateVocabulary: (values: any, vocabularyId: number)=>void,
     setLerningTarget: (learningTarget: WordType) => void,
-    checkTestResult: (values: any, wordId: number)=>void,
+    checkTestResult: (values: CheckTestResultDataType, wordId: number)=>void,
     getWordsToLern: ()=>void,
 }
 

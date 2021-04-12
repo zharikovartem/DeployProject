@@ -43,6 +43,11 @@ type UpdateVocabularyType = {
     vocabularyTarget: VocabularyType
 }
 
+export type CheckTestResultDataType = {
+    result: string,
+    checkMethod: 'ru_en_c'|'en_ru_c'|'ru_en_s'|'en_ru_s'|'ru_en_r'|'en_ru_r';
+}
+
 export const vocabularyAPI = {
     getVocabularyPart(part: number) {
         getToken()
@@ -78,10 +83,10 @@ export const vocabularyAPI = {
             return null
         })
     },
-    checkTestResult(values: any, wordId: number) {
+    checkTestResult(data: CheckTestResultDataType, wordId: number) {
         console.log('wordId: ', wordId)
         getToken()
-        return instance.post<any>(`checkTestResult/${wordId}`, values)
+        return instance.post<any>(`checkTestResult/${wordId}`, data)
         .then(response => {
             console.log('checkTestResult: ', response)
             return response.status === 200 ? response : null

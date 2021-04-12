@@ -1,7 +1,7 @@
 
 import { Dispatch } from 'redux'
 import { isConditionalExpression } from 'typescript'
-import { vocabularyAPI, VocabularyType, WordType } from './../api/vocabularyAPI'
+import { CheckTestResultDataType, vocabularyAPI, VocabularyType, WordType } from './../api/vocabularyAPI'
 import { BaseThunkType, InferActionsTypes } from './store'
 
 export type InitialStateType = {
@@ -90,9 +90,9 @@ export const updateVocabulary = (values: any, vocabularyId: number): ThunkType =
     }
 }
 
-export const checkTestResult = (values: any, wordId: number): ThunkType => {
+export const checkTestResult = (data: CheckTestResultDataType, wordId: number): ThunkType => {
     return async (dispatch, getState) => {
-        let response = await vocabularyAPI.checkTestResult(values, wordId)
+        let response = await vocabularyAPI.checkTestResult(data, wordId)
         dispatch(actions.setResults(response.data))
     }
 }
