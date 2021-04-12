@@ -18,16 +18,33 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     if (props.checkType === 'say') {
         // @ts-ignore
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        // recognition.lang = 'ru-RU';
+        const recognition = new SpeechRecognition(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!
+        recognition.lang = props.rand ? 'en-US' : 'ru-RU';
         recognition.start()
-        // console.log('recognition.start()')
-        // alert('recognition.start()')
+
+        recognition.onaudiostart = function () {
+            // microphoneWrapper.style.visibility = 'hidden';
+            // audioRecordAnimation.style.visibility = 'visible';
+            console.log('onaudiostart')
+        }
+        recognition.onaudioend = ()=> {
+            alert('onaudioend')
+        }
+
+        recognition.onresult = function(event) {
+            console.log('onresult')
+            const last = event.results.length - 1;
+            // const colors = getColor(event.results[last][0].transcript);
+            // recognitionTextResult.textContent = 'Результат: ' + colors[0];
+            // speechRecognitionSection.style.backgroundColor = colors[1];
+            // console.log('Confidence: ' + event.results[0][0].confidence);
+        }
+
         if (record === undefined) {
-            alert('1)recognition.start()')
+            // alert('1)recognition.start()')
             // console.log(recognition)
         }
-        
+
     }
 
     console.log(props)
