@@ -86,7 +86,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         utterThis.voice = voices.filter(item => item.lang === lang)[0]
         console.log(voices.filter(item => item.lang === lang))
         window.speechSynthesis.speak(utterThis)
-
+        console.log('speak!!!: ', tergetName, ' on ', utterThis.voice.lang)
         
         
     
