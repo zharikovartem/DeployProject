@@ -9,6 +9,7 @@ import { Button } from 'antd'
 
 // @ts-ignore
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+var synth = window.speechSynthesis;
 
 // SpeechRecognition.startListening()
 
@@ -16,18 +17,19 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [record, setRecord] = useState<string>()
     const [status, setStatus] = useState(false)  
     const [recognition] = useState(new SpeechRecognition())
+    const [tergetName, setTergetName] = useState<string>(props.rand ? props.target.name : props.target.relations[0].name)
 
     useEffect(()=> {
         console.log('useEffect', status)
         if (!status) {
-            setStatus(true)
-            recognition.start()
+            // setStatus(true)
+            // recognition.start()
         } else {
             console.log(!status)
         }
     },[])
 
-        recognition.lang = 'ru-RU'
+        recognition.lang = props.rand ? 'ru-RU' : 'en-US'
 
         recognition.onaudiostart = function () {
             setStatus(true)
@@ -76,7 +78,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         
         // setStatus(true)
 
-        // console.log(recognition)
+        console.log(tergetName)
+        var utterThis = new SpeechSynthesisUtterance(tergetName);
+        synth.speak(utterThis);
+
+        console.log(synth)
+        debugger
 
         
         
