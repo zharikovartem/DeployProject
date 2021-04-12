@@ -19,7 +19,8 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         // @ts-ignore
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!
-        recognition.lang = props.rand ? 'en-US' : 'ru-RU';
+        // recognition.lang = props.rand ? 'en-US' : 'ru-RU';
+        recognition.lang = 'ru-RU'
         recognition.start()
 
         recognition.onaudiostart = function () {
@@ -31,20 +32,24 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         }
 
         recognition.onresult = function(event) {
-            console.log('onresult: ',event)
-            const last = event.results.length - 1;
+            console.log('onresult: ')
+            for(let i=0; i<event.results.length; i++) {
+                console.log(event.results[i][0].transcript)
+                setRecord(event.results[i][0].transcript)
+            }
+            
         }
 
         recognition.onend = ()=> {
-            console.log('onend')
-            // recognition.start()
+            // console.log('onend')
+            recognition.start()
         }
 
     }
 
     console.log(props)
     return (
-        <div>SayingWords2{record}</div>
+        <div>{record}</div>
     )
 }
 
