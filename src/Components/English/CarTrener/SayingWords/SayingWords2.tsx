@@ -75,12 +75,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         
         // setStatus(true)
 
-        console.log(tergetName)
+        // console.log(tergetName)
 
         const utterThis = new SpeechSynthesisUtterance(tergetName)
         const lang = props.rand ? "en-US" : "ru-RU"
         utterThis.voice = voices.filter(item => item.lang === lang)[0]
-        console.log(voices.filter(item => item.lang === lang))
+        // console.log(voices.filter(item => item.lang === lang))
         
         const startLisent = () => {
             recognition.start()
@@ -89,7 +89,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         const speak = () => {
             if (!ok) {
                 window.speechSynthesis.speak(utterThis)
-                console.log(window.speechSynthesis.pending)
+                // console.log(window.speechSynthesis.pending)
                 console.log('speak!!!: ', tergetName, ' on ')//, utterThis.voice.lang)
                 setOk(true)
                 checkPendidng(window.speechSynthesis, startLisent)
@@ -101,7 +101,9 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         }
 
     return (
-        <div>1) {record}
+        <div>
+            1) 
+            <p>{record}</p>
         
         <Button className="btntooc" type="primary" onClick={startLisent}>speak</Button>
         </div>
@@ -112,7 +114,7 @@ export default SayingWords
 
 const checkPendidng = (speechSynthesis: SpeechSynthesis, startLisent:()=>void) => {
     setTimeout(() => {
-        console.log(window.speechSynthesis)
+        // console.log(window.speechSynthesis)
         if (speechSynthesis.pending) {
             checkPendidng(speechSynthesis, startLisent)
         } 
