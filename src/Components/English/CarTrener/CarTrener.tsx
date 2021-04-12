@@ -161,14 +161,14 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                         
                 </div>
 
-            <div>
+            {/* <div>
                 {isShowRelations ?
                     props.toLern[target].relations.map((item: any) => {
                         return <h4 key={item.id}>{props.toLern[target].name}- {item.name}</h4>
                     })
                     : null
                 }
-            </div>
+            </div> */}
 
             {isLern && props.toLern.length !== 0 ?
 
@@ -177,6 +177,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                 next={onMove} 
                 englishWords={props.toLern} 
                 wordsCount={initialSettingsValues.compareCount}
+                isShowRelations={isShowRelations}
                 target={props.toLern[target]}
                 checkType = {checkType}
             />

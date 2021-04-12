@@ -8,7 +8,7 @@ import { ConsoleView } from 'react-device-detect'
 const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     // console.log('SayingWords props: ', props)
 
-    const speechSynthesis = require('speech-synthesis')
+    // const speechSynthesis = require('speech-synthesis')
 
     const [result, setResult] = useState<string>('')
     const [targetIndex, setTargetIndex] = useState(0)
@@ -37,9 +37,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             } else {
                 resetTranscript()
                 console.log('resetTranscript')
-            }
-            
-            
+            }            
         } else {
             if (selectedLang !== 'StartEng') {
                 if (isStarted) {
@@ -171,6 +169,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
             <Button className="m-2" type="primary" onClick={resetTranscript}>Reset</Button>
             <h1>{transcript}</h1>
+            {props.isShowRelations === true ?
+                    <span>{props.rand ? props.target.relations[0].name : props.target.name}</span>
+                : 
+                    null
+            }
+            
 
             {/* <h1>{props.toLern.length >= targetIndex - 1 ? props.toLern[targetIndex].name : null}</h1> */}
             <Button className="m-2" type="primary" onClick={() => { onNext(-1) }}>Prev</Button>

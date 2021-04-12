@@ -14,6 +14,7 @@ type OwnLerningWordsPropsType = {
     target: WordType,
     rand: number,
     checkType?: 'check' | 'say' | 'write'
+    isShowRelations?: boolean
 }
 
 type MapDispatchPropsType = {

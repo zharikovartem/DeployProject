@@ -3,7 +3,7 @@ import { Button } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import React, { useState, useEffect } from 'react'
 import { WordType } from '../../../../api/vocabularyAPI'
-import SayingWords from '../SayingWords/SayingWords'
+import SayingWords from '../SayingWords/SayingWords2'
 import { LerningWordsPropsType } from './LerningWordsContainer'
 
 

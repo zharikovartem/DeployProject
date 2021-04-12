@@ -1,5 +1,6 @@
 
 import { Dispatch } from 'redux'
+import { isConditionalExpression } from 'typescript'
 import { vocabularyAPI, VocabularyType, WordType } from './../api/vocabularyAPI'
 import { BaseThunkType, InferActionsTypes } from './store'
 
@@ -72,7 +73,13 @@ export const actions = {
 export const getVocabularyList = (part: number): ThunkType => {
     return async (dispatch, getState) => {
         let response = await vocabularyAPI.getVocabularyPart(part)
-        dispatch( actions.setVocabularyList(response.data.englishWords, Number(response.data.part), Number(response.data.count), response.data.toLern) )
+        console.log(response)
+        if (response.status === 200) {
+            dispatch( actions.setVocabularyList(response.data.englishWords, Number(response.data.part), Number(response.data.count), response.data.toLern) )
+        } else {
+            console.log(response.data.message)
+        }
+        
     }
 }
 
