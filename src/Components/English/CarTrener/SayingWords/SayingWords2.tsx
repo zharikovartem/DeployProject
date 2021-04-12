@@ -7,24 +7,17 @@ import { Button } from 'antd'
 // import SpeechRecognition from 'react-speech-recognition';
 // const SpeechRecognition = window.SpeechRecognition
 
-
-
+// @ts-ignore
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 // SpeechRecognition.startListening()
 
 const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [record, setRecord] = useState<string>()
-    let status = false
+    const [status, setstatus] = useState(true)  
+    const [recognition] = useState(new SpeechRecognition())
 
-    if (props.checkType === 'say') {
-        // @ts-ignore
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // recognition.lang = props.rand ? 'en-US' : 'ru-RU';
-        recognition.lang = 'ru-RU'
-        recognition.start()
-        status = true
-
+    useEffect( () => {
         recognition.onaudiostart = function () {
             // setStatus(false)
             console.log('onaudiostart')
@@ -41,20 +34,22 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 console.log('!!!!!----->>>>>',event.results[i][0].transcript)
                 // setRecord(event.results[i][0].transcript)
             }
-            
         }
 
         recognition.onend = ()=> {
-            // console.log('onend', status)
+            console.log('onend', status)
             if (status) {
-                status = false
-                console.log('!!!!!!!!')
+                setstatus(false)
+                console.log('!!!!!!!!', status)
                 recognition.start()
             }
         }
 
         recognition.onerror = function(event) {
-            console.log('Speech recognition error detected: ' + event.error);
+            // console.log('Speech recognition error detected: ' + event.error);
+            // if (event.error === 'no-speech') {
+            //     recognition.start()
+            // }
         }
 
         recognition.onnomatch = function() {
@@ -63,10 +58,23 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         recognition.onsoundstart = function() {
             console.log('Some sound is being received');
         }
+        
+        recognition.start()
+        setstatus(true)
+        console.log('useEffect')
+    },[])
+
+    if (props.checkType === 'say') {
+        
+        
+        const recognition = new SpeechRecognition(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // recognition.lang = props.rand ? 'en-US' : 'ru-RU';
+        recognition.lang = 'ru-RU'
 
     }
 
-    console.log(props)
+    console.log(recognition)
+
     return (
         <div>{record}</div>
     )
