@@ -20,7 +20,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     useEffect( () => {
         recognition.onaudiostart = function () {
             // setStatus(false)
-            console.log('onaudiostart')
+            // console.log('onaudiostart')
         }
 
         recognition.onaudioend = ()=> {
@@ -29,7 +29,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         }
 
         recognition.onresult = function(event) {
-            console.log('onresult: ')
+            // console.log('onresult: ')
             for(let i=0; i<event.results.length; i++) {
                 console.log('!!!!!----->>>>>',event.results[i][0].transcript)
                 // setRecord(event.results[i][0].transcript)
@@ -37,10 +37,10 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         }
 
         recognition.onend = ()=> {
-            console.log('onend', status)
+            // console.log('onend', status)
             if (status) {
                 setstatus(false)
-                console.log('!!!!!!!!', status)
+                // console.log('!!!!!!!!', status)
                 recognition.start()
             }
         }
@@ -56,12 +56,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             console.log('Speech not recognized');
         }
         recognition.onsoundstart = function() {
-            console.log('Some sound is being received');
+            // console.log('Some sound is being received');
         }
-        
+
         recognition.start()
         setstatus(true)
-        console.log('useEffect')
+        // console.log('useEffect')
     },[])
 
     if (props.checkType === 'say') {
@@ -73,7 +73,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     }
 
-    console.log(recognition)
+    // console.log(recognition)
 
     return (
         <div>{record}</div>
