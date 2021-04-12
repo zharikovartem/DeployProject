@@ -42,7 +42,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             // console.log('onresult: ')
             for(let i=0; i<event.results.length; i++) {
                 console.log('!!!!!----->>>>>',event.results[i][0].transcript)
-                // setRecord(event.results[i][0].transcript)
+                setRecord(event.results[i][0].transcript)
             }
         }
 
