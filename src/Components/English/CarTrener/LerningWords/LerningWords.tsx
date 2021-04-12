@@ -149,15 +149,15 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
     )
     }
     if (props.checkType === 'say') {
-        alert('say')
-        // return <SayingWords {...props} />
+        // alert('say')
+        return <SayingWords {...props} />
     }
 
     if (props.checkType === 'write') {
         return <div>write</div>
     }
 
-    return <div>???{props.checkType}???</div>
+    return <div>?2??{props.checkType}???</div>
 }
 
 export default LerningWords
