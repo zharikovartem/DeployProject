@@ -85,16 +85,22 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         const lang = props.rand ? "en-US" : "ru-RU"
         utterThis.voice = voices.filter(item => item.lang === lang)[0]
         console.log(voices.filter(item => item.lang === lang))
+        
+        
+        
+        
+    const speak = () => {
         window.speechSynthesis.speak(utterThis)
-        console.log('speak!!!: ', tergetName, ' on ', utterThis.voice.lang)
-        
-        
-    
+        console.log('speak!!!: ', tergetName, ' on ')//, utterThis.voice.lang)
+    }
 
-    
+    speak()
 
     return (
-        <div>1) {record}</div>
+        <div>1) {record}
+        
+        <Button type="primary" onClick={speak}>speak</Button>
+        </div>
     )
 }
 
