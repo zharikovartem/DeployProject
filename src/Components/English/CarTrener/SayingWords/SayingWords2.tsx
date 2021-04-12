@@ -84,12 +84,13 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         
         
         
-        
     const speak = () => {
         if (!ok) {
             window.speechSynthesis.speak(utterThis)
+            console.log(window.speechSynthesis.pending)
             console.log('speak!!!: ', tergetName, ' on ')//, utterThis.voice.lang)
             setOk(true)
+            checkPendidng(window.speechSynthesis)
         }
     }
 
@@ -106,3 +107,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 }
 
 export default SayingWords
+
+const checkPendidng = (speechSynthesis: SpeechSynthesis) => {
+    setTimeout(() => {
+        console.log(window.speechSynthesis)
+        if (speechSynthesis.pending) {
+            checkPendidng(speechSynthesis)
+        }
+    }, 1000);
+}
