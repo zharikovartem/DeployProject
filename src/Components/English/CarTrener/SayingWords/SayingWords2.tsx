@@ -14,13 +14,15 @@ import { ConsoleView } from 'react-device-detect'
 
 const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [record, setRecord] = useState()
-    
+
     if (props.checkType === 'say') {
         // @ts-ignore
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.lang = 'ru-RU';
         recognition.start()
+        console.log('recognition.start()')
+        alert('recognition.start()')
     }
 
     console.log(props)
