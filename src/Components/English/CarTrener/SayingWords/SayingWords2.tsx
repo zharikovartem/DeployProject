@@ -14,6 +14,7 @@ import { Button } from 'antd'
 
 const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [record, setRecord] = useState<string>()
+    let status = false
 
     if (props.checkType === 'say') {
         // @ts-ignore
@@ -22,27 +23,45 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         // recognition.lang = props.rand ? 'en-US' : 'ru-RU';
         recognition.lang = 'ru-RU'
         recognition.start()
+        status = true
 
         recognition.onaudiostart = function () {
+            // setStatus(false)
             console.log('onaudiostart')
         }
 
         recognition.onaudioend = ()=> {
             console.log('onaudioend')
+            // recognition.start()
         }
 
         recognition.onresult = function(event) {
             console.log('onresult: ')
             for(let i=0; i<event.results.length; i++) {
-                console.log(event.results[i][0].transcript)
-                setRecord(event.results[i][0].transcript)
+                console.log('!!!!!----->>>>>',event.results[i][0].transcript)
+                // setRecord(event.results[i][0].transcript)
             }
             
         }
 
         recognition.onend = ()=> {
-            // console.log('onend')
-            recognition.start()
+            // console.log('onend', status)
+            if (status) {
+                status = false
+                console.log('!!!!!!!!')
+                recognition.start()
+            }
+        }
+
+        recognition.onerror = function(event) {
+            console.log('Speech recognition error detected: ' + event.error);
+        }
+
+        recognition.onnomatch = function() {
+            console.log('Speech not recognized');
+        }
+        recognition.onsoundstart = function() {
+            console.log('Some sound is being received');
         }
 
     }
