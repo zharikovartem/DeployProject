@@ -17,7 +17,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     if (props.checkType === 'say') {
         // @ts-ignore
-        // const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         // const recognition = new SpeechRecognition();
         // recognition.lang = 'ru-RU';
         // recognition.start()
