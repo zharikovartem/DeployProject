@@ -157,6 +157,7 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
         return <div>write</div>
     }
 
+    alert('props.checkType: '+props.checkType)
     return <div>???</div>
 }
 
