@@ -7,15 +7,22 @@ import { ConsoleView } from 'react-device-detect'
 // import SpeechRecognition from 'react-speech-recognition';
 // const SpeechRecognition = window.SpeechRecognition
 
-// @ts-ignore
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.lang = 'ru-RU';
-recognition.start()
+
+
 
 // SpeechRecognition.startListening()
 
 const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
+    const [record, setRecord] = useState()
+    
+    if (props.checkType === 'say') {
+        // @ts-ignore
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'ru-RU';
+        recognition.start()
+    }
+
     console.log(props)
     return (
         <div>SayingWords2</div>

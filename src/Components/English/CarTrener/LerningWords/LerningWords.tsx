@@ -151,6 +151,7 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
     if (props.checkType === 'say') {
         return <SayingWords {...props} />
     }
+
     if (props.checkType === 'write') {
         return <div>write</div>
     }

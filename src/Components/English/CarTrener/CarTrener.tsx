@@ -183,7 +183,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
             />
 
             // <SayingWords />
-
+            // <></>
             : null }
             
         </div>

@@ -44,7 +44,7 @@ const Trening: React.FC<TreningPropsType> = (props) => {
         }
     ]
 
-    const { transcript, resetTranscript } = useSpeechRecognition({commands})
+    // const { transcript, resetTranscript } = useSpeechRecognition({commands})
 
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
         return null
@@ -70,16 +70,16 @@ const Trening: React.FC<TreningPropsType> = (props) => {
     const onNext = (step:number) => {
         setAnswer(false)
         setTargetIndex(targetIndex+step)
-        resetTranscript()
+        // resetTranscript()
     }
 
     console.log(props)
     console.log(targetIndex)
 
-    if (isSpeaking !== targetIndex && props.toLern.length !== 0) {
-        speechSynthesis(props.toLern[targetIndex].name, 'ru-RU')
-        setIsSpeaking(targetIndex)
-    }
+    // if (isSpeaking !== targetIndex && props.toLern.length !== 0) {
+    //     speechSynthesis(props.toLern[targetIndex].name, 'ru-RU')
+    //     setIsSpeaking(targetIndex)
+    // }
      
 
     if (props.toLern.length !== 0) {
@@ -89,8 +89,8 @@ const Trening: React.FC<TreningPropsType> = (props) => {
                 <Button className="m-2" type="primary" onClick={onStartRus}>StartRus</Button>
                 <Button className="m-2" type="primary" onClick={onStart}>StartEng</Button>
                 <Button className="m-2" type="primary" onClick={onStop}>Stop</Button>
-                <Button className="m-2" type="primary" onClick={resetTranscript}>Reset</Button>
-                <h1>{transcript}</h1>
+                {/* <Button className="m-2" type="primary" onClick={resetTranscript}>Reset</Button> */}
+                {/* <h1>{transcript}</h1> */}
     
                 <h1>{props.toLern.length >= targetIndex-1 ? props.toLern[targetIndex].name : null}</h1>
                 <Button className="m-2" type="primary" onClick={()=>{onNext(-1)}}>Prev</Button>
