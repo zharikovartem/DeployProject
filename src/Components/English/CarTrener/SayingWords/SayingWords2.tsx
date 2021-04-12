@@ -18,13 +18,13 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     if (props.checkType === 'say') {
         // @ts-ignore
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        // const recognition = new SpeechRecognition();
+        const recognition = new SpeechRecognition();
         // recognition.lang = 'ru-RU';
-        // recognition.start()
+        recognition.start()
         // console.log('recognition.start()')
         // alert('recognition.start()')
         if (record === undefined) {
-            alert('recognition.start()')
+            alert('1)recognition.start()')
             // console.log(recognition)
         }
         
