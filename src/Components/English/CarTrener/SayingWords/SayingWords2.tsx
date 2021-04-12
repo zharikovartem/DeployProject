@@ -3,7 +3,7 @@ import { LerningWordsPropsType } from '../LerningWords/LerningWordsContainer'
 
 // import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { Button } from 'antd'
-import { ConsoleView } from 'react-device-detect'
+// import { ConsoleView } from 'react-device-detect'
 // import SpeechRecognition from 'react-speech-recognition';
 // const SpeechRecognition = window.SpeechRecognition
 
