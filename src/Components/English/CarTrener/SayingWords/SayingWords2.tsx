@@ -19,16 +19,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [recognition] = useState(new SpeechRecognition())
     const [tergetName, setTergetName] = useState<string>(props.rand ? props.target.name : props.target.relations[0].name)
     const [voices] = useState( window.speechSynthesis.getVoices() )
+    const [ok, setOk] = useState(false)
 
     useEffect(()=> {
-        console.log('useEffect', status)
-        if (!status) {
-            // setStatus(true)
-            // recognition.start()
-        } else {
-            console.log(!status)
-        }
-    },[])
+        setTergetName(props.rand ? props.target.name : props.target.relations[0].name)
+        // setOk(false)
+    },[props.target])
 
         recognition.lang = props.rand ? 'ru-RU' : 'en-US'
 
@@ -90,16 +86,21 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         
         
     const speak = () => {
-        window.speechSynthesis.speak(utterThis)
-        console.log('speak!!!: ', tergetName, ' on ')//, utterThis.voice.lang)
+        if (!ok) {
+            window.speechSynthesis.speak(utterThis)
+            console.log('speak!!!: ', tergetName, ' on ')//, utterThis.voice.lang)
+            setOk(true)
+        }
     }
 
-    speak()
+    if (props.isShowAudio) {
+        speak()
+    }
 
     return (
         <div>1) {record}
         
-        <Button type="primary" onClick={speak}>speak</Button>
+        <Button className="btntooc" type="primary" onClick={speak}>speak</Button>
         </div>
     )
 }

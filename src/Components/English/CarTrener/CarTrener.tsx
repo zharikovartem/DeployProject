@@ -180,6 +180,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
                 isShowRelations={isShowRelations}
                 target={props.toLern[target]}
                 checkType = {checkType}
+                isShowAudio={isShowAudio}
             />
 
             // <SayingWords />
