@@ -18,6 +18,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [status, setStatus] = useState(false)  
     const [recognition] = useState(new SpeechRecognition())
     const [tergetName, setTergetName] = useState<string>(props.rand ? props.target.name : props.target.relations[0].name)
+    const [voices] = useState( window.speechSynthesis.getVoices() )
 
     useEffect(()=> {
         console.log('useEffect', status)
@@ -79,11 +80,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         // setStatus(true)
 
         console.log(tergetName)
-        var utterThis = new SpeechSynthesisUtterance(tergetName);
-        synth.speak(utterThis);
 
-        console.log(synth)
-        debugger
+        const utterThis = new SpeechSynthesisUtterance(tergetName)
+        const lang = props.rand ? "en-US" : "ru-RU"
+        utterThis.voice = voices.filter(item => item.lang === lang)[0]
+        console.log(voices.filter(item => item.lang === lang))
+        window.speechSynthesis.speak(utterThis)
 
         
         
