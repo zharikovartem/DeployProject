@@ -44,10 +44,10 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 console.log('!!!!!----->>>>>',event.results[i][0].transcript)
                 setRecord(event.results[i][0].transcript)
                 
-                if (record !== undefined) {
+                // if (record !== undefined) {
                     recognition.stop()
-                    speak(newSpech(record))
-                }
+                    speak(newSpech(event.results[i][0].transcript))
+                // }
                 
             }
         }
