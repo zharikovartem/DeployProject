@@ -42,18 +42,21 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         recognition.onresult = function(event) {
             // console.log('onresult: ')
             for(let i=0; i<event.results.length; i++) {
+                setStatus(false)
                 console.log('!!!!!: ',event.results[i][0].transcript)
                 setRecord(event.results[i][0].transcript)
                 
                 // if (record !== undefined) {
-                    recognition.abort()
-                    console.log('stop()')
-                    const newSpechInstanse = newSpech(event.results[i][0].transcript)
-                    // newSpechInstanse.voice
-                    const lang = !props.rand ? "en-US" : "ru-RU"
-                    console.log(lang)
-                    newSpechInstanse.voice = voices.filter(item => item.lang === lang)[0]
-                    speak(newSpechInstanse)
+                recognition.abort()
+                console.log('stop()')
+                const newSpechInstanse = newSpech(event.results[i][0].transcript)
+                // newSpechInstanse.voice
+                const lang = !props.rand ? "en-US" : "ru-RU"
+                console.log(lang)
+                newSpechInstanse.voice = voices.filter(item => item.lang === lang)[0]
+                console.log(newSpechInstanse)
+                speak(newSpechInstanse)
+                console.log('speak')
                 // }
                 
             }
