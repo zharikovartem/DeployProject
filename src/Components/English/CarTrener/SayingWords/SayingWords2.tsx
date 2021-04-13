@@ -24,7 +24,6 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     useEffect(()=> {
         setTergetName(props.rand ? props.target.name : props.target.relations[0].name)
-        // setOk(false)
     },[props.target])
 
         recognition.lang = props.rand ? 'ru-RU' : 'en-US'
@@ -48,7 +47,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 setRecord(event.results[i][0].transcript)
                 
                 // if (record !== undefined) {
-                recognition.abort()
+                
                 console.log('stop()')
                 const newSpechInstanse = newSpech(event.results[i][0].transcript)
                 // newSpechInstanse.voice
@@ -56,6 +55,8 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 console.log(lang)
                 newSpechInstanse.voice = voices.filter(item => item.lang === lang)[0]
                 console.log(newSpechInstanse)
+
+                recognition.abort()
                 speak(newSpechInstanse)
                 console.log('speak')
                 // }
@@ -125,7 +126,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     return (
         <div>
-            v1.31) SayingWords<br/>
+            v1.32) SayingWords<br/>
             <p>{record}</p>
         
         <Button className="btntooc" type="primary" onClick={startLisent}>speak</Button>
