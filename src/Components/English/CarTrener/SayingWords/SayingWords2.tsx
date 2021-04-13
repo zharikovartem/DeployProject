@@ -44,11 +44,11 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 setStatus(false)
                 // setOk(false)
                 console.log('!!!!!: ',event.results[i][0].transcript)
-                setRecord(event.results[i][0].transcript)
+                // setRecord(event.results[i][0].transcript)
                 
                 // if (record !== undefined) {
                 
-                console.log('stop()')
+                
                 const newSpechInstanse = newSpech(event.results[i][0].transcript)
                 // newSpechInstanse.voice
                 const lang = !props.rand ? "en-US" : "ru-RU"
@@ -57,6 +57,8 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 console.log(newSpechInstanse)
 
                 recognition.abort()
+                console.log('stop()')
+
                 speak(newSpechInstanse, true)
                 console.log('speak')
                 // }
@@ -115,8 +117,6 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 console.log('speechSynthesis.speak: ', utterThisItem.text)
                 setOk(true)
                 checkPendidng(window.speechSynthesis, startLisent)
-            } else {
-                console.log('ok is: ', ok)
             }
         }
 
