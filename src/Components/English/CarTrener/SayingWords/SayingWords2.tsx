@@ -3,6 +3,7 @@ import { LerningWordsPropsType } from '../LerningWords/LerningWordsContainer'
 
 // import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { Button } from 'antd'
+import { ConsoleView } from 'react-device-detect';
 // import { ConsoleView } from 'react-device-detect'
 // import SpeechRecognition from 'react-speech-recognition';
 // const SpeechRecognition = window.SpeechRecognition
@@ -45,9 +46,14 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 setRecord(event.results[i][0].transcript)
                 
                 // if (record !== undefined) {
-                    recognition.stop()
+                    recognition.abort()
                     console.log('stop()')
-                    speak(newSpech(event.results[i][0].transcript))
+                    const newSpechInstanse = newSpech(event.results[i][0].transcript)
+                    // newSpechInstanse.voice
+                    const lang = !props.rand ? "en-US" : "ru-RU"
+                    console.log(lang)
+                    newSpechInstanse.voice = voices.filter(item => item.lang === lang)[0]
+                    speak(newSpechInstanse)
                 // }
                 
             }
