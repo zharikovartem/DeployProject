@@ -42,7 +42,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             // console.log('onresult: ')
             for(let i=0; i<event.results.length; i++) {
                 setStatus(false)
-                setOk(false)
+                // setOk(false)
                 console.log('!!!!!: ',event.results[i][0].transcript)
                 setRecord(event.results[i][0].transcript)
                 
@@ -57,7 +57,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 console.log(newSpechInstanse)
 
                 recognition.abort()
-                speak(newSpechInstanse)
+                speak(newSpechInstanse, true)
                 console.log('speak')
                 // }
                 
@@ -109,8 +109,8 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             return new SpeechSynthesisUtterance(text)
         }
         
-        const speak = (utterThisItem: SpeechSynthesisUtterance) => {
-            if (!ok) {
+        const speak = (utterThisItem: SpeechSynthesisUtterance, need?: boolean) => {
+            if (!ok && need) {
                 window.speechSynthesis.speak(utterThisItem)
                 console.log('speechSynthesis.speak: ', utterThisItem.text)
                 setOk(true)
@@ -126,7 +126,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     return (
         <div>
-            v1.32) SayingWords<br/>
+            v1.33) SayingWords<br/>
             <p>{record}</p>
         
         <Button className="btntooc" type="primary" onClick={startLisent}>speak</Button>
