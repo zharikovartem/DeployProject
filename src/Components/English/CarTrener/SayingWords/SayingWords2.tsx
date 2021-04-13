@@ -54,7 +54,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         }
 
         recognition.onend = ()=> {
-            // console.log('onend', status)
+            console.log('onend')
             if (status) {
                 setStatus(false)
                 // console.log('!!!!!!!!', status)
