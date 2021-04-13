@@ -41,11 +41,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         recognition.onresult = function(event) {
             // console.log('onresult: ')
             for(let i=0; i<event.results.length; i++) {
-                console.log('!!!!!----->>>>>',event.results[i][0].transcript)
+                console.log('!!!!!: ',event.results[i][0].transcript)
                 setRecord(event.results[i][0].transcript)
                 
                 // if (record !== undefined) {
                     recognition.stop()
+                    console.log('stop()')
                     speak(newSpech(event.results[i][0].transcript))
                 // }
                 
@@ -112,7 +113,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     return (
         <div>
-            v1.1) SayingWords<br/>
+            v1.2) SayingWords<br/>
             <p>{record}</p>
         
         <Button className="btntooc" type="primary" onClick={startLisent}>speak</Button>
