@@ -18,7 +18,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     const [isShowRelations, setIsShowRelations] = useState(false)
     const [isShowAudio, setIsShowAudio] = useState(false)
     const [isLern, setIsLern] = useState(true)
-    const [checkType, setCheckType] = useState<'say'|'check'|'write'>('say')
+    const [checkType, setCheckType] = useState<'say'|'check'|'write'>('check')
     
     const rand = getRandomInt(2)
 
@@ -72,7 +72,7 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
     // console.log(window.speechSynthesis.getVoices())
     if (isShowAudio) {
         const data = rand ? props.toLern[target].name : props.toLern[target].relations[0].name
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', data)
+        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', data)
         utterThis = new SpeechSynthesisUtterance(data)
         const lang = rand ? "en-US" : "ru-RU"
         utterThis.voice = voices.filter(item => item.lang === lang)[0]

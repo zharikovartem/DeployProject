@@ -43,6 +43,12 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
             for(let i=0; i<event.results.length; i++) {
                 console.log('!!!!!----->>>>>',event.results[i][0].transcript)
                 setRecord(event.results[i][0].transcript)
+                
+                if (record !== undefined) {
+                    recognition.stop()
+                    speak(newSpech(record))
+                }
+                
             }
         }
 
@@ -80,29 +86,33 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         const utterThis = new SpeechSynthesisUtterance(tergetName)
         const lang = props.rand ? "en-US" : "ru-RU"
         utterThis.voice = voices.filter(item => item.lang === lang)[0]
-        // console.log(voices.filter(item => item.lang === lang))
+        // 
         
         const startLisent = () => {
+            console.log('recognition.start()')
             recognition.start()
         }
+
+        const newSpech = (text: string): SpeechSynthesisUtterance => {
+            return new SpeechSynthesisUtterance(text)
+        }
         
-        const speak = () => {
+        const speak = (utterThis: SpeechSynthesisUtterance) => {
             if (!ok) {
                 window.speechSynthesis.speak(utterThis)
-                // console.log(window.speechSynthesis.pending)
-                console.log('speak!!!: ', tergetName, ' on ')//, utterThis.voice.lang)
+                console.log('speechSynthesis.speak: ', tergetName)
                 setOk(true)
                 checkPendidng(window.speechSynthesis, startLisent)
             }
         }
 
         if (props.isShowAudio) {
-            speak()
+            speak(utterThis)
         }
 
     return (
         <div>
-            1) 
+            v1.1) SayingWords<br/>
             <p>{record}</p>
         
         <Button className="btntooc" type="primary" onClick={startLisent}>speak</Button>
@@ -117,6 +127,7 @@ const checkPendidng = (speechSynthesis: SpeechSynthesis, startLisent:()=>void) =
         // console.log(window.speechSynthesis)
         if (speechSynthesis.pending) {
             checkPendidng(speechSynthesis, startLisent)
+            // console.log(window.speechSynthesis)
         } 
         else {
             startLisent()

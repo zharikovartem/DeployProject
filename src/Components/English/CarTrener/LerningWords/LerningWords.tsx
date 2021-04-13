@@ -120,6 +120,8 @@ const LerningWords: React.FC<LerningWordsPropsType> = (props) => {
         setWordsToCompare(wordsToCompareCopy)
     }
 
+    console.log('checkType: ', props.checkType)
+
     if (wordsToCompare.length === 0) {
         console.log('wordsToCompare: ', wordsToCompare)
         return <Spin size="large" />
@@ -246,7 +248,6 @@ const getWordsToCompare = (words: Array<WordType>, wordsCount: number, target: W
 const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
 
 const reverseWordsArray = (words: Array<WordType>, target: WordType) => {
-    console.log('target', target)
     const targetRus = {
         ...target.relations[0],
         relations: [target]
