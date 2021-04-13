@@ -110,7 +110,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         }
         
         const speak = (utterThisItem: SpeechSynthesisUtterance, need?: boolean) => {
-            if (!ok && need) {
+            if (!ok || need) {
                 window.speechSynthesis.speak(utterThisItem)
                 console.log('speechSynthesis.speak: ', utterThisItem.text)
                 setOk(true)
