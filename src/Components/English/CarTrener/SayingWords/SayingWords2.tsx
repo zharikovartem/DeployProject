@@ -114,6 +114,8 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 console.log('speechSynthesis.speak: ', utterThisItem.text)
                 setOk(true)
                 checkPendidng(window.speechSynthesis, startLisent)
+            } else {
+                console.log('ok is: ', ok)
             }
         }
 
@@ -123,7 +125,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     return (
         <div>
-            v1.3) SayingWords<br/>
+            v1.31) SayingWords<br/>
             <p>{record}</p>
         
         <Button className="btntooc" type="primary" onClick={startLisent}>speak</Button>
