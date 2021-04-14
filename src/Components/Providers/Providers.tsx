@@ -10,9 +10,10 @@ const Providers: React.FC<ProvidersPropsType> = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const emptyInitialvalues: initialvaluesType = {
         name: '',
-        descriptions: ''
+        descriptions: '',
+        contacts: []
     }
-    const [initialvaluesType, setInitialvalues] = useState<initialvaluesType>(emptyInitialvalues)
+    const [initialvalues, setInitialvalues] = useState<initialvaluesType>(emptyInitialvalues)
 
     useEffect( ()=> {
         if (props.providorsList.length === 0) {
@@ -29,7 +30,8 @@ const Providers: React.FC<ProvidersPropsType> = (props) => {
         setInitialvalues({
             name: item.name,
             descriptions: item.descriptions,
-            id: item.id
+            id: item.id,
+            contacts: item.contacts
         })
         setIsModalVisible(true)
     }
@@ -90,7 +92,7 @@ const Providers: React.FC<ProvidersPropsType> = (props) => {
 
             <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Formik
-                    initialValues={initialvaluesType}
+                    initialValues={initialvalues}
                     onSubmit={handleSubmit}
                     enableReinitialize={true}
                 >

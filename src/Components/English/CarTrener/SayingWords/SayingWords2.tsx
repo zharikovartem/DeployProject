@@ -17,7 +17,7 @@ var synth = window.speechSynthesis;
 const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [record, setRecord] = useState<string>()
     const [status, setStatus] = useState(false)  
-    const [recognition] = useState(new SpeechRecognition())
+    const [recognition, setRecognition] = useState(new SpeechRecognition())
     const [tergetName, setTergetName] = useState<string>(props.rand ? props.target.name : props.target.relations[0].name)
     const [voices] = useState( window.speechSynthesis.getVoices() )
     const [ok, setOk] = useState(false)
@@ -50,18 +50,17 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 
                 
                 const newSpechInstanse = newSpech(event.results[i][0].transcript)
-                // newSpechInstanse.voice
                 const lang = !props.rand ? "en-US" : "ru-RU"
                 console.log(lang)
                 newSpechInstanse.voice = voices.filter(item => item.lang === lang)[0]
                 console.log(newSpechInstanse)
+                
 
                 recognition.abort()
                 console.log('stop()')
 
                 speak(newSpechInstanse, true)
                 console.log('speak')
-                // }
                 
             }
         }
@@ -126,7 +125,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     return (
         <div>
-            v1.33) SayingWords<br/>
+            v1.34) SayingWords<br/>
             <p>{record}</p>
         
         <Button className="btntooc" type="primary" onClick={startLisent}>speak</Button>

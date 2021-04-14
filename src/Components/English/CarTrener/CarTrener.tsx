@@ -7,8 +7,6 @@ import LerningWords from './LerningWords/LerningWordsContainer'
 // import { WordType } from '../../../api/vocabularyAPI'
 import { CarTrenerPropsType } from './CarTrenerContainer'
 
-// const speechSynthesis = require('speech-synthesis')
-
 const { Panel } = Collapse
 const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max))
 
@@ -63,20 +61,6 @@ const CarTrener: React.FC<CarTrenerPropsType> = (props) => {
         // console.log(val)
         props.skipWord(val)
         onMove(1)
-    }
-
-    // const voices = window.speechSynthesis.getVoices();
-    
-    let utterThis: any
-
-    // console.log(window.speechSynthesis.getVoices())
-    if (isShowAudio) {
-        // const data = rand ? props.toLern[target].name : props.toLern[target].relations[0].name
-        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', data)
-        // utterThis = new SpeechSynthesisUtterance(data)
-        // const lang = rand ? "en-US" : "ru-RU"
-        // utterThis.voice = voices.filter(item => item.lang === lang)[0]
-        // window.speechSynthesis.speak(utterThis)
     }
 
     if (props.toLern.length === 0) {

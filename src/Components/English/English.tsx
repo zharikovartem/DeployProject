@@ -6,14 +6,9 @@ import { WordType } from './../../api/vocabularyAPI'
 import Trening from './Trening/TreningContainer'
 import CarTrener from './CarTrener/CarTrenerContainer'
 
-// import {speechSynthesis} from 'speech-synthesis'
-
 const { TabPane } = Tabs
 
 const English: React.FC<EnglishPropsType> = (props) => {
-    // const [current, setCurrent] = useState(props.part)
-    // const speechSynthesis = require('speech-synthesis')
-
     useEffect(() => {
         if (props.vocabularyList.length === 0) {
             props.getVocabularyList(1)
@@ -24,18 +19,7 @@ const English: React.FC<EnglishPropsType> = (props) => {
         // props.getVocabularyList(1)
     }, [props.vocabularyList, props.count, props.part])
 
-    // const onPlayEng = (url: string | null) => {
-    //     speechSynthesis(url, 'en-US')
-    // }
-
-    // const onPlayRus = (word: string | null) => {
-    //     speechSynthesis(word, 'ru-RU');
-    //     // speechSynthesis(word, 'en-GB')
-    //     // speechSynthesis(word, 'en-US')
-    // }
-
     const onPaginationChange = (pageNumber: number) => {
-        // setCurrent(pageNumber)
         console.log(pageNumber)
         props.getVocabularyList(pageNumber)
     }
@@ -45,8 +29,6 @@ const English: React.FC<EnglishPropsType> = (props) => {
             status: status//'inProcess'
         }, id)
     }
-
-    // console.log(props.part)
 
     return (
         <Tabs defaultActiveKey="0" >
@@ -87,19 +69,6 @@ const English: React.FC<EnglishPropsType> = (props) => {
                                 <div className="col-3 text-right">
                                     {item.name + ' ' + item.part_of_speech}
                                 </div>
-                                {/* <div className="col-6">
-                                    <Button
-                                        type="primary" size="small"
-                                        onClick={() => {
-                                            // onPlayEng(item.eng_sound) 
-                                            onPlayEng(item.name)
-                                        }}
-                                    >Eng</Button>
-                                    <Button onClick={() => { onPlayRus(item.name) }} className="ml-1" type="primary" size="small">Rus</Button>
-                                    <Button className="ml-3" type="primary" size="small" onClick={ ()=>{ onStatusChange(item.id, 'inProcess') } }>Lern</Button>
-                                    <Button className="ml-1" type="primary" size="small" onClick={ ()=>{ onStatusChange(item.id, 'learned') } }>Know it</Button>
-                                    <Button className="ml-3" type="primary" size="small">Edit</Button>
-                                </div> */}
                             </div>
                         </List.Item>
                     }
