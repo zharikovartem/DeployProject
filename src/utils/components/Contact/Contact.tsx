@@ -1,12 +1,16 @@
 import { Button, Checkbox, Input } from 'antd'
 import { CheckboxValueType } from 'antd/lib/checkbox/Group'
-import React, { ChangeEventHandler, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ContactType } from '../../../api/ProviderAPI'
 import {ContactPropsType} from './ContactContainer'
 
 const Contact: React.FC<ContactPropsType> = (props) => {
     const [contacts, setContacts] = useState<Array<ContactType>>(props.contacts)
 
+    useEffect(()=>{
+        console.log('useEffect', props)
+        setContacts(props.contacts)
+    }, [props])
     const addContact = () => {
         console.log('addContact')
         const newContact: ContactType = {
@@ -37,6 +41,7 @@ const Contact: React.FC<ContactPropsType> = (props) => {
 
         setContacts(contactsCopy)
 
+        console.log('props.parentId', props.parentId)
         props.createNewContact({
             ...contact,
             Skype: null,
@@ -52,6 +57,10 @@ const Contact: React.FC<ContactPropsType> = (props) => {
         let contactsCopy = [...contacts]
         contactsCopy.splice(index, 1)
         setContacts(contactsCopy)
+    }
+
+    const onEdit = () => {
+        console.log('onEdit')
     }
 
     console.log(props)
@@ -81,7 +90,7 @@ const Contact: React.FC<ContactPropsType> = (props) => {
                                         {contact.phone}
                                     </div>
                                     <div className="col-2 d-flex flex-row">
-                                        <Button size="small" type="ghost">Edit</Button>
+                                        <Button onClick={onEdit} size="small" type="ghost">Edit</Button>
                                     </div>
                                 </div>
                             </div>

@@ -41,7 +41,9 @@ const Providers: React.FC<ProvidersPropsType> = (props) => {
     }
 
     const handleCancel = () => {
+        console.log('handleCancel ОБНУЛИЛ')
         setIsModalVisible(false);
+        setInitialvalues(emptyInitialvalues)
     }
 
     const handleSubmit = (values: any) => {
@@ -55,6 +57,7 @@ const Providers: React.FC<ProvidersPropsType> = (props) => {
     }
 
     console.log(props)
+    console.log(initialvalues)
     
     return (
         <div className="w-100">
