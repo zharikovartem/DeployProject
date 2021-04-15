@@ -93,7 +93,7 @@ export const updateVocabulary = (values: any, vocabularyId: number): ThunkType =
 export const checkTestResult = (data: CheckTestResultDataType, wordId: number): ThunkType => {
     return async (dispatch, getState) => {
         let response = await vocabularyAPI.checkTestResult(data, wordId)
-        dispatch(actions.setResults(response.data))
+        // dispatch(actions.setResults(response.data))
     }
 }
 

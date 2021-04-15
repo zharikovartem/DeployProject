@@ -33,7 +33,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
     const [speachResults, setSpeachResults] = useState<Array<string>>([])
 
     useEffect(()=> {
-        console.log(recognizing)
+        console.log(recognizing, tergetName)
         if (!recognizing) {
             recognition.start()
             // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!started')
@@ -118,10 +118,8 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 setSpeachResults([])
 
                 if (success) {
-                    // recognition.abort()
-                    // setRecognizing(false)
                     console.log('success = true')
-                    const correctResult = !props.rand ? '. Correct result!':'. Правельный результат!'
+                    const correctResult = !props.rand ? '. Correct result!':'. Верно!'
                     const newSpechInstanse = newSpech(lastResult + correctResult)
                     const lang = !props.rand ? "en-US" : "ru-RU"
                     newSpechInstanse.voice = voices.filter(item => item.lang === lang)[0]
@@ -129,7 +127,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
                     props.checkTestResult({
                         result: 'success',
-                        checkMethod: !props.rand ? 'en_ru_c' : 'ru_en_c'
+                        checkMethod: !props.rand ? 'en_ru_s' : 'ru_en_s'
                     }, props.target.id)
                     console.log('props.next(1)')
                     props.next(1)
@@ -141,9 +139,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                     if (isComand === '') {
                         if (lastResult!== undefined) {
                             console.log(lastResult.toLowerCase())
-                            // recognition.abort()
-                            // setRecognizing(false)
-                            // console.log('!!!setRecognizing(false)', recognizing)
+
                             const newSpechInstanse = newSpech(!props.rand ? 'wrong!':'Не верно!')
                             const lang = !props.rand ? "en-US" : "ru-RU"
                             newSpechInstanse.voice = voices.filter(item => item.lang === lang)[0]
@@ -153,18 +149,19 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                             setRecognizing(true)
                             console.log('!!!setRecognizing(true)', recognizing)
                         } else {
-                            recognition.stop()
-                            console.log('stop')
-                            recognition.start()
-                            console.log('start')
-                            // setRecognizing(false)
-                            // console.log('setRecognizing(true)')
+                            
+                            console.log('NOT COMAND BUT EMPTY')
+
+
+
+
+                            console.log('recognition', recognition)
+                            console.log('recognizing', recognizing)
+                            startLisent()
                         }
                     } else {
-                        console.log(isComand)
-                        recognition.abort()
-                        // setRecognizing(false)
-                        console.log('setRecognizing(false)')
+                        console.log('isComand: ',isComand)
+                        recognition.abort() 
                         const newSpechInstanse = newSpech(isComand)
                         const lang = !props.rand ? "en-US" : "ru-RU"
                         newSpechInstanse.voice = voices.filter(item => item.lang === lang)[0]
@@ -183,8 +180,6 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
         recognition.onerror = function(event) {
             console.log('Speech recognition error detected: ' + event.error);
-            recognition.stop()
-            setRecognizing(false)
         }
 
         recognition.onnomatch = function() {
@@ -195,8 +190,6 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         }
         recognition.onsoundend = function() {
             console.log('Звук перестал приниматься', recognizing);
-            // recognition.start()
-            // setRecognizing(false)
         }
 
         
@@ -211,21 +204,6 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
         
         const startLisent = (check: string|undefined = undefined ) => {
             setRecognizing(false)
-            // if (check === undefined) {
-            //     // console.log('recognition.start()', recognition)
-            //     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!recognizing', !recognizing)
-            //     // console.log('ansswerLang', ansswerLang)
-            //     if (!recognizing) {
-            //         // recognition.start()
-            //         setRecognizing(true)
-            //         console.log('setRecognizing(true)                      startLisent')
-            //     } else {
-            //         console.log('НЕ ЗАПУСТИЛИ СТАРТ', recognizing)
-            //         // recognition.start()
-            //     }
-            // } else {
-            //     console.log('Проверяем: ', check)
-            // }
         }
 
         const newSpech = (text: string): SpeechSynthesisUtterance => {
@@ -272,7 +250,7 @@ const checkPendidng = (speechSynthesis: SpeechSynthesis, startLisent:()=>void) =
             console.log('WAIT')
         } 
         else {
-            // console.log('startLisent from checkPendidng')
+            console.log('startLisent from checkPendidng')
             startLisent()
         }
     }, 100);
