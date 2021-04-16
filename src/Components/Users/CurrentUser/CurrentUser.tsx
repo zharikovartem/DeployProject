@@ -210,10 +210,12 @@ const TodoItem: React.FC<TodoItemPropsType> = (props) => {
     const showDrawer = (item: TaskType) => {
         props.setToDoFormVisible(true)
         const timeParts = item.time.split(':')
+        const splitTime_to_complete = item.time_to_complete.split(/:/)
         props.setInitialFormValues({
             name: item.name,
             time: moment().hours(Number(timeParts[0])).minutes(Number(timeParts[1])).seconds(Number(timeParts[2])),
             date: moment(item.date),
+            time_to_complete: moment().hours(Number(splitTime_to_complete[0])).minutes(Number(splitTime_to_complete[1])).seconds(Number(splitTime_to_complete[2])),
             descriptions: item.descriptions ? item.descriptions : null
         })
     }

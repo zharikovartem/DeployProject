@@ -6,6 +6,7 @@ import { TaskType } from '../../../../Types/types'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { TaskItemPropsType } from './TaskItemContainer'
 import ToDoActionsRouter from '../../ToDoActions/ToDoActionsRouter'
+import moment from 'moment'
 
 export type OwnTaskItemPropsType = {
     element: TaskType,
@@ -34,6 +35,15 @@ const TaskItem: React.FC<TaskItemPropsType> = (props) => {
         props.deleteTask(taskid, props.dateInterval.startDate.format('YYYY-MM-DD'), props.dateInterval.endDate.format('YYYY-MM-DD'))
     }
 
+    const split_time_to_complete = props.element.time_to_complete.split(':')
+    const split_start = props.element.time.split(':')
+    console.log(split_start)
+    const startTimeTime = moment().hours(parseInt(split_start[0])).minutes( parseInt(split_start[1]) )
+
+    console.log(props.element.name,': ',startTimeTime.format('HH:mm'))
+
+    const endTime = startTimeTime.add({hour: parseInt(split_time_to_complete[0]), minute: parseInt(split_time_to_complete[1]) })
+
     const disabled = props.isReadOnly ? {disabled: true} : null
     return (
         <ListGroup.Item as="li" action className="" key={props.element.id}>
@@ -46,7 +56,7 @@ const TaskItem: React.FC<TaskItemPropsType> = (props) => {
                         />
                 </Col>
                 <Col className="mx-2">
-                    {props.element.time.split(':', 2).join(':')}
+                    {props.element.time.split(':', 2).join(':')} - {endTime.format('HH:mm')}
                 </Col>
                 <Col className="mx-2">
                     <Tooltip key={props.element.id} placement="topLeft" title={props.element.descriptions}>

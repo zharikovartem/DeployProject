@@ -105,7 +105,8 @@ const CurrentUserMobile: React.FC<CurrentUserPropsType> = (props) => {
             name: task.name,
             time: time,
             date: date,
-            descriptions: task.descriptions ? task.descriptions : null
+            descriptions: task.descriptions ? task.descriptions : null,
+            time_to_complete: NewTimeByString(task.time_to_complete)
         })
     }
 

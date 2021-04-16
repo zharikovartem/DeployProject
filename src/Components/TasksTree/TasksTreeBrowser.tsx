@@ -83,6 +83,7 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
     type RunTaskSubmitType = {
         date: moment.Moment,
         time: moment.Moment,
+        time_to_complete: moment.Moment,
     }
     const runTaskSubmit = (values: RunTaskSubmitType) => {
         if (runData !== null && runData.data !== null && props.userId) {
@@ -92,6 +93,7 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
                 description: data.phone_number,
                 date: values.date.format('YYYY-MM-DD'),
                 time: values.time.format('HH:mm:00'), 
+                time_to_complete: values.time_to_complete.format('HH:mm:00'), 
                 user_id: props.userId,
                 action: Number(runData.task_type),
                 action_data: {
@@ -243,6 +245,7 @@ const TasksTreeBrowser: React.FC<TasksTreePropsType> = (props) => {
                             initialValues={{
                                 date: moment(),
                                 time: moment(),
+                                time_to_complete: moment(), 
                                 action: 2
                             }}
                             onSubmit={runTaskSubmit}

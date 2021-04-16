@@ -23,6 +23,7 @@ import Projects from './Components/Development/Projects/ProjectsContainer'
 import CurrentProject from './Components/Development/Projects/CurrentProject/CurrentProjectContainer'
 import English from './Components/English/EnglishContainer'
 import ProvidersContainer from './Components/Providers/ProvidersContainer'
+import Schedule from './Components/ToDo/Schedule/Schedule'
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
@@ -83,6 +84,9 @@ const App = (props: MapPropsType & DispatchPropsType) => {
 
                 <Route path={props.appLocation + 'tasksTree'}
                     render={() => <TasksTree />} />
+
+                <Route path={props.appLocation + 'schedule'}
+                    render={() => <Schedule />} />
 
                 <Route path={props.appLocation + 'orders'}
                     render={() => <Orders />} />

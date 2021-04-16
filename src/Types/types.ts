@@ -48,7 +48,8 @@ export type TaskType = {
     updated_at?: string | null,
     user_id: number | null,
     isCompleted?: boolean,
-    action?: number
+    action?: number,
+    time_to_complete: string
 }
 
 export type NewTaskDataType = {
@@ -60,7 +61,8 @@ export type NewTaskDataType = {
     id?: number,
     isCompleted?: boolean,
     action?: number
-    action_data?: any
+    action_data?: any,
+    time_to_complete: string
 }
 
 export declare type RangeValue<DateType> = [EventValue<DateType>, EventValue<DateType>] | null

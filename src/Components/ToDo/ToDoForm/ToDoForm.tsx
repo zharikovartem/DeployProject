@@ -52,6 +52,14 @@ const ToDoForm: ((props: FormikProps<{}>) => ReactNode) = (props) => {
                 disabled= {disabled}
             />
 
+            <Field
+                component={AntTimePicker}
+                name="time_to_complete"
+                type="time"
+                label="Time to complete"
+                submitCount={props.submitCount}
+            />
+
             { !disabled ?
                 <div className="submit-container">
                     <button className="ant-btn ant-btn-primary" type="submit">

@@ -29,15 +29,16 @@ export type InitialValuesType = {
     name: string,
     time: moment.Moment,
     date: moment.Moment,
-    descriptions: string | null
+    descriptions: string | null,
+    time_to_complete: moment.Moment,
 }
 
 export const initialValues: InitialValuesType = {
     name: '',
     time: zeroTime,
     date: moment(),
-    descriptions: ''
-
+    descriptions: '',
+    time_to_complete: zeroTime
 }
 
 const ToDoBrowser: React.FC<ToDoListPropsType> = (props) => {
@@ -65,12 +66,14 @@ const ToDoBrowser: React.FC<ToDoListPropsType> = (props) => {
         })
 
         const splitTime = value.time.split(/:/)
+        const splitTime_to_complete = value.time_to_complete.split(/:/)
 
         setInitialFormValues({
             name: value.name,
             time: moment().hours(Number(splitTime[0])).minutes(Number(splitTime[1])).seconds(0),
             date: moment(value.date),
-            descriptions: value.descriptions ? value.descriptions : null
+            descriptions: value.descriptions ? value.descriptions : null,
+            time_to_complete: moment().hours(Number(splitTime_to_complete[0])).minutes(Number(splitTime_to_complete[1])).seconds(0),
         })
 
         showDrawer()
@@ -99,11 +102,14 @@ const ToDoBrowser: React.FC<ToDoListPropsType> = (props) => {
     }
 
     const handleSubmit = (values: InitialValuesType, actions: any) => {
+        // @ts-ignore
+        console.log(values.time_to_complete.format('HH:mm:ss'))
         let formProps: NewTaskDataType = {
             ...values,
             time: values.time.format('HH:mm:ss'),
             date: values.date.format('YYYY-MM-DD'),
             user_id: props.userId,
+            time_to_complete: values.time_to_complete.format('HH:mm:ss')
         }
         if (!drawerData.taskId) {
             props.createNewTask(formProps, true)

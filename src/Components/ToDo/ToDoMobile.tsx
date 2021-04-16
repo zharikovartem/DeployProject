@@ -25,6 +25,7 @@ export type InitialValuesType = {
     name: string,
     time: Date,
     date: Date,
+    time_to_complete: Date,
     descriptions: string | null
 }
 
@@ -32,6 +33,7 @@ export const initialValues: InitialValuesType = {
     name: '',
     time: zeroTime,
     date: new Date(),
+    time_to_complete: zeroTime,
     descriptions: ''
 }
 
@@ -86,6 +88,8 @@ const ToDoMobile: React.FC<ToDoListPropsType> = (props) => {
             ...values,
             time: moment(values.time).format('HH:mm:ss'),
             date: moment(values.date).format('YYYY-MM-DD'),
+            // time_to_complete: values.time_to_complete.format('HH:mm:00'), 
+            time_to_complete: moment(values.time_to_complete).format('HH:mm:ss'),
             user_id: props.userId,
         }
 
@@ -211,6 +215,7 @@ const TaskItemMobile: React.FC<TaskItemMobileType> = (props) => {
             name: value.name,
             time: time,
             date: date,
+            time_to_complete: NewTimeByString(value.time_to_complete),
             descriptions: value.descriptions ? value.descriptions : null
         })
 
