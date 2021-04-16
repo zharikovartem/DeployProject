@@ -101,7 +101,7 @@ export const getWordsToLern = ():ThunkType => {
     return async (dispatch, getState) => {
         let response = await vocabularyAPI.getWordsToLern()
         dispatch(actions.setToLern(response.data.toLearn))
-    }
+    } 
 }
 
 export const skipWord = (wordId: number):ThunkType => {
