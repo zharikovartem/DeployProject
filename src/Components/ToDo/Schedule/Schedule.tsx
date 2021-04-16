@@ -53,7 +53,7 @@ const Schedule: React.FC<SchedulePropsType> = (props) => {
                     <h4>Понедельник:</h4>
                     <ScheduleDay 
                         dayNumber={'Понедельник'} 
-                        // defaultActiveKey={activeKey} 
+                        // defaultActiveKey={activeKey}
                         // setActiveKey={setActiveKey}
                     />
                 </TabPane>
