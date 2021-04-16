@@ -47,6 +47,9 @@ const ProviderForm: ((props: FormikProps<initialvaluesType>) => ReactNode) = (pr
                 </button>
             </div>
 
+            <li>Prices</li>
+            <li>BrendList</li>
+
         </Form>
     )
 }

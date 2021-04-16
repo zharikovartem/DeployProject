@@ -16,7 +16,7 @@ const Providers: React.FC<ProvidersPropsType> = (props) => {
     const [initialvalues, setInitialvalues] = useState<initialvaluesType>(emptyInitialvalues)
 
     useEffect( ()=> {
-        if (props.providorsList.length === 0) {
+        if (props.providorsList !== undefined && props.providorsList.length === 0) {
             props.getProvidersList()
         }
     },[props])
@@ -48,6 +48,7 @@ const Providers: React.FC<ProvidersPropsType> = (props) => {
 
     const handleSubmit = (values: any) => {
         console.log(values)
+        delete values.contacts
         if(values.id === undefined) {
             props.createNewProvider(values)
         } else {
