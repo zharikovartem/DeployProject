@@ -34,10 +34,17 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
 
     useEffect(()=> {
         console.log(recognizing, tergetName)
+        
         if (!recognizing) {
-            recognition.start()
-            // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!started')
-            setRecognizing(true)
+            // recognition.start()
+            // // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!started')
+            // setRecognizing(true)
+            try {
+                recognition.start()
+                setRecognizing(true)
+            } catch (error) {
+                alert('error')
+            }
         }
     },[recognizing])
 
