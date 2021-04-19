@@ -131,14 +131,56 @@ type CollapseItemType = {
     onRunTask: (values: number) => void
 }
 const CollapseItem: React.FC<CollapseItemType> = (props) => {
-    const isLast = getChildsList(props.taskList, props.item).length === 0 ? true : false
+    const childsList = getChildsList(props.taskList, props.item)
+    const isLast = childsList.length === 0 ? true : false
+    
+
+    let totalTime = moment().hours(0).minutes(0).seconds(0)
+
+    console.groupCollapsed(props.item.name)
+    console.log('empty totalTime.format: ', totalTime.format('HH:mm'))
+    for (let index = 0; index < childsList.length; index++) {
+        const element = childsList[index];
+
+        const elementChildList = getChildsList(props.taskList, element)
+        const isElementLast = elementChildList.length > 0 ? false : true
+
+        let timeParts: Array<string> = []
+        if (isElementLast) {
+            if (element.time_to_complete !== null && !element.isCompleted ) {
+                timeParts = element.time_to_complete.split(':')
+                console.log(timeParts)
+                console.log(totalTime.format('HH:mm'))
+                totalTime.add({
+                    days: 0,
+                    hours: parseInt(timeParts[0]),
+                    minutes: parseInt(timeParts[1]),
+                    seconds: parseInt(timeParts[2]),
+                })
+                console.log(totalTime.format('HH:mm'))
+                // console.log(element.name, ': ',element.time_to_complete, totalTime.format('HH:mm') )
+            }
+        } else {
+            console.log('not last: ', element.name)
+        }
+    }
+    console.log(props.item.name, ': ',totalTime.format('HH:mm') )
+    console.groupEnd()
 
     if (!isLast) {
         return (
             <List.Item className="p-0" draggable key={props.item.id}>
                 <Collapse key={String(props.item.id)} className="w-100" defaultActiveKey={[]} collapsible="header" ghost>
                     <Panel
-                        header={<span key={String(props.item.id)} className="float-left pl-2" >{props.item.name}</span>}
+                        header={
+                            // <span key={String(props.item.id)} className="float-left pl-2" >{props.item.name}</span>
+                            <div key={String(props.item.id)}>
+                                <div>
+                                    <span  className="float-left pl-2" >{props.item.name}</span>
+                                </div>
+                                <div className="float-right pl-2">({totalTime.format('HH:mm')})</div>
+                            </div>
+                        }
                         key={props.item.id + 'Panel'}
                         extra={<ButtonsBlock {...props} />}
                     >
@@ -274,7 +316,7 @@ const ButtonsBlock: React.FC<ButtonsBlockType> = (props) => {
     )
 }
 
-const getChildsList = (taskList: Array<TaskListType>, item: TaskListType) => {
+const getChildsList = (taskList: Array<TaskListType>, item: TaskListType):Array<TaskListType> => {
     let childs: Array<TaskListType> = []
     for (let index = 0; index < taskList.length; index++) {
         const elem = taskList[index]
@@ -283,4 +325,34 @@ const getChildsList = (taskList: Array<TaskListType>, item: TaskListType) => {
         }
     }
     return childs
+}
+
+const getTotalTime = (totalTime: moment.Moment, target: TaskListType, taskArray: Array<TaskListType>) => {
+    const childsList = getChildsList(taskArray, target)
+
+    for (let index = 0; index < childsList.length; index++) {
+        const element = childsList[index]
+
+        const elementChildList = getChildsList(taskArray, element)
+        const isElementLast = elementChildList.length > 0 ? false : true
+
+        let timeParts: Array<string> = []
+        if (isElementLast) {
+            if (element.time_to_complete !== null && !element.isCompleted ) {
+                timeParts = element.time_to_complete.split(':')
+                console.log(timeParts)
+                console.log(totalTime.format('HH:mm'))
+                totalTime.add({
+                    days: 0,
+                    hours: parseInt(timeParts[0]),
+                    minutes: parseInt(timeParts[1]),
+                    seconds: parseInt(timeParts[2]),
+                })
+                console.log(totalTime.format('HH:mm'))
+                // console.log(element.name, ': ',element.time_to_complete, totalTime.format('HH:mm') )
+            }
+        } else {
+            console.log('not last: ', element.name)
+        }
+    }
 }

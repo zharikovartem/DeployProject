@@ -10,6 +10,7 @@ import taskReducer from './taskReducer'
 import usersReducer from "./usersReducer"
 import vocabularyReducer from "./vocabularyReducer"
 import contactReducer from './ContactsReducer'
+import productReducer from "./productsReducer"
 
 
 let rootReducer = combineReducers({
@@ -23,6 +24,7 @@ let rootReducer = combineReducers({
     vocabulary: vocabularyReducer,
     providors: providerReducer,
     contacts: contactReducer,
+    products: productReducer
 })
 
 type rootReducerType = typeof rootReducer

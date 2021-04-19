@@ -24,6 +24,7 @@ import CurrentProject from './Components/Development/Projects/CurrentProject/Cur
 import English from './Components/English/EnglishContainer'
 import ProvidersContainer from './Components/Providers/ProvidersContainer'
 import Schedule from './Components/ToDo/Schedule/Schedule'
+import ProductsContainer from './Components/Products/ProductsContainer'
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
@@ -90,6 +91,9 @@ const App = (props: MapPropsType & DispatchPropsType) => {
 
                 <Route path={props.appLocation + 'orders'}
                     render={() => <Orders />} />
+
+                <Route path={props.appLocation + 'products'}
+                    render={() => <ProductsContainer />} />
 
                 <Route path={props.appLocation + 'providers'}
                     render={() => <ProvidersContainer />} />

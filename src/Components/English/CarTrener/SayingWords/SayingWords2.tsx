@@ -43,6 +43,7 @@ const SayingWords: React.FC<LerningWordsPropsType> = (props) => {
                 recognition.start()
             } catch (error) {
                 console.log('!!!!!!!!!!!!!!!!!!!error')
+                setRecognizing(false) // ?????
             } finally {
                 setRecognizing(true)
             }
